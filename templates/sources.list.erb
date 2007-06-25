@@ -1,0 +1,14 @@
+# This file is brought to you by puppet
+
+# basic <%= dv %>
+deb http://ftp.at.debian.org/debian <%= dv %> main
+# security suppport
+deb http://security.debian.org/ <%= dv %>/updates main
+# local packages
+#deb http://puppetmaster:81/ /
+
+# additional packages, see preferences
+#deb http://ftp.at.debian.org/debian sid main
+
+# backports
+deb http://www.backports.org/debian/ <%= dv %>-backports main

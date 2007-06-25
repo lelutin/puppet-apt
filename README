@@ -1,0 +1,19 @@
+Variables:
+	$apt_clean: Sets DSelect::Clean, defaults to 'auto' on normal hosts and
+		'pre-auto' in vservers, since the latter are usually more space-bound and
+		have better recovery mechanisms via the host
+		From apt.conf(5), 0.7.2: "Cache Clean mode; this value may be one of
+			always, prompt, auto, pre-auto and never. always and prompt will
+			remove all packages from the cache after upgrading, prompt (the
+			default) does so conditionally.  auto removes only those packages
+			which are no longer downloadable (replaced with a new version for
+			instance). pre-auto performs this action before downloading new
+			packages."
+
+Provided Resources:
+	File[apt_config]: Use this resource to depend on or add to a completed apt
+		configuration
+	Exec[apt_updated]: After this point, current packages can installed via apt,
+		usually used like this:
+		Package { require => Exec[apt_updated] }
+
