@@ -56,7 +56,8 @@ class apt {
 	}
 
 	exec {
-		"/usr/bin/apt-get -y update #on refresh":
+		# "&& sleep 1" is workaround for older(?) clients
+		"/usr/bin/apt-get -y update && sleep 1 #on refresh":
 			refreshonly => true,
 			subscribe => [ File["/etc/apt/sources.list"],
 				File["/etc/apt/preferences"], File["/etc/apt/apt.conf.d"],
