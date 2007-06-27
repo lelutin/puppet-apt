@@ -1,9 +1,9 @@
 # This file is brought to you by puppet
 
-# basic <%= dv %>
-deb http://ftp.at.debian.org/debian <%= dv %> main
+# basic <%= lsbdistcodename %>
+deb http://ftp.at.debian.org/debian <%= lsbdistcodename %> main
 # security suppport
-deb http://security.debian.org/ <%= dv %>/updates main
+deb http://security.debian.org/ <%= lsbdistcodename %>/updates main
 # local packages
 #deb http://puppetmaster:81/ /
 
@@ -11,4 +11,4 @@ deb http://security.debian.org/ <%= dv %>/updates main
 #deb http://ftp.at.debian.org/debian sid main
 
 # backports
-deb http://www.backports.org/debian/ <%= dv %>-backports main
+deb http://www.backports.org/debian/ <%= lsbdistcodename %>-backports main
