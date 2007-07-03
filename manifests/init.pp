@@ -14,6 +14,10 @@ class apt {
 		default => $apt_clean,
 	}
 
+	package {
+		[apt, dselect]: ensure => installed,
+	}
+
 	# a few templates need lsbdistcodename
 	include assert_lsbdistcodename
 
@@ -57,12 +61,12 @@ class apt {
 
 	exec {
 		# "&& sleep 1" is workaround for older(?) clients
-		"/usr/bin/apt-get -y update && sleep 1 #on refresh":
+		"/usr/bin/dselect update && sleep 1 #on refresh":
 			refreshonly => true,
 			subscribe => [ File["/etc/apt/sources.list"],
 				File["/etc/apt/preferences"], File["/etc/apt/apt.conf.d"],
 				File[apt_config] ];
-		"/usr/bin/apt-get -y update && /usr/bin/apt-get autoclean #hourly":
+		"/usr/bin/dselect update && /usr/bin/apt-get autoclean #hourly":
 			require => [ File["/etc/apt/sources.list"],
 				File["/etc/apt/preferences"], File[apt_config] ],
 			# Another Semaphor for all packages to reference
