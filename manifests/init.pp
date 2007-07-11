@@ -76,11 +76,12 @@ class apt {
 	case $lsbdistcodename {
 		etch: {
 			## This package should really always be current
-			package { "debian-archive-keyring": ensure => latest, }
+			package { [ "debian-archive-keyring", "debian-backports-keyring" ]:
+				ensure => latest, }
 
 			# This key was downloaded from
 			# http://backports.org/debian/archive.key
-			# and is needed to verify the backports
+			# and is needed to bootstrap the backports trustpath
 			file { "${base_dir}/backports.org.key":
 				source => "puppet://$servername/apt/backports.org.key",
 				mode => 0444, owner => root, group => root,
