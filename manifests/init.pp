@@ -76,8 +76,11 @@ class apt {
 	case $lsbdistcodename {
 		etch: {
 			## This package should really always be current
-			package { [ "debian-archive-keyring", "debian-backports-keyring" ]:
-				ensure => latest, }
+			package {
+				[ "debian-archive-keyring", "debian-backports-keyring" ]:
+					ensure => latest,
+					require => File[apt_config],
+				}
 
 			# This key was downloaded from
 			# http://backports.org/debian/archive.key
