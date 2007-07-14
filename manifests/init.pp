@@ -41,13 +41,13 @@ class apt {
 			before => File[apt_config];
 	}
 
-	$base_dir = "/var/lib/puppet/modules/apt"
+	$apt_base_dir = "/var/lib/puppet/modules/apt"
 	file {
 		# remove my legacy files
 		[ "/etc/apt/backports.key", "/etc/apt/apt.conf.d/local-conf" ]:
 			ensure => removed;
 		# create new modules dir
-		$base_dir: ensure => directory;
+		$apt_base_dir: ensure => directory;
 		# watch apt.conf.d
 		"/etc/apt/apt.conf.d": ensure => directory, checksum => mtime;
 	}
@@ -85,14 +85,14 @@ class apt {
 			# This key was downloaded from
 			# http://backports.org/debian/archive.key
 			# and is needed to bootstrap the backports trustpath
-			file { "${base_dir}/backports.org.key":
+			file { "${apt_base_dir}/backports.org.key":
 				source => "puppet://$servername/apt/backports.org.key",
 				mode => 0444, owner => root, group => root,
 				before => File[apt_config],
 			}
-			exec { "/usr/bin/apt-key add ${base_dir}/backports.org.key":
+			exec { "/usr/bin/apt-key add ${apt_base_dir}/backports.org.key":
 				refreshonly => true,
-				subscribe => File["${base_dir}/backports.org.key"],
+				subscribe => File["${apt_base_dir}/backports.org.key"],
 				before => File[apt_config],
 			}
 		}
