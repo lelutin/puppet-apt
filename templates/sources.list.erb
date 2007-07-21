@@ -1,9 +1,9 @@
 # This file is brought to you by puppet
 
 # basic <%= lsbdistcodename %>
-deb http://ftp.at.debian.org/debian <%= lsbdistcodename %> main
+deb http://ftp.at.debian.org/debian <%= lsbdistcodename %> main contrib non-free
 # security suppport
-deb http://security.debian.org/ <%= lsbdistcodename %>/updates main
+deb http://security.debian.org/ <%= lsbdistcodename %>/updates main contrib non-free
 # local packages
 #deb http://puppetmaster:81/ /
 
