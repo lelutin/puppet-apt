@@ -79,7 +79,7 @@ class apt {
 			package {
 				[ "debian-archive-keyring", "debian-backports-keyring" ]:
 					ensure => latest,
-					require => File[apt_config],
+					require => [ File[apt_config], Exec["backports_key"] ],
 				}
 
 			# This key was downloaded from
@@ -91,6 +91,7 @@ class apt {
 				before => File[apt_config],
 			}
 			exec { "/usr/bin/apt-key add ${apt_base_dir}/backports.org.key":
+				alias => "backports_key",
 				refreshonly => true,
 				subscribe => File["${apt_base_dir}/backports.org.key"],
 				before => File[apt_config],
