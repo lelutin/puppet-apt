@@ -42,15 +42,9 @@ class apt {
 	}
 
 	$apt_base_dir = "/var/lib/puppet/modules/apt"
-	file {
-		# remove my legacy files
-		[ "/etc/apt/backports.key", "/etc/apt/apt.conf.d/local-conf" ]:
-			ensure => removed;
-		# create new modules dir
-		$apt_base_dir: ensure => directory;
-		# watch apt.conf.d
-		"/etc/apt/apt.conf.d": ensure => directory, checksum => mtime;
-	}
+	modules_dir { apt: }
+	# watch apt.conf.d
+	file { "/etc/apt/apt.conf.d": ensure => directory, checksum => mtime; }
 
 	# suppress annoying help texts of dselect
 	line { dselect_expert:
