@@ -21,12 +21,28 @@ class apt {
 	# a few templates need lsbdistcodename
 	include assert_lsbdistcodename
 
+	case $custom_sources_list {
+		'': {
+			include default_sources_list
+		}
+		default: {
+			config_file { "/etc/apt/sources.list":
+				content => $custom_sources_list
+			}
+		}
+	}
+
+	class default_sources_list {
+		config_file {
+			# include main, security and backports
+			# additional sources could be included via an array
+			"/etc/apt/sources.list":
+				content => template("apt/sources.list.erb"),
+				require => Exec[assert_lsbdistcodename];
+		}
+	}
+
 	config_file {
-		# include main, security and backports
-		# additional sources could be included via an array
-		"/etc/apt/sources.list":
-			content => template("apt/sources.list.erb"),
-			require => Exec[assert_lsbdistcodename];
 		# this just pins unstable and testing to very low values
 		"/etc/apt/preferences":
 			content => template("apt/preferences.erb"),

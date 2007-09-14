@@ -35,6 +35,8 @@ $lsbdistcodename: Contains the Codename ("etch", "lenny", ...) of the client's
 	release. While the values comes from lsb-release by default, this value
 	can be set manually too, to enable forced upgrades e.g.
 
+$custom_sources_list: If non-empty, the contents of this variable are used as
+	new sources.list for the node.
 
 Classes
 =======
