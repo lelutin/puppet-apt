@@ -3,7 +3,11 @@
 # basic <%= lsbdistcodename %>
 deb http://ftp.at.debian.org/debian <%= lsbdistcodename %> main contrib non-free
 # security suppport
+<% if (lsbdistcodename == "sid" || lsbdistcodename == "unstable" -%>
+# There is no security mirror for <%= lsbdistcodename %>
+<% else %>
 deb http://security.debian.org/ <%= lsbdistcodename %>/updates main contrib non-free
+<% end -%>
 # local packages
 #deb http://puppetmaster:81/ /
 
@@ -11,4 +15,8 @@ deb http://security.debian.org/ <%= lsbdistcodename %>/updates main contrib non-
 #deb http://ftp.at.debian.org/debian sid main
 
 # backports
+<% if (lsbdistcodename == "sid" || lsbdistcodename == "unstable" -%>
+# There are no backports for for <%= lsbdistcodename %>
+<% else %>
 deb http://www.backports.org/debian/ <%= lsbdistcodename %>-backports main
+<% end -%>
