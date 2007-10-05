@@ -31,9 +31,9 @@ $apt_clean: Sets DSelect::Clean, defaults to 'auto' on normal hosts and
 		downloading new packages."
 
 
-$lsbdistcodename: Contains the Codename ("etch", "lenny", ...) of the client's
-	release. While the values comes from lsb-release by default, this value
-	can be set manually too, to enable forced upgrades e.g.
+$lsbdistcodename: Contains the codename ("etch", "lenny", ...) of the client's
+	release. While these values come from lsb-release by default, this value
+	can be set manually too, e.g. to enable forced upgrades
 
 $custom_sources_list: If non-empty, the contents of this variable are used as
 	new sources.list for the node.
@@ -41,7 +41,7 @@ $custom_sources_list: If non-empty, the contents of this variable are used as
 Classes
 =======
 
-This modules contains only the apt class, which sets up all described
+This module contains only the apt class, which sets up all described
 functionality.
 
 
