@@ -26,6 +26,7 @@ class apt {
 		default: {
 			config_file { "/etc/apt/sources.list":
 				content => $custom_sources_list
+				require => Exec[assert_lsbdistcodename];
 			}
 		}
 	}
