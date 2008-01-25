@@ -14,9 +14,7 @@ class apt {
 		default => $apt_clean,
 	}
 
-	package {
-		[apt, dselect]: ensure => installed,
-	}
+	package { apt: ensure => installed }
 
 	# a few templates need lsbdistcodename
 	include assert_lsbdistcodename
@@ -62,21 +60,14 @@ class apt {
 	# watch apt.conf.d
 	file { "/etc/apt/apt.conf.d": ensure => directory, checksum => mtime; }
 
-	# suppress annoying help texts of dselect
-	line { dselect_expert:
-		file => "/etc/dpkg/dselect.cfg",
-		line => "expert",
-		ensure => present,
-	}
-
 	exec {
 		# "&& sleep 1" is workaround for older(?) clients
-		"/usr/bin/dselect update && sleep 1 #on refresh":
+		"/usr/bin/apt-get update && sleep 1 #on refresh":
 			refreshonly => true,
 			subscribe => [ File["/etc/apt/sources.list"],
 				File["/etc/apt/preferences"], File["/etc/apt/apt.conf.d"],
 				File[apt_config] ];
-		"/usr/bin/dselect update && /usr/bin/apt-get autoclean #hourly":
+		"/usr/bin/apt-get update && /usr/bin/apt-get autoclean #hourly":
 			require => [ File["/etc/apt/sources.list"],
 				File["/etc/apt/preferences"], File[apt_config] ],
 			# Another Semaphor for all packages to reference
@@ -98,7 +89,7 @@ class apt {
 				source => "puppet://$servername/apt/backports.org.key",
 				mode => 0444, owner => root, group => root,
 			}
-			exec { "/usr/bin/apt-key add ${apt_base_dir}/backports.org.key && dselect update":
+			exec { "/usr/bin/apt-key add ${apt_base_dir}/backports.org.key && apt-get update":
 				alias => "backports_key",
 				refreshonly => true,
 				subscribe => File["${apt_base_dir}/backports.org.key"],
@@ -106,4 +97,15 @@ class apt {
 			}
 		}
 	}
+}
+
+class dselect {
+	# suppress annoying help texts of dselect
+	line { dselect_expert:
+		file => "/etc/dpkg/dselect.cfg",
+		line => "expert",
+		ensure => present,
+	}
+
+	package { dselect: ensure => installed }
 }
