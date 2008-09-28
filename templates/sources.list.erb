@@ -1,7 +1,7 @@
 # This file is brought to you by puppet
 
 # basic <%= lsbdistcodename %>
-deb http://debian.mirror.iweb.ca/debian/ <%= lsbdistcodename %> main contrib non-free
+deb http://ftp.debian.org/debian/ <%= lsbdistcodename %> main contrib non-free
 # security suppport
 <% if (lsbdistcodename == "sid" || lsbdistcodename == "unstable") -%>
 # There is no security mirror for <%= lsbdistcodename %>
