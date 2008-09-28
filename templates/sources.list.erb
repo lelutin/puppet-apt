@@ -8,11 +8,6 @@ deb http://debian.mirror.iweb.ca/debian/ <%= lsbdistcodename %> main contrib non
 <% else -%>
 deb http://security.debian.org/ <%= lsbdistcodename %>/updates main contrib non-free
 <% end -%>
-# local packages
-#deb http://puppetmaster:81/ /
-
-# additional packages, see preferences
-#deb http://ftp.at.debian.org/debian sid main
 
 # backports
 <% if (lsbdistcodename == "sid" || lsbdistcodename == "unstable") -%>
