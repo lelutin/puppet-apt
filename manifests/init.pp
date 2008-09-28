@@ -41,20 +41,34 @@ class apt {
 		}
 	}
 
-	config_file {
-		# this just pins unstable and testing to very low values
-		"/etc/apt/preferences":
-			content => template("apt/preferences.erb"),
-			# use File[apt_config] to reference a completed configuration
-			# See "The Puppet Semaphor" 2007-06-25 on the puppet-users ML
-			alias => apt_config,
-			# only update together
-			require => File["/etc/apt/sources.list"];
-		# little default settings which keep the system sane
-		"/etc/apt/apt.conf.d/from_puppet":
-			content => "APT::Get::Show-Upgraded true;\nDSelect::Clean $real_apt_clean;\n",
-			before => File[apt_config];
-	}
+        case $custom_preferences {
+          '': {
+            include default_preferences
+          }
+          default: {
+            config_file { "/etc/apt/preferences":
+              content => $custom_preferences
+              alias => apt_config,
+              require => File["/etc/apt/sources.list"];
+            }
+          }
+        }
+        class default_preferences {
+	  config_file {
+	    # this just pins unstable and testing to very low values
+	    "/etc/apt/preferences":
+	      content => template("apt/preferences.erb"),
+	      # use File[apt_config] to reference a completed configuration
+	      # See "The Puppet Semaphor" 2007-06-25 on the puppet-users ML
+	      alias => apt_config,
+	      # only update together
+	      require => File["/etc/apt/sources.list"];
+	    # little default settings which keep the system sane
+	    "/etc/apt/apt.conf.d/from_puppet":
+	      content => "APT::Get::Show-Upgraded true;\nDSelect::Clean $real_apt_clean;\n",
+	      before => File[apt_config];
+	  }
+        }
 
 	$apt_base_dir = "/var/lib/puppet/modules/apt"
 	modules_dir { apt: }
