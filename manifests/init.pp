@@ -14,7 +14,7 @@ class apt {
 		default => $apt_clean,
 	}
 
-	package { [ 'lsb-release', 'apt' ]: ensure => installed }
+	package { apt: ensure => installed }
 
 	# a few templates need lsbdistcodename
 	include assert_lsbdistcodename
@@ -25,8 +25,8 @@ class apt {
 		}
 		default: {
 			config_file { "/etc/apt/sources.list":
-				content => $custom_sources_list,
-				require => Exec[assert_lsbdistcodename],
+				content => $custom_sources_list
+				require => Exec[assert_lsbdistcodename];
 			}
 		}
 	}
@@ -52,7 +52,7 @@ class apt {
 			require => File["/etc/apt/sources.list"];
 		# little default settings which keep the system sane
 		"/etc/apt/apt.conf.d/from_puppet":
-			content => "APT::Get::Show-Upgraded true;\nDSelect::Clean $real_apt_clean;\nAPT::Cache-Limit 22582912;\n",
+			content => "APT::Get::Show-Upgraded true;\nDSelect::Clean $real_apt_clean;\n",
 			before => File[apt_config];
 	}
 
@@ -63,7 +63,7 @@ class apt {
 
 	exec {
 		# "&& sleep 1" is workaround for older(?) clients
-		"/usr/bin/apt-get update #on refresh":
+		"/usr/bin/apt-get update && sleep 1 #on refresh":
 			refreshonly => true,
 			subscribe => [ File["/etc/apt/sources.list"],
 				File["/etc/apt/preferences"], File["/etc/apt/apt.conf.d"],
@@ -78,16 +78,10 @@ class apt {
 	case $lsbdistcodename {
 		etch: {
 			## This package should really always be current
-			package { "debian-archive-keyring": ensure => latest, }
-		}
-	}
-}
-
-class apt::backports inherits apt {
-	$custom_sources_list = template("apt/sources.list+backports.erb")
-	case $lsbdistcodename {
-		etch: {
-			package { "debian-backports-keyring": ensure => latest, }
+			package {
+				[ "debian-archive-keyring", "debian-backports-keyring" ]:
+					ensure => latest,
+				}
 
 			# This key was downloaded from
 			# http://backports.org/debian/archive.key
