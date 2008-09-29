@@ -133,8 +133,55 @@ class apt {
             }
           }
         }
-}
+
+        # workaround for preseeded_package component
+        file { "/var/cache": ensure => directory }
+        file { "/var/cache/local": ensure => directory }
+        file { "/var/cache/local/preseeding/": ensure => directory }
+
+        define preseeded_package ($content = "", $ensure = "installed") {
+          $seedfile = "/var/cache/local/preseeding/$name.seeds"
+          $real_content = $content ? {
+            "" => template ( "$debian_version/$name.seeds" ),
+            Default => $content
+          }
+  
+          file{ $seedfile:
+            content => $real_content,
+            mode => 0600, owner => root, group => root,
+          }
+  
+          package { $name:
+            ensure => $ensure,
+            responsefile => $seedfile,
+            require => File[$seedfile],
+          }
+        }
+
+        # workaround for preseeded_package component
+        file { "/var/cache": ensure => directory }
+        file { "/var/cache/local": ensure => directory }
+        file { "/var/cache/local/preseeding/": ensure => directory }
         
+        define preseeded_package ($content = "", $ensure = "installed") {
+          $seedfile = "/var/cache/local/preseeding/$name.seeds"
+          $real_content = $content ? {
+            "" => template ( "$debian_version/$name.seeds" ),
+            Default => $content
+          }
+          
+          file{ $seedfile:
+            content => $real_content,
+            mode => 0600, owner => root, group => root,
+          }
+          
+          package { $name:
+            ensure => $ensure,
+            responsefile => $seedfile,
+            require => File[$seedfile],
+          }
+        }
+}       
 
 class dselect {
 	# suppress annoying help texts of dselect
