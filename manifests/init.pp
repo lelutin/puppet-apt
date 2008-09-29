@@ -47,7 +47,7 @@ class apt {
           }
           default: {
             config_file { "/etc/apt/preferences":
-              content => $custom_preferences
+              content => $custom_preferences,
               alias => apt_config,
               require => File["/etc/apt/sources.list"];
             }
