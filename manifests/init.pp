@@ -1,10 +1,7 @@
 # apt.pp - common components and defaults for handling apt
+# Copyright (C) 2008 Micah Anerson <micah@riseup.net>
 # Copyright (C) 2007 David Schmitt <david@schmitt.edv-bus.at>
 # See LICENSE for the full license granted to you.
-#
-# With hints from
-#  Micah Anderson <micah@riseup.net>
-#  * backports key
 
 class apt {
 
