@@ -117,6 +117,9 @@ class apt {
 	}
 
         case $custom_key_dir {
+          '': {
+            exec { "/bin/true # no_custom_keydir": }
+          }
           default: {
             file { "${apt_base_dir}/keys.d":
               source => "$custom_key_dir",
