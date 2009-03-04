@@ -111,6 +111,25 @@ class apt {
 		    before => [ File[apt_config], Package["debian-backports-keyring"] ]
 		  }
 		}
+                lenny: {
+                  package { "debian-backports-keyring":
+                    ensure => latest,
+                  }
+
+                  # This key was downloaded from
+                  # http://backports.org/debian/archive.key
+                  # and is needed to bootstrap the backports trustpath
+                  file { "${apt_base_dir}/backports.org.key":
+                    source => "puppet://$servername/apt/backports.org.key",
+                    mode => 0444, owner => root, group => root,
+                  }
+                  exec { "/usr/bin/apt-key add ${apt_base_dir}/backports.org.key && apt-get update":
+                    alias => "backports_key",
+                    refreshonly => true,
+                    subscribe => File["${apt_base_dir}/backports.org.key"],
+                    before => [ File[apt_config], Package["debian-backports-keyring"] ]
+                  }
+                }
 	}
 
         case $custom_key_dir {
