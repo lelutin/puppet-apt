@@ -120,7 +120,7 @@ class apt {
           default: {
             file { "${apt_base_dir}/keys.d":
               source => "$custom_key_dir",
-              recurse => yes,
+              recurse => true,
               mode => 0755, owner => root, group => root,
             }
             exec { "for key in `ls ${apt_base_dir/keys.d/` ; do /usr/bin/apt-key add ${apt_base_dir}/$key && apt-get update":
