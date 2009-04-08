@@ -138,12 +138,11 @@ class apt {
           }
           default: {
             file { "${apt_base_dir}/keys.d":
-              source => "${custom_key_dir}",
+              source => "$custom_key_dir",
               recurse => true,
               mode => 0755, owner => root, group => root,
-              notify => Exec[custom_keys];
             }
-            exec { "/usr/bin/apt-key add ${apt_base_dir}/keys.d/* && apt-get update":
+            exec { "for key in `ls ${apt_base_dir/keys.d/` ; do /usr/bin/apt-key add ${apt_base_dir}/$key && apt-get update":
               alias => "custom_keys",
               refreshonly => true,
               before => File[apt_config];
