@@ -144,6 +144,7 @@ class apt {
             }
             exec { "find ${apt_base_dir}/keys.d -type f -exec apt-key add '{}' \; && apt-get update":
               alias => "custom_keys",
+              subscribe => File["${apt_base_dir}/keys.d",
               refreshonly => true,
               before => File[apt_config];
             }
