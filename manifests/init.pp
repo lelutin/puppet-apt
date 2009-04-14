@@ -142,7 +142,7 @@ class apt {
               recurse => true,
               mode => 0755, owner => root, group => root,
             }
-            exec { "find ${apt_base_dir}/keys.d -type f -exec apt-key add '{}' \; && apt-get update":
+            exec { "find ${apt_base_dir}/keys.d -type f -exec apt-key add '{}' \\; && apt-get update":
               alias => "custom_keys",
               subscribe => File["${apt_base_dir}/keys.d"],
               refreshonly => true,
