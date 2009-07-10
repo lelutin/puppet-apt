@@ -68,7 +68,7 @@ class apt {
         }
 
 	$apt_base_dir = "/var/lib/puppet/modules/apt"
-	modules_dir { apt: }
+	module_dir { apt: }
 	# watch apt.conf.d
 	file { "/etc/apt/apt.conf.d": ensure => directory, checksum => mtime; }
 
