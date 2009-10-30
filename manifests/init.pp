@@ -13,17 +13,15 @@ class apt {
 
   package { apt: ensure => installed }
 
-  # a few templates need lsbdistcodename
-  include assert_lsbdistcodename
-
   case $custom_sources_list {
     '': {
       include apt::default_sources_list
     }
     default: {
+      include lsb
       config_file { "/etc/apt/sources.list":
         content => $custom_sources_list,
-        require => Exec[assert_lsbdistcodename];
+        require => Exec['lsb'];
       }
     }
   }
