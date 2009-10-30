@@ -11,7 +11,10 @@ class apt {
     default => $apt_clean,
   }
 
-  package { apt: ensure => installed }
+  package { apt:
+    ensure => installed,
+    require => undef,
+  }
 
   case $custom_sources_list {
     '': {
@@ -21,7 +24,7 @@ class apt {
       include lsb
       config_file { "/etc/apt/sources.list":
         content => $custom_sources_list,
-        require => Exec['lsb'];
+        require => Package['lsb'];
       }
     }
   }
