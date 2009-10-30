@@ -1,5 +1,8 @@
 class apt::unattended_upgrades {
-  package{'unattended-upgrades': ensure => present }
+  package{'unattended-upgrades':
+    ensure => present
+    require => undef,
+  }
 
   config_file {
     "/etc/apt/apt.conf.d/unattended_upgrades":
