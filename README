@@ -34,7 +34,6 @@ From apt.conf(5), 0.7.2:
      instance). pre-auto performs this action before downloading new
      packages."
 
-
 $lsbdistcodename
 ---------------- 	
 Contains the codename ("etch", "lenny", ...) of the client's
@@ -68,6 +67,13 @@ If you have different apt-key files that you want to get added to your
 apt keyring, you can set this variable to a path in your fileserver
 where individual key files can be placed. If this is set and keys
 exist there, this module will apt-key add each key
+
+$apt_unattended_upgrades
+------------------------
+
+If this variable is set to true apt::unattended_upgrades is included,
+which will install the package unattended-upgrades and configure it to
+daily upgrade the system.
 
 Classes
 =======

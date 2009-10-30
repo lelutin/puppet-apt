@@ -41,6 +41,10 @@ class apt {
     }
   }
 
+  if $apt_unattended_upgrades {
+    include apt::unattended_upgrades
+  }
+
   $apt_base_dir = "${module_dir_path}/apt"
   module_dir { apt: }
   # watch apt.conf.d
