@@ -46,7 +46,7 @@ class apt {
   }
 
   $apt_base_dir = "${module_dir_path}/apt"
-  module_dir { apt: }
+  modules_dir { apt: }
   # watch apt.conf.d
   file { "/etc/apt/apt.conf.d": ensure => directory, checksum => mtime; }
 
