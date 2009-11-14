@@ -128,5 +128,5 @@ class apt {
   # workaround for preseeded_package component
   file { "/var/cache": ensure => directory }
   file { "/var/cache/local": ensure => directory }
-  file { "/var/cache/local/preseeding/": ensure => directory }
+  file { "/var/cache/local/preseeding": ensure => directory }
 }     
