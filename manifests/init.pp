@@ -3,6 +3,7 @@
 # Copyright (C) 2007 David Schmitt <david@schmitt.edv-bus.at>
 # See LICENSE for the full license granted to you.
 
+
 class apt {
 
 	# See README
@@ -14,6 +15,11 @@ class apt {
 	$backports_enabled = $backports_enabled ? {
 		'' => 'false',
 		default => $backports_enabled,
+	}
+	
+	$apt_deb_src_enabled = $apt_deb_src_enabled ? {
+		'true' => 'true',
+		default => $apt_deb_src_enabled,
 	}
 
 	package { apt: ensure => installed }
@@ -150,7 +156,17 @@ class apt {
 	  default: { }
 	}
 
-    
+	case $apt_deb_src_enabled {
+	  'true': {   
+	      config_file {
+		      # deb-src
+		      "/etc/apt/sources.list.d/debian-sources.list":
+			      content => template("apt/sources.list.deb-src.erb"),
+			      require => Exec[assert_lsbdistcodename];
+	      }
+	  }		
+   	  default: {}
+ 	}
 
         case $custom_key_dir {
           '': {
@@ -226,3 +242,18 @@ class dselect {
 
 	package { dselect: ensure => installed }
 }
+
+
+class apt::unattended_upgrades {
+    case $operatingsystem {
+        debian,ubuntu: { 
+                package {       unattended-upgrades : ensure => latest; }
+                file { "/etc/apt/apt.conf.d/50unattended-upgrades": 
+                        source  => "puppet://$server/modules/apt/50unattended-upgrades" }
+        }
+
+        default: { notice "unknown operatingsystem: $operatingsystem for class apt::unattended_upgrades" }
+    }
+
+}
+

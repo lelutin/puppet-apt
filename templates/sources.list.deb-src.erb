@@ -1,0 +1,11 @@
+# This file is brought to you by puppet
+
+# basic <%= lsbdistcodename %>
+deb-src http://ftp.debian.org/debian/ <%= lsbdistcodename %> main contrib non-free
+# security suppport
+<% if (lsbdistcodename == "sid" || lsbdistcodename == "unstable") -%>
+# There is no security mirror for <%= lsbdistcodename %>
+<% else -%>
+deb-src http://security.debian.org/ <%= lsbdistcodename %>/updates main contrib non-free
+<% end -%>
+
