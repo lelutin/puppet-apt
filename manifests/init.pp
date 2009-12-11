@@ -245,15 +245,8 @@ class dselect {
 
 
 class apt::unattended_upgrades {
-    case $operatingsystem {
-        debian,ubuntu: { 
-                package {       unattended-upgrades : ensure => latest; }
-                file { "/etc/apt/apt.conf.d/50unattended-upgrades": 
-                        source  => "puppet://$server/modules/apt/50unattended-upgrades" }
-        }
-
-        default: { notice "unknown operatingsystem: $operatingsystem for class apt::unattended_upgrades" }
-    }
-
+        package {       unattended-upgrades : ensure => latest; }
+        file { "/etc/apt/apt.conf.d/50unattended-upgrades": 
+               source  => "puppet://$server/modules/apt/50unattended-upgrades" }
 }
 
