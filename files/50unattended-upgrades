@@ -30,14 +30,19 @@ Unattended-Upgrade::Package-Blacklist {
 	//2009-12-11 13:41:45,233 INFO Writing dpkg log to '/var/log/unattended-upgrades-dpkg_2009-12-11_13:41:45.233713.log'
 	//2009-12-11 13:42:11,988 INFO All upgrades installed
         
-	"linux-image-2.6.18-5-vserver-686";
-	"linux-image-2.6.18-5-xen-vserver-686";
-        "linux-image-2.6.18-6-vserver-686";
-	"linux-image-2.6.18-6-xen-vserver-686";
-        "linux-image-2.6.24.3";
-        "linux-image-2.6.26-1-686";
-        "linux-image-2.6.26-2-xen-amd64";
-        "linux-image-2.6.26-2-xen-686";
+        # lenny
+	"linux-image-2.6.26-1-686";
+	"linux-image-2.6.26-1-amd64";
+        "linux-image-2.6.26-1-xen-686";
+        "linux-image-2.6.26-1-xen-amd64";
+	"linux-image-2.6.26-1-vserver-686";
+	"linux-image-2.6.26-1-vserver-amd64";
+	
+	"linux-image-2.6.26-2-686";
 	"linux-image-2.6.26-2-amd64";
+        "linux-image-2.6.26-2-xen-686";
+        "linux-image-2.6.26-2-xen-amd64";
+	"linux-image-2.6.26-2-vserver-amd64";
+
 };
 
