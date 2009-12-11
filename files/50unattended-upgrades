@@ -30,7 +30,7 @@ Unattended-Upgrade::Package-Blacklist {
 	//2009-12-11 13:41:45,233 INFO Writing dpkg log to '/var/log/unattended-upgrades-dpkg_2009-12-11_13:41:45.233713.log'
 	//2009-12-11 13:42:11,988 INFO All upgrades installed
         
-        # lenny
+        // lenny
 	"linux-image-2.6.26-1-686";
 	"linux-image-2.6.26-1-amd64";
         "linux-image-2.6.26-1-xen-686";
