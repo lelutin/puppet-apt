@@ -75,11 +75,16 @@ exist there, this module will apt-key add each key
 $backports_enabled
 ------------------
 If set to true, the debian backports repository is enabled through a 
-file in /etc/apt/sources.d/. Defaults to false.
+file in /etc/apt/sources.d/. Defaults to true.
 
 $apt_deb_src_enabled
 --------------------
 If set to true, the debian sources repository is enabled through a 
+file in /etc/apt/sources.d/. Defaults to false.
+
+$apt_volatile_enabled
+--------------------
+If set to true, the debiani volatile repository is enabled through a 
 file in /etc/apt/sources.d/. Defaults to false.
 
 

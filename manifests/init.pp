@@ -21,6 +21,11 @@ class apt {
 		'true' => 'true',
 		default => $apt_deb_src_enabled,
 	}
+	
+	$apt_volatile_enabled = $apt_volatile_enabled ? {
+		'true' => 'true',
+		default => $apt_volatile_enabled,
+	}
 
 	package { apt: ensure => installed }
 
@@ -159,9 +164,19 @@ class apt {
 	case $apt_deb_src_enabled {
 	  'true': {   
 	      config_file {
-		      # deb-src
 		      "/etc/apt/sources.list.d/debian-sources.list":
 			      content => template("apt/sources.list.deb-src.erb"),
+			      require => Exec[assert_lsbdistcodename];
+	      }
+	  }		
+   	  default: {}
+ 	}
+
+	case $apt_volatile_enabled {
+	  'true': {   
+	      config_file {
+		      "/etc/apt/sources.list.d/debian-volatile.list":
+			      content => template("apt/sources.list.volatile.erb"),
 			      require => Exec[assert_lsbdistcodename];
 	      }
 	  }		
