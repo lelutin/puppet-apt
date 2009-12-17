@@ -49,7 +49,7 @@ class apt {
 			# include main, security and backports
 			# additional sources could be included via an array
 			"/etc/apt/sources.list":
-				content => template("apt/sources.list.erb"),
+				content => template("apt/${operatingsystem}/sources.list.erb"),
 				require => Exec[assert_lsbdistcodename];
 		}
 	}
@@ -111,8 +111,8 @@ class apt {
 	  'true': {   
 	      config_file {
 		      # backports
-		      "/etc/apt/sources.list.d/debian-backports.list":
-			      content => template("apt/sources.list.backports.erb"),
+		      "/etc/apt/sources.list.d/${operatingsystem}-backports.list":
+			      content => template("apt/${operatingsystem}/sources.list.backports.erb"),
 			      require => Exec[assert_lsbdistcodename];
 	      }
 		
@@ -164,8 +164,8 @@ class apt {
 	case $apt_deb_src_enabled {
 	  'true': {   
 	      config_file {
-		      "/etc/apt/sources.list.d/debian-sources.list":
-			      content => template("apt/sources.list.deb-src.erb"),
+		      "/etc/apt/sources.list.d/${operatingsystem}-sources.list":
+			      content => template("apt/${operatingsystem}/sources.list.deb-src.erb"),
 			      require => Exec[assert_lsbdistcodename];
 	      }
 	  }		
@@ -175,8 +175,8 @@ class apt {
 	case $apt_volatile_enabled {
 	  'true': {   
 	      config_file {
-		      "/etc/apt/sources.list.d/debian-volatile.list":
-			      content => template("apt/sources.list.volatile.erb"),
+		      "/etc/apt/sources.list.d/${operatingsystem}-volatile.list":
+			      content => template("apt/${operatingsystem}/sources.list.volatile.erb"),
 			      require => Exec[assert_lsbdistcodename];
 	      }
 	  }		
