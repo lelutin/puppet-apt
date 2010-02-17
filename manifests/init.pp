@@ -53,8 +53,19 @@ class apt {
 				require => Exec[assert_lsbdistcodename];
 		}
 	}
-
-        case $custom_preferences {
+        
+	define custom_sources_template ($sources_file = "") {
+           file { "/etc/apt/sources.list.d/$sources_file":
+                          content => template($name),
+                          require => Exec[assert_lsbdistcodename];
+            }
+           exec { "/usr/bin/apt-get update":   
+               subscribe => File["/etc/apt/sources.list.d/$sources_file"],
+               refreshonly => true,            
+           }
+        }
+        
+	case $custom_preferences {
           '': {
             include default_preferences
           }

@@ -146,6 +146,12 @@ upgrade_package { "perl":
 		  "perl-modules":
 }
 
+apt::custom_sources_template
+----------------------------
+Deploys custom sources in /etc/apt/sources.list.d, i.e.
+
+    apt::custom_sources_template { "site-apt/my-repository.list.erb": sources_file => "my-repository.list" }
+
 TODO
 ====
 
