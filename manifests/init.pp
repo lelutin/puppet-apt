@@ -106,13 +106,8 @@ class apt {
 			subscribe => [ File["/etc/apt/sources.list"],
 				File["/etc/apt/preferences"], File["/etc/apt/apt.conf.d"],
 				File[apt_config] ];
-		"/usr/bin/apt-get update && /usr/bin/apt-get autoclean #hourly":
-			require => [ File["/etc/apt/sources.list"],
-				File["/etc/apt/preferences"], File[apt_config] ],
-			# Another Semaphor for all packages to reference
-			alias => apt_updated;
 	}
-	      
+
 	## This package should really always be current
 	package { "debian-archive-keyring":
 	  ensure => latest,
@@ -270,9 +265,17 @@ class dselect {
 }
 
 
-class apt::unattended_upgrades {
+class apt::unattended_upgrades inherits apt {
         package {       unattended-upgrades : ensure => latest; }
         file { "/etc/apt/apt.conf.d/50unattended-upgrades": 
                source  => "puppet://$server/modules/apt/50unattended-upgrades" }
+}
+
+class apt::cron inherits apt {
+       file {'/etc/cron.d/apt.cron':
+	    source => undef,
+            content => "# by puppet\n3 * * * * root /usr/bin/apt-get update && /usr/bin/apt-get autoclean\n",
+	    notify => service["crond"]; 
+	}	
 }
 

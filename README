@@ -102,6 +102,10 @@ Unfortunately there seems to be a bug in unattended-upgrades <= 0.25.1 that
 wildcards aren't recognized, so use it with care !
 http://packages.debian.org/de/lenny/unattended-upgrades
 
+apt::cron
+---------
+Deploys a cronjob to run apt-get update && apt-get autoclean every hour
+
 
 Resources
 =========
