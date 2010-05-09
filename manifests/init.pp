@@ -46,7 +46,8 @@ class apt {
     include apt::unattended_upgrades
   }
 
-  $apt_base_dir = "${module_dir_path}/apt"
+  include common::moduledir
+  $apt_base_dir = "${common::moduledir::module_dir_path}/apt"
   modules_dir { apt: }
   # watch apt.conf.d
   file { "/etc/apt/apt.conf.d": ensure => directory, checksum => mtime; }
