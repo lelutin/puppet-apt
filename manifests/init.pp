@@ -63,6 +63,7 @@ class apt {
       "/usr/bin/apt-get update && /usr/bin/apt-get autoclean #hourly":
         require => [ File["/etc/apt/sources.list"],
                      File["/etc/apt/preferences"], File[apt_config] ],
+        loglevel => info,
         # Another Semaphor for all packages to reference
         alias => apt_updated;
   }
