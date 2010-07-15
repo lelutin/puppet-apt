@@ -107,18 +107,31 @@ class apt {
 				File["/etc/apt/preferences"], File["/etc/apt/apt.conf.d"],
 				File[apt_config] ];
 	}
-
+	      
 	## This package should really always be current
 	package { "debian-archive-keyring":
 	  ensure => latest,
 	}
 
+<<<<<<< HEAD
+	## This package should really always be current
+	package { "debian-archive-keyring":
+	  ensure => latest,
+	}
+
+=======
+>>>>>>> riseup/master
 	case $backports_enabled {
 	  'true': {   
 	      config_file {
 		      # backports
+<<<<<<< HEAD
 		      "/etc/apt/sources.list.d/${operatingsystem}-backports.list":
 			      content => template("apt/${operatingsystem}/sources.list.backports.erb"),
+=======
+		      "/etc/apt/sources.list.d/debian-backports.list":
+			      content => template("apt/sources.list.backports.erb"),
+>>>>>>> riseup/master
 			      require => Exec[assert_lsbdistcodename];
 	      }
 		
@@ -167,6 +180,7 @@ class apt {
 	  default: { }
 	}
 
+<<<<<<< HEAD
 	case $apt_deb_src_enabled {
 	  'true': {   
 	      config_file {
@@ -188,6 +202,9 @@ class apt {
 	  }		
    	  default: {}
  	}
+=======
+    
+>>>>>>> riseup/master
 
         case $custom_key_dir {
           '': {
