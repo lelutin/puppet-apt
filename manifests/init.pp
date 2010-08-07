@@ -79,7 +79,7 @@ class apt {
       # http://backports.org/debian/archive.key
       # and is needed to bootstrap the backports trustpath
       file { "${apt_base_dir}/backports.org.key":
-        source => "puppet://$server/modules/apt/backports.org.key",
+        source => "puppet:///modules/apt/backports.org.key",
         mode => 0444, owner => root, group => root,
       }
       exec { "/usr/bin/apt-key add ${apt_base_dir}/backports.org.key && apt-get update":
@@ -96,7 +96,7 @@ class apt {
       # http://backports.org/debian/archive.key
       # and is needed to bootstrap the backports trustpath
       file { "${apt_base_dir}/backports.org.key":
-        source => "puppet://$server/modules/apt/backports.org.key",
+        source => "puppet:///modules/apt/backports.org.key",
         mode => 0444, owner => root, group => root,
       }
       exec { "/usr/bin/apt-key add ${apt_base_dir}/backports.org.key && apt-get update":
