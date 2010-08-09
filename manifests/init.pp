@@ -59,10 +59,10 @@ class apt {
       subscribe => [ File["/etc/apt/sources.list"],
                      File["/etc/apt/preferences"], 
                      File["/etc/apt/apt.conf.d"],
-                     File[apt_config] ];
+                     Config_file[apt_config] ];
       "/usr/bin/apt-get update && /usr/bin/apt-get autoclean #hourly":
         require => [ File["/etc/apt/sources.list"],
-                     File["/etc/apt/preferences"], File[apt_config] ],
+                     File["/etc/apt/preferences"], Config_file[apt_config] ],
         loglevel => info,
         # Another Semaphor for all packages to reference
         alias => apt_updated;
@@ -103,7 +103,7 @@ class apt {
         alias => "backports_key",
         refreshonly => true,
         subscribe => File["${apt_base_dir}/backports.org.key"],
-        before => [ File[apt_config], Package["debian-backports-keyring"] ]
+        before => [ Config_file[apt_config], Package["debian-backports-keyring"] ]
       }
     }
   }
@@ -122,7 +122,7 @@ class apt {
         alias => "custom_keys",
         subscribe => File["${apt_base_dir}/keys.d"],
         refreshonly => true,
-        before => File[apt_config];
+        before => Config_file[apt_config];
       }
     }
   }
