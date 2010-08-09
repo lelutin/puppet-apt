@@ -11,6 +11,6 @@ class apt::default_preferences {
     # little default settings which keep the system sane
     "/etc/apt/apt.conf.d/from_puppet":
       content => "APT::Get::Show-Upgraded true;\nDSelect::Clean $real_apt_clean;\n",
-      before => File[apt_config];
+      before => Config_file[apt_config];
   }
 }
