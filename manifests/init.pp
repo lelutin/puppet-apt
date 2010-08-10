@@ -54,13 +54,15 @@ class apt {
 
   exec {
     # "&& sleep 1" is workaround for older(?) clients
-    "/usr/bin/apt-get update && sleep 1 #on refresh":
+    'refresh_apt':
+      command => '/usr/bin/apt-get update && sleep 1',
       refreshonly => true,
       subscribe => [ File["/etc/apt/sources.list"],
                      File["/etc/apt/preferences"], 
                      File["/etc/apt/apt.conf.d"],
                      Config_file[apt_config] ];
-      "/usr/bin/apt-get update && /usr/bin/apt-get autoclean #hourly":
+      'update_apt':
+        command => '/usr/bin/apt-get update && /usr/bin/apt-get autoclean',
         require => [ File["/etc/apt/sources.list"],
                      File["/etc/apt/preferences"], Config_file[apt_config] ],
         loglevel => info,
