@@ -57,14 +57,11 @@ class apt {
     'refresh_apt':
       command => '/usr/bin/apt-get update && sleep 1',
       refreshonly => true,
-      subscribe => [ File["/etc/apt/sources.list"],
-                     File["/etc/apt/preferences"], 
-                     File["/etc/apt/apt.conf.d"],
+      subscribe => [ File["/etc/apt/sources.list", "/etc/apt/preferences", "/etc/apt/apt.conf.d"],
                      Config_file["apt_config"] ];
       'update_apt':
         command => '/usr/bin/apt-get update && /usr/bin/apt-get autoclean',
-        require => [ File["/etc/apt/sources.list"],
-                     File["/etc/apt/preferences"], Config_file["apt_config"] ],
+        require => [ File["/etc/apt/sources.list", "/etc/apt/preferences"], Config_file["apt_config"] ],
         loglevel => info,
         # Another Semaphor for all packages to reference
         alias => "apt_updated";
