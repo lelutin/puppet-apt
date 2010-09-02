@@ -36,7 +36,7 @@ class apt {
     default: {
       config_file { "/etc/apt/preferences":
         content => $custom_preferences,
-        alias => apt_config,
+        alias => "apt_config",
         require => File["/etc/apt/sources.list"];
       }
     }
@@ -60,14 +60,14 @@ class apt {
       subscribe => [ File["/etc/apt/sources.list"],
                      File["/etc/apt/preferences"], 
                      File["/etc/apt/apt.conf.d"],
-                     Config_file[apt_config] ];
+                     Config_file["apt_config"] ];
       'update_apt':
         command => '/usr/bin/apt-get update && /usr/bin/apt-get autoclean',
         require => [ File["/etc/apt/sources.list"],
-                     File["/etc/apt/preferences"], Config_file[apt_config] ],
+                     File["/etc/apt/preferences"], Config_file["apt_config"] ],
         loglevel => info,
         # Another Semaphor for all packages to reference
-        alias => apt_updated;
+        alias => "apt_updated";
   }
 
   ## This package should really always be current
@@ -88,7 +88,7 @@ class apt {
         alias => "backports_key",
         refreshonly => true,
         subscribe => File["${apt_base_dir}/backports.org.key"],
-        before => [ File[apt_config], Package["debian-backports-keyring"] ]
+        before => [ File["apt_config"], Package["debian-backports-keyring"] ]
       }
     }
     lenny: {
@@ -105,7 +105,7 @@ class apt {
         alias => "backports_key",
         refreshonly => true,
         subscribe => File["${apt_base_dir}/backports.org.key"],
-        before => [ Config_file[apt_config], Package["debian-backports-keyring"] ]
+        before => [ Config_file["apt_config"], Package["debian-backports-keyring"] ]
       }
     }
   }
@@ -124,7 +124,7 @@ class apt {
         alias => "custom_keys",
         subscribe => File["${apt_base_dir}/keys.d"],
         refreshonly => true,
-        before => Config_file[apt_config];
+        before => Config_file["apt_config"];
       }
     }
   }
