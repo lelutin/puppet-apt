@@ -69,44 +69,9 @@ class apt {
 
   ## This package should really always be current
   package { "debian-archive-keyring": ensure => latest }
+  # backports uses the normal archive key now
+  package { "debian-backports-keyring": ensure => absent }
         
-  case $lsbdistcodename {
-    etch: {
-      package { "debian-backports-keyring": ensure => latest }
-                
-      # This key was downloaded from
-      # http://backports.org/debian/archive.key
-      # and is needed to bootstrap the backports trustpath
-      file { "${apt_base_dir}/backports.org.key":
-        source => "puppet:///modules/apt/backports.org.key",
-        mode => 0444, owner => root, group => root,
-      }
-      exec { "/usr/bin/apt-key add ${apt_base_dir}/backports.org.key && apt-get update":
-        alias => "backports_key",
-        refreshonly => true,
-        subscribe => File["${apt_base_dir}/backports.org.key"],
-        before => [ File["apt_config"], Package["debian-backports-keyring"] ]
-      }
-    }
-    lenny: {
-      package { "debian-backports-keyring": ensure => latest }
-
-      # This key was downloaded from
-      # http://backports.org/debian/archive.key
-      # and is needed to bootstrap the backports trustpath
-      file { "${apt_base_dir}/backports.org.key":
-        source => "puppet:///modules/apt/backports.org.key",
-        mode => 0444, owner => root, group => root,
-      }
-      exec { "/usr/bin/apt-key add ${apt_base_dir}/backports.org.key && apt-get update":
-        alias => "backports_key",
-        refreshonly => true,
-        subscribe => File["${apt_base_dir}/backports.org.key"],
-        before => [ Config_file["apt_config"], Package["debian-backports-keyring"] ]
-      }
-    }
-  }
-
   case $custom_key_dir {
     '': {
       exec { "/bin/true # no_custom_keydir": }

@@ -4,5 +4,5 @@
 <% if (lsbdistcodename == "sid" || lsbdistcodename == "unstable") -%>
 # There are no backports for for <%= lsbdistcodename %>
 <% else -%>
-deb http://www.backports.org/debian/ <%= lsbdistcodename %>-backports main
+deb http://backports.debian.org/debian-backports/ <%= lsbdistcodename %>-backports main
 <% end -%>
