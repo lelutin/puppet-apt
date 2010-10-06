@@ -11,14 +11,19 @@ class apt {
     default => $apt_clean,
   }
 
-  package { apt:
-    ensure => installed,
-    require => undef,
-  }
-
   $use_volatile = $apt_use_volatile ? {
     ''      => false,
     default => $apt_use_volatile,
+  }
+
+  $include_src = $apt_include_src ? {
+    ''      => false,
+    default => $apt_include_src,
+  }
+
+  package { apt:
+    ensure => installed,
+    require => undef,
   }
 
   # init $release, $next_release, $codename, $next_codename

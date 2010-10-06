@@ -4,12 +4,18 @@
 
 # basic
 deb <%= http://ftp.debian.org/debian/ %> <%= codename %> <%= repos %>
+<% if include_src then %>
+deb-src <%= http://ftp.debian.org/debian/ %> <%= codename %> <%= repos %>
+<% end %>
 
 # security
 <% if (release == "unstable" || release == "experimental") %>
 # There is no security support for <%= release %>
 <% else %>
 deb http://security.debian.org/ <%= codename %>/updates <%= repos %>
+<% if include_src then %>
+deb-src http://security.debian.org/ <%= codename %>/updates <%= repos %>
+<% end %>
 <% end %>
 
 # backports
@@ -17,6 +23,9 @@ deb http://security.debian.org/ <%= codename %>/updates <%= repos %>
 # There is no backports archive for <%= release %>
 <% else %>
 deb http://backports.debian.org/debian-backports/ <%= codename %>-backports <%= repos %>
+<% if include_src then %>
+deb-src http://backports.debian.org/debian-backports/ <%= codename %>-backports <%= repos %>
+<% end %>
 <% end %>
 
 <% if use_volatile %>
@@ -25,6 +34,9 @@ deb http://backports.debian.org/debian-backports/ <%= codename %>-backports <%= 
 # There is no volatile archive for <%= release %>
 <% else %>
 deb http://volatile.debian.org/debian-volatile/ <%= codename %>/volatile <%= repos %>
+<% if include_src then %>
+deb-src http://volatile.debian.org/debian-volatile/ <%= codename %>/volatile <%= repos %>
+<% end %>
 <% end %>
 <% end %>
 
