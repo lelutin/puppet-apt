@@ -18,15 +18,15 @@ class apt {
 
   # init $release, $next_release, $codename, $next_codename
   case $lsbdistcodename {
-      '': {
-          include lsb
-          $codename = $lsbdistcodename
-          $release = $lsbdistrelease
-      }
-      default: {
-          $codename = $lsbdistcodename
-          $release = debian_release($codename)
-      }
+    '': {
+      include lsb
+      $codename = $lsbdistcodename
+      $release = $lsbdistrelease
+    }
+    default: {
+      $codename = $lsbdistcodename
+      $release = debian_release($codename)
+    }
   }
   $next_codename = debian_nextcodename($codename)
   $next_release = debian_nextrelease($release)
