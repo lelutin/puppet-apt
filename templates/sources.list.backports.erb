@@ -1,8 +1,0 @@
-# This file is brought to you by puppet
-
-# backports
-<% if (codename == "sid" || codename == "unstable") -%>
-# There are no backports for for <%= codename %>
-<% else -%>
-deb http://backports.debian.org/debian-backports/ <%= codename %>-backports main
-<% end -%>
