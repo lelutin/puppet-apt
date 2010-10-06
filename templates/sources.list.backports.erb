@@ -1,8 +1,8 @@
 # This file is brought to you by puppet
 
 # backports
-<% if (lsbdistcodename == "sid" || lsbdistcodename == "unstable") -%>
-# There are no backports for for <%= lsbdistcodename %>
+<% if (codename == "sid" || codename == "unstable") -%>
+# There are no backports for for <%= codename %>
 <% else -%>
-deb http://backports.debian.org/debian-backports/ <%= lsbdistcodename %>-backports main
+deb http://backports.debian.org/debian-backports/ <%= codename %>-backports main
 <% end -%>
