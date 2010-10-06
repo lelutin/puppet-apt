@@ -110,9 +110,22 @@ the Debian official backports and the Debian Volatile archive.
 Classes
 =======
 
-This module contains only the apt class, which sets up all described
-functionality.
+apt
+---
 
+The apt class sets up all documented functionality but cron-apt.
+
+apt::cron::download
+-------------------
+
+This class sets up cron-apt so that it downloads upgradable packages,
+does not actually do any upgrade and email when the output changes.
+
+apt::cron::dist-upgrade
+-----------------------
+
+This class sets up cron-apt so that it dist-upgrades the system and
+email when upgrades are performed.
 
 Resources
 =========
