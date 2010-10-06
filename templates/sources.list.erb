@@ -19,3 +19,12 @@ deb http://security.debian.org/ <%= codename %>/updates <%= repos %>
 deb http://backports.debian.org/debian-backports/ <%= codename %>-backports <%= repos %>
 <% end %>
 
+<% if use_volatile %>
+# volatile
+<% if (release == "testing" || release == "unstable" || release == "experimental") %>
+# There is no volatile archive for <%= release %>
+<% else %>
+deb http://volatile.debian.org/debian-volatile/ <%= codename %>/volatile <%= repos %>
+<% end %>
+<% end %>
+

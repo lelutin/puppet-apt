@@ -16,6 +16,11 @@ class apt {
     require => undef,
   }
 
+  $use_volatile = $apt_use_volatile ? {
+    ''      => false,
+    default => $apt_use_volatile,
+  }
+
   # init $release, $next_release, $codename, $next_codename
   case $lsbdistcodename {
     '': {
