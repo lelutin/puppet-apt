@@ -3,6 +3,11 @@ Package: *
 Pin: release o=Debian,n=<%= codename %>
 Pin-Priority: 990
 
+Explanation: Debian backports
+Package: *
+Pin: origin backports.debian.org
+Pin-Priority: 200
+
 Explanation: Debian <%= next_codename %>
 Package: *
 Pin: release o=Debian,n=<%= next_codename %>
