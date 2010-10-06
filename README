@@ -11,8 +11,9 @@ backports.debian.org is added.
 
 dselect is switched to expert mode to suppress superfluous help screens.
 
-sources.list and apt_preferences are managed. Testing and unstable are pinned to
-very low values by default to prevent accidental upgrades.
+sources.list and apt_preferences are managed. More recent Debian
+releases are pinned to very low values by default to prevent
+accidental upgrades.
 
 This module needs lsb-release installed.
 
@@ -54,7 +55,7 @@ $custom_sources_list ='template("apt/sources.list")'
 $custom_preferences	
 --------------------
 By default this module will use a basic apt/preferences file with
-unstable and testing pinned to very low values so that any package
+more recent releases pinned to very low values so that any package
 installation will not accidentally pull in packages from those suites
 unless you explicitly specify the version number. You can set this
 variable to pull in a customized apt/preferences template, for
