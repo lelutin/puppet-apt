@@ -36,10 +36,8 @@ class apt {
       include apt::default_sources_list
     }
     default: {
-      include lsb
       config_file { "/etc/apt/sources.list":
         content => $custom_sources_list,
-        require => Package['lsb'];
       }
     }
   }
