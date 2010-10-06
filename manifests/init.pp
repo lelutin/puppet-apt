@@ -26,6 +26,23 @@ class apt {
     default => $apt_use_next_release,
   }
 
+  $debian_url = $apt_debian_url ? {
+    ''      => 'http://ftp.debian.org/debian/',
+    default => "${apt_debian_url}",
+  }
+  $security_url = $apt_security_url ? {
+    ''      => 'http://security.debian.org/',
+    default => "${apt_security_url}",
+  }
+  $backports_url = $apt_backports_url ? {
+    ''      => 'http://backports.debian.org/debian-backports/',
+    default => "${apt_backports_url}",
+  }
+  $volatile_url = $apt_volatile_url ? {
+    ''      => 'http://volatile.debian.org/debian-volatile/',
+    default => "${apt_volatile_url}",
+  }
+
   package { apt:
     ensure => installed,
     require => undef,

@@ -44,12 +44,11 @@ value can be set manually too, e.g. to enable forced upgrades
 
 $custom_sources_list
 --------------------
-By default this module will use a basic apt/sources.list with a
-generic debian mirror. If you need to set more specific sources,
-e.g. for country proximity, proxies, etc. you can set this variable to
-the location of your sources.list template.  For example, setting the
-following variable before including this class will pull in the
-templates/apt/sources.list file: 
+By default this module will use a basic apt/sources.list.
+If you need to set more specific sources, e.g. for proxies, etc. you
+can set this variable to the location of your sources.list template.
+For example, setting the following variable before including this
+class will pull in the templates/apt/sources.list file:
 $custom_sources_list ='template("apt/sources.list")'
 		       
 $custom_preferences	
@@ -100,6 +99,13 @@ release are added. The default pinning configuration pins it to very
 low values.
 By default this is false for backward compatibility with older
 versions of this module.
+
+$apt_debian_url, $apt_security_url, $apt_backports_url, $apt_volatile_url
+-------------------------------------------------------------------------
+
+These variables allow to override the default APT mirrors respectively
+used for the standard Debian archives, the Debian security archive,
+the Debian official backports and the Debian Volatile archive.
 
 Classes
 =======
@@ -155,8 +161,6 @@ TODO
 ====
 
 Enable debian-archive-keyring handling for sarge, lenny and sid.
-
-Enable selection of country-specific mirrors.
 
 Currently this module updates the caches on every run. Running dselect update is
 a expensive operation and should be done only on schedule by using apticron.
