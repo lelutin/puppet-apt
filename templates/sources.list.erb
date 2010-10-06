@@ -3,9 +3,9 @@
 ### Debian current: <%= codename %>
 
 # basic
-deb <%= http://ftp.debian.org/debian/ %> <%= codename %> <%= repos %>
+deb http://ftp.debian.org/debian/ <%= codename %> <%= repos %>
 <% if include_src then %>
-deb-src <%= http://ftp.debian.org/debian/ %> <%= codename %> <%= repos %>
+deb-src http://ftp.debian.org/debian/ <%= codename %> <%= repos %>
 <% end %>
 
 # security
@@ -44,9 +44,9 @@ deb-src http://volatile.debian.org/debian-volatile/ <%= codename %>/volatile <%=
 ### Debian next: <%= next_codename %>
 
 # basic
-deb <%= http://ftp.debian.org/debian/ %> <%= next_codename %> <%= repos %>
+deb http://ftp.debian.org/debian/ <%= next_codename %> <%= repos %>
 <% if include_src then %>
-deb-src <%= http://ftp.debian.org/debian/ %> <%= next_codename %> <%= repos %>
+deb-src http://ftp.debian.org/debian/ <%= next_codename %> <%= repos %>
 <% end %>
 
 # security
