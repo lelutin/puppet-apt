@@ -40,3 +40,44 @@ deb-src http://volatile.debian.org/debian-volatile/ <%= codename %>/volatile <%=
 <% end %>
 <% end %>
 
+<% if use_next_release then %>
+### Debian next: <%= next_codename %>
+
+# basic
+deb <%= http://ftp.debian.org/debian/ %> <%= next_codename %> <%= repos %>
+<% if include_src then %>
+deb-src <%= http://ftp.debian.org/debian/ %> <%= next_codename %> <%= repos %>
+<% end %>
+
+# security
+<% if (next_release == "unstable" || next_release == "experimental") %>
+# There is no security support for <%= next_release %>
+<% else %>
+deb http://security.debian.org/ <%= next_codename %>/updates <%= repos %>
+<% if include_src then %>
+deb-src http://security.debian.org/ <%= next_codename %>/updates <%= repos %>
+<% end %>
+<% end %>
+
+# backports
+<% if (next_release == "testing" || next_release == "unstable" || next_release == "experimental") %>
+# There is no backports archive for <%= next_release %>
+<% else %>
+deb http://backports.debian.org/debian-backports/ <%= next_codename %>-backports <%= repos %>
+<% if include_src then %>
+deb-src http://backports.debian.org/debian-backports/ <%= next_codename %>-backports <%= repos %>
+<% end %>
+<% end %>
+
+<% if use_volatile %>
+# volatile
+<% if (next_release == "testing" || next_release == "unstable" || next_release == "experimental") %>
+# There is no volatile archive for <%= next_release %>
+<% else %>
+deb http://volatile.debian.org/debian-volatile/ <%= next_codename %>/volatile <%= repos %>
+<% if include_src then %>
+deb-src http://volatile.debian.org/debian-volatile/ <%= next_codename %>/volatile <%= repos %>
+<% end %>
+<% end %>
+<% end %>
+<% end %>

@@ -92,6 +92,15 @@ added binary archive source.
 By default this is false for backward compatibility with older
 versions of this module.
 
+$apt_use_next_release
+---------------------
+
+If this variable is set to true the sources for the next Debian
+release are added. The default pinning configuration pins it to very
+low values.
+By default this is false for backward compatibility with older
+versions of this module.
+
 Classes
 =======
 

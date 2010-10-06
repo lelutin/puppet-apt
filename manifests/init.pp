@@ -21,6 +21,11 @@ class apt {
     default => $apt_include_src,
   }
 
+  $use_next_release = $apt_use_next_release ? {
+    ''      => false,
+    default => $apt_use_next_release,
+  }
+
   package { apt:
     ensure => installed,
     require => undef,
