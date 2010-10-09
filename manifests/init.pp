@@ -3,279 +3,127 @@
 # Copyright (C) 2007 David Schmitt <david@schmitt.edv-bus.at>
 # See LICENSE for the full license granted to you.
 
-
 class apt {
 
-	# See README
-	$real_apt_clean = $apt_clean ? {
-		'' => 'auto',
-		default => $apt_clean,
-	}
+  # See README
+  $real_apt_clean = $apt_clean ? {
+    '' => 'auto',
+    default => $apt_clean,
+  }
 
-	$backports_enabled = $backports_enabled ? {
-		'' => 'false',
-		default => $backports_enabled,
-	}
-	
-	$apt_deb_src_enabled = $apt_deb_src_enabled ? {
-		'true' => 'true',
-		default => $apt_deb_src_enabled,
-	}
-	
-	$apt_volatile_enabled = $apt_volatile_enabled ? {
-		'true' => 'true',
-		default => $apt_volatile_enabled,
-	}
+  package { apt:
+    ensure => installed,
+    require => undef,
+  }
 
-	package { apt: ensure => installed }
+  case $custom_sources_list {
+    '': {
+      include apt::default_sources_list
+    }
+    default: {
+      include lsb
+      config_file { "/etc/apt/sources.list":
+        content => $custom_sources_list,
+        require => Package['lsb'];
+      }
+    }
+  }
 
-	# a few templates need lsbdistcodename
-	include assert_lsbdistcodename
+  case $custom_preferences {
+    '': {
+      include apt::default_preferences
+    }
+    default: {
+      config_file { "/etc/apt/preferences":
+        content => $custom_preferences,
+        alias => apt_config,
+        require => File["/etc/apt/sources.list"];
+      }
+    }
+  }
 
-	case $custom_sources_list {
-		'': {
-			include default_sources_list
-		}
-		default: {
-			config_file { "/etc/apt/sources.list":
-				content => $custom_sources_list,
-				require => Exec[assert_lsbdistcodename];
-			}
-		}
-	}
+  if $apt_unattended_upgrades {
+    include apt::unattended_upgrades
+  }
 
-	class default_sources_list {
-		config_file {
-			# include main, security and backports
-			# additional sources could be included via an array
-			"/etc/apt/sources.list":
-				content => template("apt/${operatingsystem}/sources.list.erb"),
-				require => Exec[assert_lsbdistcodename];
-		}
-	}
+  include common::moduledir
+  $apt_base_dir = "${common::moduledir::module_dir_path}/apt"
+  modules_dir { apt: }
+  # watch apt.conf.d
+  file { "/etc/apt/apt.conf.d": ensure => directory, checksum => mtime; }
+
+  exec {
+    # "&& sleep 1" is workaround for older(?) clients
+    'refresh_apt':
+      command => '/usr/bin/apt-get update && sleep 1',
+      refreshonly => true,
+      subscribe => [ File["/etc/apt/sources.list"],
+                     File["/etc/apt/preferences"], 
+                     File["/etc/apt/apt.conf.d"],
+                     Config_file[apt_config] ];
+      'update_apt':
+        command => '/usr/bin/apt-get update && /usr/bin/apt-get autoclean',
+        require => [ File["/etc/apt/sources.list"],
+                     File["/etc/apt/preferences"], Config_file[apt_config] ],
+        loglevel => info,
+        # Another Semaphor for all packages to reference
+        alias => apt_updated;
+  }
+
+  ## This package should really always be current
+  package { "debian-archive-keyring": ensure => latest }
         
-	define custom_sources_template ($sources_file = "") {
-           file { "/etc/apt/sources.list.d/$sources_file":
-                          content => template($name),
-                          require => Exec[assert_lsbdistcodename];
-            }
-           exec { "/usr/bin/apt-get update":   
-               subscribe => File["/etc/apt/sources.list.d/$sources_file"],
-               refreshonly => true,            
-           }
-        }
-        
-	case $custom_preferences {
-          '': {
-            include default_preferences
-          }
-          default: {
-            config_file { "/etc/apt/preferences":
-              content => $custom_preferences,
-              alias => apt_config,
-              require => File["/etc/apt/sources.list"];
-            }
-          }
-        }
-        class default_preferences {
-	  config_file {
-	    # this just pins unstable and testing to very low values
-	    "/etc/apt/preferences":
-	      content => template("apt/preferences.erb"),
-	      # use File[apt_config] to reference a completed configuration
-	      # See "The Puppet Semaphor" 2007-06-25 on the puppet-users ML
-	      alias => apt_config,
-	      # only update together
-	      require => File["/etc/apt/sources.list"];
-	    # little default settings which keep the system sane
-	    "/etc/apt/apt.conf.d/from_puppet":
-	      content => "APT::Get::Show-Upgraded true;\nDSelect::Clean $real_apt_clean;\n",
-	      before => File[apt_config];
-	  }
-        }
+  case $lsbdistcodename {
+    etch: {
+      package { "debian-backports-keyring": ensure => latest }
+                
+      # This key was downloaded from
+      # http://backports.org/debian/archive.key
+      # and is needed to bootstrap the backports trustpath
+      file { "${apt_base_dir}/backports.org.key":
+        source => "puppet:///modules/apt/backports.org.key",
+        mode => 0444, owner => root, group => root,
+      }
+      exec { "/usr/bin/apt-key add ${apt_base_dir}/backports.org.key && apt-get update":
+        alias => "backports_key",
+        refreshonly => true,
+        subscribe => File["${apt_base_dir}/backports.org.key"],
+        before => [ File[apt_config], Package["debian-backports-keyring"] ]
+      }
+    }
+    lenny: {
+      package { "debian-backports-keyring": ensure => latest }
 
-  $apt_base_dir = "${module_dir_path}/apt"
-	module_dir { apt: }
-	# watch apt.conf.d
-	file { "/etc/apt/apt.conf.d": ensure => directory, checksum => mtime; }
+      # This key was downloaded from
+      # http://backports.org/debian/archive.key
+      # and is needed to bootstrap the backports trustpath
+      file { "${apt_base_dir}/backports.org.key":
+        source => "puppet:///modules/apt/backports.org.key",
+        mode => 0444, owner => root, group => root,
+      }
+      exec { "/usr/bin/apt-key add ${apt_base_dir}/backports.org.key && apt-get update":
+        alias => "backports_key",
+        refreshonly => true,
+        subscribe => File["${apt_base_dir}/backports.org.key"],
+        before => [ Config_file[apt_config], Package["debian-backports-keyring"] ]
+      }
+    }
+  }
 
-	exec {
-		# "&& sleep 1" is workaround for older(?) clients
-		"/usr/bin/apt-get update && sleep 1 #on refresh":
-			refreshonly => true,
-			subscribe => [ File["/etc/apt/sources.list"],
-				File["/etc/apt/preferences"], File["/etc/apt/apt.conf.d"],
-				File[apt_config] ];
-	}
-	      
-	## This package should really always be current
-	package { "debian-archive-keyring":
-	  ensure => latest,
-	}
+  if $custom_key_dir {
+    file { "${apt_base_dir}/keys.d":
+      source => "$custom_key_dir",
+      recurse => true,
+      mode => 0755, owner => root, group => root,
+    }
+    exec { "find ${apt_base_dir}/keys.d -type f -exec apt-key add '{}' \\; && apt-get update":
+      alias => "custom_keys",
+      subscribe => File["${apt_base_dir}/keys.d"],
+      refreshonly => true,
+      before => Config_file[apt_config];
+    }
+  }
 
-	case $backports_enabled {
-	  'true': {   
-	      config_file {
-		      # backports
-		      "/etc/apt/sources.list.d/${operatingsystem}-backports.list":
-			      content => template("apt/${operatingsystem}/sources.list.backports.erb"),
-			      require => Exec[assert_lsbdistcodename];
-	      }
-		
-	      case $lsbdistcodename {
-		      etch: {
-			package { "debian-backports-keyring":
-			  ensure => latest,
-			}
-			
-			# This key was downloaded from
-			# http://backports.org/debian/archive.key
-			# and is needed to bootstrap the backports trustpath
-			file { "${apt_base_dir}/backports.org.key":
-			  source => "puppet://$server/modules/apt/backports.org.key",
-			  mode => 0444, owner => root, group => root,
-			}
-			exec { "/usr/bin/apt-key add ${apt_base_dir}/backports.org.key && apt-get update":
-			  alias => "backports_key",
-			  refreshonly => true,
-			  subscribe => File["${apt_base_dir}/backports.org.key"],
-			  before => [ File[apt_config], Package["debian-backports-keyring"] ]
-			}
-		      }
-		      lenny: {
-			package { "debian-backports-keyring":
-			  ensure => latest,
-			}
-
-			# This key was downloaded from
-			# http://backports.org/debian/archive.key
-			# and is needed to bootstrap the backports trustpath
-			file { "${apt_base_dir}/backports.org.key":
-			  source => "puppet://$server/modules/apt/backports.org.key",
-			  mode => 0444, owner => root, group => root,
-			}
-			exec { "/usr/bin/apt-key add ${apt_base_dir}/backports.org.key && apt-get update":
-			  alias => "backports_key",
-			  refreshonly => true,
-			  subscribe => File["${apt_base_dir}/backports.org.key"],
-			  before => [ File[apt_config], Package["debian-backports-keyring"] ]
-			}
-		      }
-	      }
-	  
-	  }
-	  default: { }
-	}
-
-	case $apt_deb_src_enabled {
-	  'true': {   
-	      config_file {
-		      "/etc/apt/sources.list.d/${operatingsystem}-sources.list":
-			      content => template("apt/${operatingsystem}/sources.list.deb-src.erb"),
-			      require => Exec[assert_lsbdistcodename];
-	      }
-	  }		
-   	  default: {}
- 	}
-
-	case $apt_volatile_enabled {
-	  'true': {   
-	      config_file {
-		      "/etc/apt/sources.list.d/${operatingsystem}-volatile.list":
-			      content => template("apt/${operatingsystem}/sources.list.volatile.erb"),
-			      require => Exec[assert_lsbdistcodename];
-	      }
-	  }		
-   	  default: {}
- 	}
-
-        case $custom_key_dir {
-          '': {
-            exec { "/bin/true # no_custom_keydir": }
-          }
-          default: {
-            file { "${apt_base_dir}/keys.d":
-              source => "$custom_key_dir",
-              recurse => true,
-              mode => 0755, owner => root, group => root,
-            }
-            exec { "find ${apt_base_dir}/keys.d -type f -exec apt-key add '{}' \\; && apt-get update":
-              alias => "custom_keys",
-              subscribe => File["${apt_base_dir}/keys.d"],
-              refreshonly => true,
-              before => File[apt_config];
-            }
-          }
-        }
-
-        # workaround for preseeded_package component
-        file { "/var/cache": ensure => directory }
-        file { "/var/cache/local": ensure => directory }
-        file { "/var/cache/local/preseeding/": ensure => directory }
-
-        define preseeded_package ($content = "", $ensure = "installed") {
-          $seedfile = "/var/cache/local/preseeding/$name.seeds"
-          $real_content = $content ? {
-            "" => template ( "$debian_version/$name.seeds" ),
-            Default => $content
-          }
-  
-          file{ $seedfile:
-            content => $real_content,
-            mode => 0600, owner => root, group => root,
-          }
-  
-          package { $name:
-            ensure => $ensure,
-            responsefile => $seedfile,
-            require => File[$seedfile],
-          }
-        }
-
-        define upgrade_package ($version = "") {
-          case $version { 
-            '': { 
-              exec { "aptitude -y install $name": 
-                onlyif => [ "grep-status -F Status installed -a -P $name -q", "apt-show-versions -u $name | grep -q upgradeable" ],
-              }
-            }
-            'latest': { 
-              exec { "aptitude -y install $name": 
-                onlyif => [ "grep-status -F Status installed -a -P $name -q", "apt-show-versions -u $name | grep -q upgradeable" ],
-              }
-            }
-            default: { 
-              exec { "aptitude -y install $name=$version": 
-                onlyif => [ "grep-status -F Status installed -a -P $name -q", "apt-show-versions -u $name | grep -q upgradeable" ],
-              } 
-            }
-          }
-        }
-}       
-
-class dselect {
-	# suppress annoying help texts of dselect
-	line { dselect_expert:
-		file => "/etc/dpkg/dselect.cfg",
-		line => "expert",
-		ensure => present,
-	}
-
-	package { dselect: ensure => installed }
-}
-
-
-class apt::unattended_upgrades inherits apt {
-        package {       unattended-upgrades : ensure => latest; }
-        file { "/etc/apt/apt.conf.d/50unattended-upgrades": 
-               source  => "puppet://$server/modules/apt/50unattended-upgrades" }
-}
-
-class apt::cron inherits apt {
-       file {'/etc/cron.d/apt.cron':
-	    source => undef,
-            content => "# by puppet\n3 * * * * root /usr/bin/apt-get update && /usr/bin/apt-get autoclean\n",
-	    notify => service["crond"]; 
-	}	
-}
-
+  # workaround for preseeded_package component
+  file { [ "/var/cache", "/var/cache/local", "/var/cache/local/preseeding" ]: ensure => directory }
+}     
