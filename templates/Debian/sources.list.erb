@@ -9,3 +9,9 @@ deb http://ftp.debian.org/debian/ <%= lsbdistcodename %> main contrib non-free
 deb http://security.debian.org/ <%= lsbdistcodename %>/updates main contrib non-free
 <% end -%>
 
+# backports
+<% if (lsbdistcodename == "sid" || lsbdistcodename == "unstable") -%>
+# There are no backports for for <%= lsbdistcodename %>
+<% else -%>
+deb http://www.backports.org/debian/ <%= lsbdistcodename %>-backports main
+<% end -%>
