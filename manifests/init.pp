@@ -5,6 +5,8 @@
 
 class apt {
 
+  import "custom_sources.pp"
+  
   # See README
   $real_apt_clean = $apt_clean ? {
     '' => 'auto',
