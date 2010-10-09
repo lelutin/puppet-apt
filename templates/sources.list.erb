@@ -3,18 +3,18 @@
 ### Debian current: <%= codename %>
 
 # basic
-deb <%= debian_url > <%= codename %> <%= repos %>
+deb <%= debian_url %> <%= codename %> <%= repos %>
 <% if include_src then %>
-deb-src <%= debian_url > <%= codename %> <%= repos %>
+deb-src <%= debian_url %> <%= codename %> <%= repos %>
 <% end %>
 
 # security
 <% if (release == "unstable" || release == "experimental") %>
 # There is no security support for <%= release %>
 <% else %>
-deb <%= security_url > <%= codename %>/updates <%= repos %>
+deb <%= security_url %> <%= codename %>/updates <%= repos %>
 <% if include_src then %>
-deb-src <%= security_url > <%= codename %>/updates <%= repos %>
+deb-src <%= security_url %> <%= codename %>/updates <%= repos %>
 <% end %>
 <% end %>
 
@@ -22,9 +22,9 @@ deb-src <%= security_url > <%= codename %>/updates <%= repos %>
 <% if (release == "testing" || release == "unstable" || release == "experimental") %>
 # There is no backports archive for <%= release %>
 <% else %>
-deb <%= backports_url > <%= codename %>-backports <%= repos %>
+deb <%= backports_url %> <%= codename %>-backports <%= repos %>
 <% if include_src then %>
-deb-src <%= backports_url > <%= codename %>-backports <%= repos %>
+deb-src <%= backports_url %> <%= codename %>-backports <%= repos %>
 <% end %>
 <% end %>
 
@@ -33,9 +33,9 @@ deb-src <%= backports_url > <%= codename %>-backports <%= repos %>
 <% if (release == "testing" || release == "unstable" || release == "experimental") %>
 # There is no volatile archive for <%= release %>
 <% else %>
-deb <%= volatile_url > <%= codename %>/volatile <%= repos %>
+deb <%= volatile_url %> <%= codename %>/volatile <%= repos %>
 <% if include_src then %>
-deb-src <%= volatile_url > <%= codename %>/volatile <%= repos %>
+deb-src <%= volatile_url %> <%= codename %>/volatile <%= repos %>
 <% end %>
 <% end %>
 <% end %>
@@ -44,18 +44,18 @@ deb-src <%= volatile_url > <%= codename %>/volatile <%= repos %>
 ### Debian next: <%= next_codename %>
 
 # basic
-deb <%= debian_url > <%= next_codename %> <%= repos %>
+deb <%= debian_url %> <%= next_codename %> <%= repos %>
 <% if include_src then %>
-deb-src <%= debian_url > <%= next_codename %> <%= repos %>
+deb-src <%= debian_url %> <%= next_codename %> <%= repos %>
 <% end %>
 
 # security
 <% if (next_release == "unstable" || next_release == "experimental") %>
 # There is no security support for <%= next_release %>
 <% else %>
-deb <%= security_url > <%= next_codename %>/updates <%= repos %>
+deb <%= security_url %> <%= next_codename %>/updates <%= repos %>
 <% if include_src then %>
-deb-src <%= security_url > <%= next_codename %>/updates <%= repos %>
+deb-src <%= security_url %> <%= next_codename %>/updates <%= repos %>
 <% end %>
 <% end %>
 
@@ -63,9 +63,9 @@ deb-src <%= security_url > <%= next_codename %>/updates <%= repos %>
 <% if (next_release == "testing" || next_release == "unstable" || next_release == "experimental") %>
 # There is no backports archive for <%= next_release %>
 <% else %>
-deb <%= backports_url > <%= next_codename %>-backports <%= repos %>
+deb <%= backports_url %> <%= next_codename %>-backports <%= repos %>
 <% if include_src then %>
-deb-src <%= backports_url > <%= next_codename %>-backports <%= repos %>
+deb-src <%= backports_url %> <%= next_codename %>-backports <%= repos %>
 <% end %>
 <% end %>
 
@@ -74,9 +74,9 @@ deb-src <%= backports_url > <%= next_codename %>-backports <%= repos %>
 <% if (next_release == "testing" || next_release == "unstable" || next_release == "experimental") %>
 # There is no volatile archive for <%= next_release %>
 <% else %>
-deb <%= volatile_url > <%= next_codename %>/volatile <%= repos %>
+deb <%= volatile_url %> <%= next_codename %>/volatile <%= repos %>
 <% if include_src then %>
-deb-src <%= volatile_url > <%= next_codename %>/volatile <%= repos %>
+deb-src <%= volatile_url %> <%= next_codename %>/volatile <%= repos %>
 <% end %>
 <% end %>
 <% end %>
