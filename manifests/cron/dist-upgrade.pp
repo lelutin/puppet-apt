@@ -1,4 +1,4 @@
-class apt::cron::dist-upgrade inherits cron-apt::base {
+class apt::cron::dist-upgrade inherits apt::cron::base {
 
   $action = "autoclean -y
 dist-upgrade -y -o APT::Get::Show-Upgraded=true
