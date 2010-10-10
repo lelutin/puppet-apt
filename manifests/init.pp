@@ -42,6 +42,10 @@ class apt {
     ''      => 'http://volatile.debian.org/debian-volatile/',
     default => "${apt_volatile_url}",
   }
+  $repos = $apt_repos ? {
+    ''      => 'main contrib non-free',
+    default => "${apt_repos}",
+  }
 
   package { apt:
     ensure => installed,

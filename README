@@ -107,6 +107,12 @@ These variables allow to override the default APT mirrors respectively
 used for the standard Debian archives, the Debian security archive,
 the Debian official backports and the Debian Volatile archive.
 
+$apt_repos
+----------
+
+If this variable is set the default repositories list ("main contrib non-free")
+is overriden.
+
 Classes
 =======
 
