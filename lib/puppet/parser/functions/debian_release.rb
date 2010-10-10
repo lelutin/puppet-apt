@@ -1,11 +1,12 @@
 module Puppet::Parser::Functions
   newfunction(:debian_release, :type => :rvalue) do |args|
-    case #{args[0]} {
-      etch:         { 'oldstable' }
-      lenny:        { 'stable' }
-      squeeze:      { 'testing' }
-      sid:          { 'unstable' }
-      experimental: { 'experimental' }
-    }
+    result = case #{args[0]}
+      when 'etch'         then 'oldstable'
+      when 'lenny'        then 'stable'
+      when 'squeeze'      then 'testing'
+      when 'sid'          then 'unstable'
+      when 'experimental' then 'experimental'
+    end
+    return result
   end
 end
