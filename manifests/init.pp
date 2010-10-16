@@ -100,6 +100,10 @@ class apt {
   modules_dir { apt: }
   # watch apt.conf.d
   file { "/etc/apt/apt.conf.d": ensure => directory, checksum => mtime; }
+  file { '/etc/apt/apt.conf.d/99-puppet':
+      ensure => 'file',
+      owner => 'root', group => '0', mode => '0644',
+  }
 
   exec {
     # "&& sleep 1" is workaround for older(?) clients
