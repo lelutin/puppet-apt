@@ -1,7 +1,7 @@
 define apt::preseeded_package ($content = "", $ensure = "installed") {
   $seedfile = "/var/cache/local/preseeding/$name.seeds"
   $real_content = $content ? { 
-    "" => template ( "$debian_version/$name.seeds" ),
+    "" => template ( "$name.seeds", "$debian_version/$name.seeds" ),
     Default => $content
   }   
 
