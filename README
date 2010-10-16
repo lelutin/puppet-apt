@@ -76,7 +76,7 @@ If this variable is set to true apt::unattended_upgrades is included,
 which will install the package unattended-upgrades and configure it to
 daily upgrade the system.
 
-$apt_use_volatile
+$apt_volatile_enabled
 -----------------
 
 If this variable is set to true the Debian Volatile sources are added.

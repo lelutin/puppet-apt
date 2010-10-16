@@ -11,9 +11,9 @@ class apt {
     default => $apt_clean,
   }
 
-  $use_volatile = $apt_use_volatile ? {
+  $use_volatile = $apt_volatile_enabled ? {
     ''      => false,
-    default => $apt_use_volatile,
+    default => $apt_volatile_enabled,
   }
 
   $include_src = $apt_include_src ? {
