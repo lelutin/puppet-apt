@@ -20,3 +20,6 @@ deb-src http://de.archive.ubuntu.com/ubuntu <%= lsbdistcodename %>-security main
 
 # backports
 deb http://archive.ubuntu.com/ubuntu <%= lsbdistcodename %>-backports main universe multiverse restricted
+<% if include_src then -%>
+deb-src http://archive.ubuntu.com/ubuntu <%= lsbdistcodename %>-backports main universe multiverse restricted
+<% end -%>
