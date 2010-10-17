@@ -103,17 +103,25 @@ class apt {
     }
   }
 
-  config_file {
-    # little default settings which keep the system sane
-    "/etc/apt/apt.conf.d/99from_puppet":
-      content => "APT::Get::Show-Upgraded true;\nDSelect::Clean $real_apt_clean;\n",
-      before => Config_file[apt_config];
+  config_file { '/etc/apt/apt.conf.d/99from_puppet': }
+  # little default settings which keep the system sane
+  line { 'apt-get-show-upgraded':
+    file    => "/etc/apt/apt.conf.d/99from_puppet",
+    line    => "APT::Get::Show-Upgraded true;",
+    before  => Config_file[apt_config],
+    require => Config_file['/etc/apt/apt.conf.d/99from_puppet'],
+  }
+  line { 'dselect-clean':
+    file    => "/etc/apt/apt.conf.d/99from_puppet",
+    line    => "DSelect::Clean ${real_apt_clean};",
+    before  => Config_file[apt_config],
+    require => Config_file['/etc/apt/apt.conf.d/99from_puppet'],
   }
   # backward compatibility: upgrade from previous versions of this module.
   file {
     "/etc/apt/apt.conf.d/from_puppet":
       ensure  => 'absent',
-      require => Config_File['/etc/apt/apt.conf.d/99from_puppet'],
+      require => [ Line['apt-get-show-upgraded'], Line['dselect-clean'] ],
   }
 
   if $apt_unattended_upgrades {
@@ -125,10 +133,6 @@ class apt {
   modules_dir { apt: }
   # watch apt.conf.d
   file { "/etc/apt/apt.conf.d": ensure => directory, checksum => mtime; }
-  file { '/etc/apt/apt.conf.d/99-puppet':
-      ensure => 'file',
-      owner => 'root', group => '0', mode => '0644',
-  }
 
   exec {
     # "&& sleep 1" is workaround for older(?) clients
