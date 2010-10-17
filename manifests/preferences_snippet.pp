@@ -3,7 +3,7 @@ define apt::preferences_snippet(
   $release,
   $priority
 ){
-  include apt::preferences_snippet
+  include apt::preferences
   file { "${apt::preferences::apt_preferences_dir}/${name}":
     ensure => $ensure,
     content => "Package: ${name}
