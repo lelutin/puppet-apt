@@ -3,13 +3,14 @@ define apt::preferences_snippet(
   $release,
   $priority
 ){
-  file { "/var/lib/puppet/modules/apt/preferences/${name}":
+  include apt::preferences_snippet
+  file { "${apt::preferences::apt_preferences_dir}/${name}":
     ensure => $ensure,
     content => "Package: ${name}
 Pin: release a=${release}
 Pin-Priority: ${priority}
 ",
-    notify => Exec['concat_/var/lib/puppet/modules/apt/preferences'],
+    notify => Exec["concat_${apt::preferences::apt_preferences_dir}"],
     owner => root, group => 0, mode => 0600;
   }
 }

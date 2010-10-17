@@ -1,9 +1,10 @@
 class apt::preferences {
 
-  include apt::module_dir
+  include common::moduledir
+  $apt_preferences_dir = "${common::moduledir::module_dir_path}/apt/preferences"
   module_dir{'apt/preferences': }
   concatenated_file{'/etc/apt/preferences':
-    dir => '/var/lib/puppet/modules/apt/preferences',
+    dir => $apt_preferences_dir,
     header => 'Package: *
 Pin: release a=unstable
 Pin-Priority: 1
