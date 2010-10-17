@@ -44,9 +44,19 @@ class apt {
     ''      => 'http://volatile.debian.org/debian-volatile/',
     default => "${apt_volatile_url}",
   }
-  $repos = $apt_repos ? {
-    ''      => 'main contrib non-free',
-    default => "${apt_repos}",
+  case $operatingsystem {
+    'debian': {
+      $repos = $apt_repos ? {
+        ''      => 'main contrib non-free',
+        default => "${apt_repos}",
+      }
+    }
+    'ubuntu': {
+      $repos = $apt_repos ? {
+        ''      => 'main restricted universe multiverse',
+        default => "${apt_repos}",
+      }
+    }
   }
 
   package { apt:

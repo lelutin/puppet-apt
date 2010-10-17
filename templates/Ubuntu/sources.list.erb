@@ -1,25 +1,25 @@
 # This file is brought to you by puppet
 
 # basic <%= lsbdistcodename %>
-deb http://de.archive.ubuntu.com/ubuntu <%= lsbdistcodename %> main restricted universe multiverse
+deb http://de.archive.ubuntu.com/ubuntu <%= lsbdistcodename %> <%= repos %>
 <% if include_src then -%>
-deb-src http://de.archive.ubuntu.com/ubuntu <%= lsbdistcodename %> main restricted universe multiverse
+deb-src http://de.archive.ubuntu.com/ubuntu <%= lsbdistcodename %> <%= repos %>
 <% end -%>
 
 # updates
-deb http://de.archive.ubuntu.com/ubuntu <%= lsbdistcodename %>-updates main restricted universe multiverse
+deb http://de.archive.ubuntu.com/ubuntu <%= lsbdistcodename %>-updates <%= repos %>
 <% if include_src then -%>
-deb-src http://de.archive.ubuntu.com/ubuntu <%= lsbdistcodename %>-updates main restricted universe multiverse
+deb-src http://de.archive.ubuntu.com/ubuntu <%= lsbdistcodename %>-updates <%= repos %>
 <% end -%>
 
 # security suppport
-deb http://de.archive.ubuntu.com/ubuntu <%= lsbdistcodename %>-security main restricted universe multiverse
+deb http://de.archive.ubuntu.com/ubuntu <%= lsbdistcodename %>-security <%= repos %>
 <% if include_src then -%>
-deb-src http://de.archive.ubuntu.com/ubuntu <%= lsbdistcodename %>-security main restricted universe multiverse
+deb-src http://de.archive.ubuntu.com/ubuntu <%= lsbdistcodename %>-security <%= repos %>
 <% end -%>
 
 # backports
-deb http://archive.ubuntu.com/ubuntu <%= lsbdistcodename %>-backports main universe multiverse restricted
+deb http://archive.ubuntu.com/ubuntu <%= lsbdistcodename %>-backports main <%= repos %>
 <% if include_src then -%>
-deb-src http://archive.ubuntu.com/ubuntu <%= lsbdistcodename %>-backports main universe multiverse restricted
+deb-src http://archive.ubuntu.com/ubuntu <%= lsbdistcodename %>-backports <%= repos >
 <% end -%>
