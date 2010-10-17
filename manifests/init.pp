@@ -44,6 +44,10 @@ class apt {
     ''      => 'http://volatile.debian.org/debian-volatile/',
     default => "${apt_volatile_url}",
   }
+  $ubuntu_url = $apt_ubuntu_url ? {
+    ''      => 'http://archive.ubuntu.com/ubuntu',
+    default => "${apt_ubuntu_url}",
+  }
   case $operatingsystem {
     'debian': {
       $repos = $apt_repos ? {

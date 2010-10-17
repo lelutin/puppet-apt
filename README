@@ -112,6 +112,12 @@ These variables allow to override the default APT mirrors respectively
 used for the standard Debian archives, the Debian security archive,
 the Debian official backports and the Debian Volatile archive.
 
+$apt_ubuntu_url
+---------------
+
+These variables allows to override the default APT mirror used for all
+standard Ubuntu archives (including updates, security, backports).
+
 $apt_repos
 ----------
 

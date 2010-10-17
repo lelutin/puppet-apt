@@ -1,25 +1,25 @@
 # This file is brought to you by puppet
 
 # basic <%= lsbdistcodename %>
-deb http://de.archive.ubuntu.com/ubuntu <%= lsbdistcodename %> <%= repos %>
+deb <%= ubuntu_url %> <%= lsbdistcodename %> <%= repos %>
 <% if include_src then -%>
-deb-src http://de.archive.ubuntu.com/ubuntu <%= lsbdistcodename %> <%= repos %>
+deb-src <%= ubuntu_url %> <%= lsbdistcodename %> <%= repos %>
 <% end -%>
 
 # updates
-deb http://de.archive.ubuntu.com/ubuntu <%= lsbdistcodename %>-updates <%= repos %>
+deb <%= ubuntu_url %> <%= lsbdistcodename %>-updates <%= repos %>
 <% if include_src then -%>
-deb-src http://de.archive.ubuntu.com/ubuntu <%= lsbdistcodename %>-updates <%= repos %>
+deb-src <%= ubuntu_url %> <%= lsbdistcodename %>-updates <%= repos %>
 <% end -%>
 
 # security suppport
-deb http://de.archive.ubuntu.com/ubuntu <%= lsbdistcodename %>-security <%= repos %>
+deb <%= ubuntu_url %> <%= lsbdistcodename %>-security <%= repos %>
 <% if include_src then -%>
-deb-src http://de.archive.ubuntu.com/ubuntu <%= lsbdistcodename %>-security <%= repos %>
+deb-src <%= ubuntu_url %> <%= lsbdistcodename %>-security <%= repos %>
 <% end -%>
 
 # backports
-deb http://archive.ubuntu.com/ubuntu <%= lsbdistcodename %>-backports main <%= repos %>
+deb <%= ubuntu_url %> <%= lsbdistcodename %>-backports main <%= repos %>
 <% if include_src then -%>
-deb-src http://archive.ubuntu.com/ubuntu <%= lsbdistcodename %>-backports <%= repos >
+deb-src <%= ubuntu_url %> <%= lsbdistcodename %>-backports <%= repos >
 <% end -%>
