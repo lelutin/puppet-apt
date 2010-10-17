@@ -78,6 +78,13 @@ apt::preferences_snippet
 
 A way to add pinning information to /etc/apt/preferences
 
+Example:
+
+  apt::preferences_snippet{
+    'irssi-plugin-otr':
+      release => 'lenny-backports',
+      priority => 999;
+  }
 
 Resources
 =========
