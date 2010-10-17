@@ -9,6 +9,7 @@ define apt::preferences_snippet(
     content => "Package: ${name}
 Pin: release a=${release}
 Pin-Priority: ${priority}
+
 ",
     notify => Exec["concat_${apt::preferences::apt_preferences_dir}"],
     owner => root, group => 0, mode => 0600;
