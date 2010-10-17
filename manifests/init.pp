@@ -105,13 +105,13 @@ class apt {
 
   config_file { '/etc/apt/apt.conf.d/99from_puppet': }
   # little default settings which keep the system sane
-  line { 'apt-get-show-upgraded':
+  append_if_no_such_line { 'apt-get-show-upgraded':
     file    => "/etc/apt/apt.conf.d/99from_puppet",
     line    => "APT::Get::Show-Upgraded true;",
     before  => Config_file[apt_config],
     require => Config_file['/etc/apt/apt.conf.d/99from_puppet'],
   }
-  line { 'dselect-clean':
+  append_if_no_such_line { 'dselect-clean':
     file    => "/etc/apt/apt.conf.d/99from_puppet",
     line    => "DSelect::Clean ${real_apt_clean};",
     before  => Config_file[apt_config],
@@ -121,7 +121,9 @@ class apt {
   file {
     "/etc/apt/apt.conf.d/from_puppet":
       ensure  => 'absent',
-      require => [ Line['apt-get-show-upgraded'], Line['dselect-clean'] ],
+      require => [ Append_if_no_such_line['apt-get-show-upgraded'],
+                   Append_if_no_such_line['dselect-clean']
+                 ],
   }
 
   if $apt_unattended_upgrades {
