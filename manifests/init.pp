@@ -102,7 +102,7 @@ class apt {
       config_file { "/etc/apt/preferences":
         content => $custom_preferences,
         alias => "apt_config",
-        require => File["/etc/apt/sources.list"];
+        require => Config_file["/etc/apt/sources.list"];
       }
     }
   }
