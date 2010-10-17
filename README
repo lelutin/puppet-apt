@@ -89,8 +89,8 @@ Example:
 Resources
 =========
 
-File[apt_config]
-----------------
+Concatenated_file[apt_config]
+-----------------------------
 Use this resource to depend on or add to a completed apt configuration
 
 Exec[apt_updated]

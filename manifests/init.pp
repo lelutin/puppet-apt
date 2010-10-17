@@ -46,13 +46,13 @@ class apt {
     'refresh_apt':
       command => '/usr/bin/apt-get update && sleep 1',
       refreshonly => true,
-      subscribe => [ File["/etc/apt/sources.list"],
-                     File["/etc/apt/apt.conf.d"],
-                     Concatenated_file[apt_config] ];
+      subscribe => File['/etc/apt/sources.list',
+                        '/etc/apt/apt.conf.d',
+                        '/etc/apt/preferences'];
       'update_apt':
         command => '/usr/bin/apt-get update && /usr/bin/apt-get autoclean',
-        require => [ File["/etc/apt/sources.list"],
-                     File["/etc/apt/preferences"], Concatenated_file[apt_config] ],
+        require => File['/etc/apt/sources.list',
+                        '/etc/apt/preferences'],
         loglevel => info,
         # Another Semaphor for all packages to reference
         alias => apt_updated;
