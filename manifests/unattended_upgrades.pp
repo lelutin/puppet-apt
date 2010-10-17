@@ -9,7 +9,7 @@ class apt::unattended_upgrades {
       content => 'APT::Periodic::Update-Package-Lists "1";
 APT::Periodic::Unattended-Upgrade "1";
 ',
-      before => Config_file[apt_config],
+      before => Concatenated_file[apt_config],
       require => Package['unattended-upgrades'],
   }
 }
