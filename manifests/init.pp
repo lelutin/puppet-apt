@@ -109,6 +109,12 @@ class apt {
       content => "APT::Get::Show-Upgraded true;\nDSelect::Clean $real_apt_clean;\n",
       before => Config_file[apt_config];
   }
+  # backward compatibility: upgrade from previous versions of this module.
+  file {
+    "/etc/apt/apt.conf.d/from_puppet":
+      ensure  => 'absent',
+      require => Config_File['/etc/apt/apt.conf.d/99from_puppet'],
+  }
 
   if $apt_unattended_upgrades {
     include apt::unattended_upgrades
