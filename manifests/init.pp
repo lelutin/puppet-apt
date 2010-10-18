@@ -40,6 +40,12 @@ class apt {
     '': {
       include apt::default_preferences
     }
+    false: {
+      config_file { "/etc/apt/preferences":
+        alias => "apt_config",
+        ensure => absent;
+      }
+    }
     default: {
       config_file { "/etc/apt/preferences":
         content => $custom_preferences,
