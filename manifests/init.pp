@@ -78,26 +78,21 @@ class apt {
   package { "debian-archive-keyring": ensure => latest }
   # backports uses the normal archive key now
   package { "debian-backports-keyring": ensure => absent }
-        
-  case $custom_key_dir {
-    '': {
-      exec { "/bin/true # no_custom_keydir": }
+
+  if $custom_key_dir {
+    file { "${apt_base_dir}/keys.d":
+      source => "$custom_key_dir",
+      recurse => true,
+      mode => 0755, owner => root, group => root,
     }
-    default: {
-      file { "${apt_base_dir}/keys.d":
-        source => "$custom_key_dir",
-        recurse => true,
-        mode => 0755, owner => root, group => root,
-      }
-      exec { "find ${apt_base_dir}/keys.d -type f -exec apt-key add '{}' \\; && apt-get update":
-        alias => "custom_keys",
-        subscribe => File["${apt_base_dir}/keys.d"],
-        refreshonly => true,
-        before => Config_file["apt_config"];
-      }
+    exec { "find ${apt_base_dir}/keys.d -type f -exec apt-key add '{}' \\; && apt-get update":
+      alias => "custom_keys",
+      subscribe => File["${apt_base_dir}/keys.d"],
+      refreshonly => true,
+      before => Config_file["apt_config"];
     }
   }
 
   # workaround for preseeded_package component
   file { [ "/var/cache", "/var/cache/local", "/var/cache/local/preseeding" ]: ensure => directory }
-}     
+}
