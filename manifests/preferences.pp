@@ -4,7 +4,8 @@ class apt::preferences {
   $apt_preferences_dir = "${common::moduledir::module_dir_path}/apt/preferences"
   module_dir{'apt/preferences': }
   file{"${apt_preferences_dir}_header":
-    content => 'Package: *
+    content => $custom_preferences ? {
+      '' => 'Package: *
 Pin: release a=unstable
 Pin-Priority: 1
 
@@ -13,6 +14,8 @@ Pin: release a=testing
 Pin-Priority: 2
 
 ',
+      default => $custom_preferences
+    },
   }
 
   concatenated_file{'/etc/apt/preferences':
@@ -25,10 +28,4 @@ Pin-Priority: 2
     require => File["/etc/apt/sources.list"];
   }
 
-  config_file {
-    # little default settings which keep the system sane
-    "/etc/apt/apt.conf.d/from_puppet":
-      content => "APT::Get::Show-Upgraded true;\nDSelect::Clean $real_apt_clean;\n",
-      before => Concatenated_file[apt_config];
-  }
 }

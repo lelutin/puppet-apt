@@ -1,3 +1,4 @@
+
 Overview
 ========
 
@@ -6,7 +7,7 @@ This module manages apt on Debian.
 It keeps dpkg's and apt's databases as well as the keyrings for securing
 package download current.
 
-backports.org is added and an archive key is provided[1].
+backports.debian.org is added.
 
 dselect is switched to expert mode to suppress superfluous help screens.
 
@@ -50,6 +51,21 @@ following variable before including this class will pull in the
 templates/apt/sources.list file: 
 $custom_sources_list ='template("apt/sources.list")'
 		       
+$custom_preferences	
+--------------------
+By default this module will use a basic apt/preferences file with
+unstable and testing pinned to very low values so that any package
+installation will not accidentally pull in packages from those suites
+unless you explicitly specify the version number. You can set this
+variable to pull in a customized apt/preferences template, for
+example, setting the following variable before including this class
+will pull in the templates/apt/preferences file: 
+$custom_preferences = 'template("apt/preferences")'
+
+Also, if you need the preferences file to be absent, set this variable to false:
+
+$custom_preferences = false
+
 $custom_key_dir
 ---------------
 If you have different apt-key files that you want to get added to your
@@ -142,7 +158,3 @@ Sometimes -- especially when initially starting management or deploying new
 packages -- a immediate update is really needed to be able to install the right
 packages without errors. Thus a method should be devised to be able to specify
 with high fidelity when a update should be run and when it is not needed.
-
-
-
-[1] Of course, you should check the validity of _this_ key yourself.
