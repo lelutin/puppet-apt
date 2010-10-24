@@ -6,7 +6,7 @@
 class apt {
 
   import "custom_sources.pp"
-  
+
   # See README
   $real_apt_clean = $apt_clean ? {
     '' => 'auto',
@@ -18,12 +18,18 @@ class apt {
     require => undef,
   }
 
+  include lsb
   case $custom_sources_list {
     '': {
-      include apt::default_sources_list
+      config_file {
+        # include main, security and backports
+        # additional sources could be included via an array
+        "/etc/apt/sources.list":
+          content => template( "apt/$operatingsystem/sources.list.erb"),
+          require => Package['lsb'];
+      }
     }
     default: {
-      include lsb
       config_file { "/etc/apt/sources.list":
         content => $custom_sources_list,
         require => Package['lsb'];
