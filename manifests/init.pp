@@ -23,7 +23,8 @@ class apt {
     '': {
       config_file {
         # include main, security and backports
-        # additional sources could be included via an array
+        # additional sources should be included via the custom_sources_template
+        # define
         "/etc/apt/sources.list":
           content => template( "apt/$operatingsystem/sources.list.erb"),
           require => Package['lsb'];
@@ -37,11 +38,17 @@ class apt {
     }
   }
 
-  config_file {
-    # little default settings which keep the system sane
-    "/etc/apt/apt.conf.d/from_puppet":
-      content => "APT::Get::Show-Upgraded true;\nDSelect::Clean $real_apt_clean;\n",
-      before => Concatenated_file['/etc/apt/preferences'];
+  # 01autoremove already present by default
+  apt_conf_snippet{ "02show_upgraded":
+    source => ["puppet:///modules/site-apt/${fqdn}/02show_upgraded",
+               "puppet:///modules/site-apt/02show_upgraded",
+               "puppet:///modules/apt/02show_upgraded"]
+  }
+
+  apt_conf_snippet{ "03clean":
+    source => ["puppet:///modules/site-apt/${fqdn}/03clean",
+               "puppet:///modules/site-apt/03clean",
+               "puppet:///modules/apt/03clean"]
   }
 
   case $custom_preferences {
