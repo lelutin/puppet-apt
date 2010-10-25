@@ -12,7 +12,6 @@ define apt::sources_list (
 
   file { "/etc/apt/sources.list.d/${name}":
     ensure => $ensure,
-    notify => Exec['refresh_apt'],
     owner => root, group => 0, mode => 0600;
   }
 

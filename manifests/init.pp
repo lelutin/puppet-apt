@@ -54,8 +54,13 @@ class apt {
     }
   }
 
-  # watch apt.conf.d
+  # watch .d directories and ensure they are present
   file { "/etc/apt/apt.conf.d": ensure => directory, checksum => mtime; }
+  file { "/etc/apt/sources.list.d":
+    ensure => directory,
+    checksum => mtime,
+    notify => Exec['refresh_apt'],
+  }
 
   exec {
     # "&& sleep 1" is workaround for older(?) clients
