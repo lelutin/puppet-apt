@@ -9,24 +9,18 @@ package download current.
 
 backports.debian.org is added.
 
-dselect is switched to expert mode to suppress superfluous help screens.
-
-sources.list and apt_preferences are managed. Testing and unstable are pinned to
-very low values by default to prevent accidental upgrades.
+/etc/apt/sources.list and /etc/apt/preferences are managed. Testing and
+unstable are pinned to very low values by default to prevent accidental
+upgrades.
 
 This module needs lsb-release installed.
 
+By default, this module sets the cofiguration option DSelect::Clean to 'auto'.
+It is the recommended value on normal hosts.  On virtual servers, the
+recommended value is 'pre-auto', since virtual servers are usually more
+space-bound and have better recovery mechanisms via the host:
 
-Variables
-=========
-
-$apt_clean
-----------
-Sets DSelect::Clean, defaults to 'auto' on normal hosts and 'pre-auto'
-in vservers, since the latter are usually more space-bound and have
-better recovery mechanisms via the host:
-
-From apt.conf(5), 0.7.2: 
+From apt.conf(5), 0.7.2:
      "Cache Clean mode; this value may be one of always, prompt, auto,
      pre-auto and never. always and prompt will remove all packages
      from the cache after upgrading, prompt (the default) does so
@@ -35,59 +29,137 @@ From apt.conf(5), 0.7.2:
      instance). pre-auto performs this action before downloading new
      packages."
 
+To change the default setting for DSelect::Clean, you can create a file named
+"03clean" in a site-apt module's files directory. You can also define this for
+a specific host by creating a file in a subdirectory of the site-apt modules'
+files directory that is named the same as the host. (example:
+site-apt/files/some.host.com/03clean)
+
+Variables
+=========
+
 $lsbdistcodename
----------------- 	
+----------------
+
 Contains the codename ("etch", "lenny", ...) of the client's
 release. While these values come from lsb-release by default, this
-value can be set manually too, e.g. to enable forced upgrades
+value can be set manually too, e.g. to enable forced upgrades.
+
+$main_apt_source
+----------------
+
+If the default sources.list template (see next variable) suits your needs but
+you simply need to change the URL to the apt source used, set this variable to
+the URL that is desired. The default value for this variable is
+"http://ftp.debian.org/debian/" for Debian and
+"http://de.archive.ubuntu.com/ubuntu/" for Ubuntu.
+
+Here's an example for setting a local source near Montreal, Quebec, Canada:
+
+  $apt_main_source = "ftp://debian.mirror.iweb.ca/debian/"
 
 $custom_sources_list
 --------------------
-By default this module will use a basic apt/sources.list with a
-generic debian mirror. If you need to set more specific sources,
-e.g. for country proximity, proxies, etc. you can set this variable to
-the location of your sources.list template.  For example, setting the
-following variable before including this class will pull in the
-templates/apt/sources.list file: 
-$custom_sources_list ='template("apt/sources.list")'
-		       
-$custom_preferences	
---------------------
-By default this module will use a basic apt/preferences file with
-unstable and testing pinned to very low values so that any package
-installation will not accidentally pull in packages from those suites
-unless you explicitly specify the version number. You can set this
-variable to pull in a customized apt/preferences template, for
-example, setting the following variable before including this class
-will pull in the templates/apt/preferences file: 
-$custom_preferences = 'template("apt/preferences")'
 
-Also, if you need the preferences file to be absent, set this variable to false:
+By default this module will use a basic apt/sources.list template with a
+generic debian mirror. If you need to set more specific sources, e.g. changing
+the sections included in the source or removing backports, etc. you can set
+this variable to the content that you desire to use instead.
 
-$custom_preferences = false
+For example, setting the following variable before including this class will
+pull in the templates/site-apt/sources.list file:
+
+  $custom_sources_list = template("site-apt/sources.list")
+
+$custom_preferences
+-------------------
+
+Since Debian stable's version of apt doesn't support the use of the
+preferences.d directory for putting fragments of 'preferences', this module
+will manage a default basic apt/preferences file with unstable and testing
+pinned to very low values so that any package installation will not
+accidentally pull in packages from those suites unless you explicitly specify
+the version number. This file will be complemented with all of the
+preferences_snippet calls (see below).
+
+If you are not using the 'stable' branch or if the default preferences file
+doesn't suit your needs, you can create a file named 'preferences' in a
+site-apt module's files directory. You can also create a host-specific file:
+
+  site-apt
+   - files/
+     - server.domain.com/
+       - preferences
+       preferences
+
+You can set this variable to false before including this class will force the
+apt/preferences file to be absent:
+
+  $custom_preferences = false
 
 $custom_key_dir
 ---------------
+
 If you have different apt-key files that you want to get added to your
 apt keyring, you can set this variable to a path in your fileserver
 where individual key files can be placed. If this is set and keys
-exist there, this module will apt-key add each key
+exist there, this module will 'apt-key add' each key.
 
-$apt_unattended_upgrades
-------------------------
+$apt_proxy / $apt_proxy_port
+----------------------------
 
-If this variable is set to true apt::unattended_upgrades is included,
-which will install the package unattended-upgrades and configure it to
-daily upgrade the system.
+When you include the apt::proxy_client class in your nodes, you can set the
+$apt_proxy variable to the URL of the proxy that will be used.
+By default, the proxy will be queried on port 3142, but you can change the port
+number by setting the $apt_proxy_port variable.
+
+Here's an example of setting the proxy to 'http://proxy.domain' at port 666:
+
+  $apt_proxy = 'http://proxy.domain'
+  $apt_proxy_port = 666
+  include apt::proxy_client
 
 Classes
 =======
 
-This module contains only the apt class, which sets up all described
-functionality.
+Most of the functionality is provided by the 'apt' class, but some
+functionality is not inclulded by default. To use it, you must inlucde one of
+the following classes:
+
+apt::dselect
+------------
+
+This class, when included, installs dselect and switches it to expert mode to
+suppress superfluous help screens.
+
+apt::proxy_client
+-----------------
+
+This class adds the right configuration to apt to make it fetch packages via a
+proxy. The variables $apt_proxy and $apt_proxy_port need to be set (see above).
+
+apt::unattended_upgrades
+------------------------
+
+If this class is included, it will install the package 'unattended-upgrades'
+and configure it to daily upgrade the system.
 
 Defines
 =======
+
+apt::apt_conf
+-------------
+
+Creates a file in the apt/apt.conf.d directory to easily add configuration
+components. One can use either 'sources' to specify a list of static files to
+include from the puppet fileserver or 'content' to define content inline or
+with the help of a template.
+
+Example:
+
+  apt::apt_conf { "80download-only":
+    source => "puppet:///modules/site-apt/80download-only",
+  }
 
 apt::preferences_snippet
 ------------------------
@@ -102,41 +174,51 @@ Example:
       priority => 999;
   }
 
-Resources
-=========
-
-Concatenated_file[apt_config]
------------------------------
-Use this resource to depend on or add to a completed apt configuration
-
-Exec[apt_updated]
------------------
-After this point, current packages can installed via apt, usually used
-like this: 
-
-Package { require => Exec[apt_updated] }
-
 apt::preseeded_package
 ----------------------
-This simplifies installation of packages that you wish to preseed the
+
+This simplifies installation of packages for which you wish to preseed the
 answers to debconf. For example, if you wish to provide a preseed file
-for the locales package, you would place the locales.seed file in 
-templates/$debian_version/locales.seeds and then include the following
+for the locales package, you would place the locales.seed file in
+'templates/$debian_version/locales.seeds' and then include the following
 in your manifest:
 
-apt::preseeded_package { locales: }
+  apt::preseeded_package { locales: }
+
+You can also specify 'content' to define this file via a template. Here's an
+example for preseeding installation of the 'mysql' package with a template:
+
+  apt::preseeded_package { "mysql":
+    content => template("site-apt/mysql.seed.erb"),
+  }
+
+apt::sources_list
+-------------
+
+Creates a file in the apt/apt.conf.d directory to easily add additional apt
+sources. One can use either 'sources' to specify a list of static files to
+include from the puppet fileserver or 'content' to define content inline or
+with the help of a template.
+
+Example:
+
+  apt::sources_list { "company_internals.list":
+    content => ["puppet:///modules/site-apt/${fqdn}/company_internals.list",
+                "puppet:///modules/site-apt/company_internals.list"],
+  }
 
 apt::upgrade_package
 --------------------
-This simplifies upgrades for DSA security announcements or point-releases. This
-will ensure that the named package is upgrade to the version specified, only if the
-package is installed, otherwise nothing happens. If the specified version is 'latest' (the
-default), then the package is ensured to be upgraded to the latest package revision when
-it becomes available.  
 
-For example, the following upgrades the perl package to version 5.8.8-7etch1 (if it is
-installed), it also upgrades the syslog-ng and perl-modules packages to their latest (also,
-only if they are installed):
+This simplifies upgrades for DSA security announcements or point-releases. This
+will ensure that the named package is upgrade to the version specified, only if
+the package is installed, otherwise nothing happens. If the specified version
+is 'latest' (the default), then the package is ensured to be upgraded to the
+latest package revision when it becomes available.
+
+For example, the following upgrades the perl package to version 5.8.8-7etch1
+(if it is installed), it also upgrades the syslog-ng and perl-modules packages
+to their latest (also, only if they are installed):
 
 upgrade_package { "perl":
 			version => '5.8.8-7etch1';
@@ -145,15 +227,27 @@ upgrade_package { "perl":
 		  "perl-modules":
 }
 
+Resources
+=========
+
+Concatenated_file[apt_config]
+-----------------------------
+
+Use this resource to depend on or add to a completed apt configuration
+
+Exec[apt_updated]
+-----------------
+
+After this point, current packages can be installed via apt. It is usually used
+like this:
+
+Package { require => Exec[apt_updated] }
+
 TODO
 ====
 
-Enable debian-archive-keyring handling for sarge, lenny and sid.
-
-Enable selection of country-specific mirrors.
-
-Currently this module updates the caches on every run. Running dselect update is
-a expensive operation and should be done only on schedule by using apticron.
+Currently this module updates the caches on every run. Running apt-get update is
+an expensive operation and should be done only on schedule by using apticron.
 Sometimes -- especially when initially starting management or deploying new
 packages -- a immediate update is really needed to be able to install the right
 packages without errors. Thus a method should be devised to be able to specify
