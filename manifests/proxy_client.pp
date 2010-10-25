@@ -1,4 +1,4 @@
-class apt::proxy-client {
+class apt::proxy_client {
 
   $real_apt_proxy = $apt_proxy ? {
     "" => "localhost",
@@ -10,7 +10,7 @@ class apt::proxy-client {
     default => $apt_proxy_port
   }
 
-  apt_conf_snippet { "20proxy":
+  apt_conf { "20proxy":
     content => template("apt/20proxy.erb"),
   }
 }

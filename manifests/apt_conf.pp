@@ -1,13 +1,13 @@
-define apt::apt_conf_snippet(
+define apt::apt_conf(
   $ensure = 'present',
   $source = '',
   $content = undef
 ){
   if $source == '' and $content == undef {
-    fail("One of \$source or \$content must be specified for apt_conf_snippet ${name}")
+    fail("One of \$source or \$content must be specified for apt_conf ${name}")
   }
   if $source != '' and $content != undef {
-    fail("Only one of \$source or \$content must specified for apt_conf_snippet ${name}")
+    fail("Only one of \$source or \$content must specified for apt_conf ${name}")
   }
 
   file { "/etc/apt/apt.conf.d/${name}":
