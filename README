@@ -151,9 +151,9 @@ apt::apt_conf
 -------------
 
 Creates a file in the apt/apt.conf.d directory to easily add configuration
-components. One can use either 'sources' to specify a list of static files to
-include from the puppet fileserver or 'content' to define content inline or
-with the help of a template.
+components. One can use either the 'source' meta-parameter to specify a list of
+static files to include from the puppet fileserver or the 'content'
+meta-parameter to define content inline or with the help of a template.
 
 Example:
 
@@ -195,16 +195,16 @@ example for preseeding installation of the 'mysql' package with a template:
 apt::sources_list
 -------------
 
-Creates a file in the apt/apt.conf.d directory to easily add additional apt
-sources. One can use either 'sources' to specify a list of static files to
-include from the puppet fileserver or 'content' to define content inline or
-with the help of a template.
+Creates a file in the apt/sources.list.d directory to easily add additional apt
+sources. One can use either the 'source' meta-parameter to specify a list of
+static files to include from the puppet fileserver or the 'content'
+meta-parameter to define content inline or with the help of a template.
 
 Example:
 
   apt::sources_list { "company_internals.list":
-    content => ["puppet:///modules/site-apt/${fqdn}/company_internals.list",
-                "puppet:///modules/site-apt/company_internals.list"],
+    source => ["puppet:///modules/site-apt/${fqdn}/company_internals.list",
+               "puppet:///modules/site-apt/company_internals.list"],
   }
 
 apt::upgrade_package
