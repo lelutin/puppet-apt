@@ -96,7 +96,11 @@ class apt {
       alias => "custom_keys",
       subscribe => File["${apt_base_dir}/keys.d"],
       refreshonly => true,
-      before => Concatenated_file[apt_config];
+    }
+    if $custom_preferences != false {
+      Exec["custom_keys"] {
+        before => Concatenated_file[apt_config],
+      }
     }
   }
 
