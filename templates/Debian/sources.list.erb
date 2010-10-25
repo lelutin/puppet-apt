@@ -2,7 +2,7 @@
 # all local modifications will be overwritten
 
 # basic <%= lsbdistcodename %>
-deb http://ftp.debian.org/debian/ <%= lsbdistcodename %> main contrib non-free
+deb <%= real_main_apt_source %> <%= lsbdistcodename %> main contrib non-free
 # security suppport
 <% if (lsbdistcodename == "sid" || lsbdistcodename == "unstable") -%>
 # There is no security mirror for <%= lsbdistcodename %>

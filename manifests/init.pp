@@ -10,6 +10,14 @@ class apt {
     require => undef,
   }
 
+  $real_main_apt_source = $main_apt_source ? {
+    '' => $operatingsystem ? {
+      "Ubuntu" => "http://de.archive.ubuntu.com/ubuntu/",
+      default => "http://ftp.debian.org/debian/",
+    },
+    default => $main_apt_source,
+  }
+
   include lsb
   config_file {
     # include main, security and backports

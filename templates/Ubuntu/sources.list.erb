@@ -2,7 +2,7 @@
 # all local modifications will be overwritten
 
 # basic <%= lsbdistcodename %>
-deb http://de.archive.ubuntu.com/ubuntu <%= lsbdistcodename %> main restricted universe multiverse
+deb <%= real_main_apt_source %> <%= lsbdistcodename %> main restricted universe multiverse
 
 # updates
 deb http://de.archive.ubuntu.com/ubuntu <%= lsbdistcodename %>-updates main restricted universe multiverse
