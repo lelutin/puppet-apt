@@ -4,18 +4,9 @@ class apt::preferences {
   $apt_preferences_dir = "${common::moduledir::module_dir_path}/apt/preferences"
   module_dir{'apt/preferences': }
   file{"${apt_preferences_dir}_header":
-    content => $custom_preferences ? {
-      '' => 'Package: *
-Pin: release a=unstable
-Pin-Priority: 1
-
-Package: *
-Pin: release a=testing
-Pin-Priority: 2
-
-',
-      default => $custom_preferences
-    },
+    source => ["puppet:///modules/site-apt/${fqdn}/preferences",
+               "puppet:///modules/site-apt/preferences",
+               "puppet:///modules/apt/preferences"]
   }
 
   concatenated_file{'/etc/apt/preferences':

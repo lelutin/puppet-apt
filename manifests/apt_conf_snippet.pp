@@ -10,20 +10,20 @@ define apt::apt_conf_snippet(
     fail("Only one of \$source or \$content must specified for apt_conf_snippet ${name}")
   }
 
+  file { "/etc/apt/apt.conf.d/${name}":
+    ensure => $ensure,
+    notify => Exec["refresh_apt"],
+    owner => root, group => 0, mode => 0600;
+  }
+
   if $source {
-    file { "/etc/apt/apt.conf.d/${name}":
-      ensure => $ensure,
+    File["/etc/apt/apt.conf.d/${name}"] {
       source => $source,
-      notify => Exec["refresh_apt"],
-      owner => root, group => 0, mode => 0600;
     }
   }
   else {
-    file { "/etc/apt/apt.conf.d/${name}":
-      ensure => $ensure,
+    File["/etc/apt/apt.conf.d/${name}"] {
       content => $content,
-      notify => Exec["refresh_apt"],
-      owner => root, group => 0, mode => 0600;
     }
   }
 }
