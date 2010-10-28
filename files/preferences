@@ -1,6 +1,3 @@
-// This file is managed by Puppet
-// all local modifications will be overwritten
-
 Package: *
 Pin: release a=unstable
 Pin-Priority: 1
