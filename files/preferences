@@ -1,5 +1,5 @@
-# This file is managed by Puppet
-# all local modifications will be overwritten
+// This file is managed by Puppet
+// all local modifications will be overwritten
 
 Package: *
 Pin: release a=unstable
