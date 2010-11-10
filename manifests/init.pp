@@ -6,7 +6,7 @@
 class apt {
 
   import "custom_sources.pp"
-
+  
   # See README
   $real_apt_clean = $apt_clean ? {
     '' => 'auto',
@@ -95,15 +95,11 @@ class apt {
   }
 
   case $custom_preferences {
-    '': {
-      include apt::default_preferences
+    false: {
+      include apt::preferences::absent
     }
     default: {
-      config_file { "/etc/apt/preferences":
-        content => $custom_preferences,
-        alias => "apt_config",
-        require => Config_file["/etc/apt/sources.list"];
-      }
+      include apt::preferences
     }
   }
 
@@ -112,13 +108,13 @@ class apt {
   append_if_no_such_line { 'apt-get-show-upgraded':
     file    => "/etc/apt/apt.conf.d/99from_puppet",
     line    => "APT::Get::Show-Upgraded true;",
-    before  => Config_file[apt_config],
+    before  => Concatenated_file['/etc/apt/preferences'],
     require => Config_file['/etc/apt/apt.conf.d/99from_puppet'],
   }
   append_if_no_such_line { 'dselect-clean':
     file    => "/etc/apt/apt.conf.d/99from_puppet",
     line    => "DSelect::Clean ${real_apt_clean};",
-    before  => Config_file[apt_config],
+    before  => Concatenated_file['/etc/apt/preferences'],
     require => Config_file['/etc/apt/apt.conf.d/99from_puppet'],
   }
   # backward compatibility: upgrade from previous versions of this module.
@@ -145,12 +141,13 @@ class apt {
     'refresh_apt':
       command => '/usr/bin/apt-get update && sleep 1',
       refreshonly => true,
-      subscribe => [ File["/etc/apt/apt.conf.d"],
-                     Config_file["/etc/apt/sources.list"] ];
+      subscribe => [ File['/etc/apt/apt.conf.d'],
+                     Config_file['/etc/apt/sources.list'] ];
     'update_apt':
       command => '/usr/bin/apt-get update && /usr/bin/apt-get autoclean',
-      require => [ File["/etc/apt/apt.conf.d"],
-                   Config_file["/etc/apt/sources.list"] ],
+      require => [ File['/etc/apt/apt.conf.d',
+                        '/etc/apt/preferences'],
+                   Config_file['/etc/apt/sources.list'] ],
       loglevel => info,
       # Another Semaphor for all packages to reference
       alias => "apt_updated";
@@ -158,6 +155,7 @@ class apt {
 
   ## This package should really always be current
   package { "debian-archive-keyring": ensure => latest }
+
   # backports uses the normal archive key now
   package { "debian-backports-keyring": ensure => absent }
 
@@ -171,7 +169,7 @@ class apt {
       alias => "custom_keys",
       subscribe => File["${apt_base_dir}/keys.d"],
       refreshonly => true,
-      before => Config_file[apt_config];
+      before => Concatenated_file[apt_config];
     }
   }
 

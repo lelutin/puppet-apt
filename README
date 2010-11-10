@@ -67,6 +67,10 @@ example, setting the following variable before including this class
 will pull in the templates/apt/preferences file: 
 $custom_preferences = 'template("apt/preferences")'
 
+Also, if you need the preferences file to be absent, set this variable to false:
+
+$custom_preferences = false
+
 $custom_key_dir
 ---------------
 If you have different apt-key files that you want to get added to your
@@ -144,11 +148,27 @@ apt::cron::dist-upgrade
 This class sets up cron-apt so that it dist-upgrades the system and
 email when upgrades are performed.
 
+Defines
+=======
+
+apt::preferences_snippet
+------------------------
+
+A way to add pinning information to /etc/apt/preferences
+
+Example:
+
+  apt::preferences_snippet{
+    'irssi-plugin-otr':
+      release => 'lenny-backports',
+      priority => 999;
+  }
+
 Resources
 =========
 
-File[apt_config]
-----------------
+Concatenated_file[apt_config]
+-----------------------------
 Use this resource to depend on or add to a completed apt configuration
 
 Exec[apt_updated]
