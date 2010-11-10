@@ -145,6 +145,7 @@ class apt {
                      Config_file['/etc/apt/sources.list'] ];
     'update_apt':
       command => '/usr/bin/apt-get update && /usr/bin/apt-get autoclean',
+      refreshonly => true,
       require => [ File['/etc/apt/apt.conf.d',
                         '/etc/apt/preferences'],
                    Config_file['/etc/apt/sources.list'] ],
