@@ -116,8 +116,8 @@ class apt {
      "/etc/apt/apt.conf.d/99from_puppet"
     ]:
       ensure  => 'absent',
-      require => [ Apt_conf_snippet['02show_upgraded'],
-                   Apt_conf_snippet['03clean'],
+      require => [ Apt_conf['02show_upgraded'],
+                   Apt_conf['03clean'],
                  ],
   }
 
