@@ -63,10 +63,10 @@ pull in the templates/site-apt/sources.list file:
 
   $custom_sources_list = template("site-apt/sources.list")
 
-$custom_preferences	
---------------------
+$custom_preferences
+-------------------
 
-Since Debian stable's version of APT doesn't support the use of the
+Since Debian Lenny's version of APT doesn't support the use of the
 preferences.d directory for putting fragments of 'preferences', this
 module will manage a default generic apt/preferences file with more
 recent releases pinned to very low values so that any package
