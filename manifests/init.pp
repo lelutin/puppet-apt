@@ -6,7 +6,7 @@
 class apt {
 
   import "custom_sources.pp"
-  
+
   # See README
   $real_apt_clean = $apt_clean ? {
     '' => 'auto',
@@ -68,10 +68,11 @@ class apt {
     require => undef,
   }
 
+  include lsb
+
   # init $release, $next_release, $codename, $next_codename
   case $lsbdistcodename {
     '': {
-      include lsb
       $codename = $lsbdistcodename
       $release = $lsbdistrelease
     }
@@ -85,13 +86,32 @@ class apt {
 
   case $custom_sources_list {
     '': {
-      include apt::default_sources_list
+      config_file {
+        # include main, security and backports
+        # additional sources should be included via the custom_sources_template
+        # define
+        "/etc/apt/sources.list":
+          content => template( "apt/$operatingsystem/sources.list.erb"),
+          require => Package['lsb'];
+      }
     }
     default: {
       config_file { "/etc/apt/sources.list":
         content => $custom_sources_list,
       }
     }
+  }
+
+  apt_conf_snippet{ "02show_upgraded":
+    source => ["puppet:///modules/site-apt/${fqdn}/02show_upgraded",
+               "puppet:///modules/site-apt/02show_upgraded",
+               "puppet:///modules/apt/02show_upgraded"]
+  }
+
+  apt_conf_snippet{ "03clean":
+    source => ["puppet:///modules/site-apt/${fqdn}/03clean",
+               "puppet:///modules/site-apt/03clean",
+               "puppet:///modules/apt/03clean"]
   }
 
   case $custom_preferences {
@@ -103,26 +123,14 @@ class apt {
     }
   }
 
-  config_file { '/etc/apt/apt.conf.d/99from_puppet': }
-  # little default settings which keep the system sane
-  append_if_no_such_line { 'apt-get-show-upgraded':
-    file    => "/etc/apt/apt.conf.d/99from_puppet",
-    line    => "APT::Get::Show-Upgraded true;",
-    before  => Concatenated_file['/etc/apt/preferences'],
-    require => Config_file['/etc/apt/apt.conf.d/99from_puppet'],
-  }
-  append_if_no_such_line { 'dselect-clean':
-    file    => "/etc/apt/apt.conf.d/99from_puppet",
-    line    => "DSelect::Clean ${real_apt_clean};",
-    before  => Concatenated_file['/etc/apt/preferences'],
-    require => Config_file['/etc/apt/apt.conf.d/99from_puppet'],
-  }
   # backward compatibility: upgrade from previous versions of this module.
   file {
-    "/etc/apt/apt.conf.d/from_puppet":
+    ["/etc/apt/apt.conf.d/from_puppet",
+     "/etc/apt/apt.conf.d/99from_puppet"
+    ]:
       ensure  => 'absent',
-      require => [ Append_if_no_such_line['apt-get-show-upgraded'],
-                   Append_if_no_such_line['dselect-clean']
+      require => [ Apt_conf_snippet['02show_upgraded'],
+                   Apt_conf_snippet['03clean'],
                  ],
   }
 

@@ -10,9 +10,7 @@ class apt::proxy-client {
     default => $apt_proxy_port
   }
 
-  file { "/etc/apt/apt.conf.d/20proxy":
-    ensure => present,
-    content => "Acquire::http { Proxy \"http://$real_apt_proxy:$real_apt_proxy_port\"; };\n",
-    owner => root, group => 0, mode => 0644;
+  apt_conf_snippet { "20proxy":
+    content => template("apt/20proxy.erb"),
   }
 }
