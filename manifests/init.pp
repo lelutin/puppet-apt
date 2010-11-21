@@ -84,22 +84,16 @@ class apt {
   $next_codename = debian_nextcodename($codename)
   $next_release = debian_nextrelease($release)
 
-  case $custom_sources_list {
-    '': {
-      config_file {
-        # include main, security and backports
-        # additional sources should be included via the custom_sources_template
-        # define
-        "/etc/apt/sources.list":
-          content => template( "apt/$operatingsystem/sources.list.erb"),
-          require => Package['lsb'];
-      }
-    }
-    default: {
-      config_file { "/etc/apt/sources.list":
-        content => $custom_sources_list,
-      }
-    }
+  config_file {
+    # include main, security and backports
+    # additional sources should be included via the custom_sources_template
+    # define
+    "/etc/apt/sources.list":
+      content => $custom_sources_list ? {
+        '' => template( "apt/$operatingsystem/sources.list.erb"),
+        default => $custom_sources_list
+      },
+      require => Package['lsb'];
   }
 
   apt_conf_snippet{ "02show_upgraded":
