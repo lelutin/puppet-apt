@@ -5,12 +5,6 @@
 
 class apt {
 
-  # See README
-  $real_apt_clean = $apt_clean ? {
-    '' => 'auto',
-    default => $apt_clean,
-  }
-
   $use_volatile = $apt_volatile_enabled ? {
     ''      => false,
     default => $apt_volatile_enabled,
@@ -129,9 +123,6 @@ class apt {
     include apt::unattended_upgrades
   }
 
-  include common::moduledir
-  $apt_base_dir = "${common::moduledir::module_dir_path}/apt"
-  modules_dir { apt: }
   # watch apt.conf.d
   file { "/etc/apt/apt.conf.d": ensure => directory, checksum => mtime; }
 
@@ -158,6 +149,10 @@ class apt {
 
   # backports uses the normal archive key now
   package { "debian-backports-keyring": ensure => absent }
+
+  include common::moduledir
+  $apt_base_dir = "${common::moduledir::module_dir_path}/apt"
+  modules_dir { apt: }
 
   if $custom_key_dir {
     file { "${apt_base_dir}/keys.d":
