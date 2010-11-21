@@ -21,13 +21,15 @@ define apt::preferences_snippet(
   # snippets, but since the preferences.d directory cannot be used in Debian
   # lenny, we can't generalize without going into ugly special-casing.
   case $source {
-    '' =>
-      File["${apt::preferences::apt_preferences_dir/${name}"] {
+    '': {
+      File["${apt::preferences::apt_preferences_dir}/${name}"] {
         content => template("apt/preferences_snippet.erb")
-      },
-    default =>
-      File["${apt::preferences::apt_preferences_dir/${name}"] {
+      }
+    }
+    default: {
+      File["${apt::preferences::apt_preferences_dir}/${name}"] {
         source => $source
       }
+    }
   }
 }
