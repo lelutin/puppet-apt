@@ -4,6 +4,10 @@ define apt::preferences_snippet(
   $release,
   $priority
 ){
+  if $custom_preferences == false {
+    fail("Trying to define a preferences_snippet with \$custom_preferences set to false.")
+  }
+
   include apt::preferences
 
   file { "${apt::preferences::apt_preferences_dir}/${name}":

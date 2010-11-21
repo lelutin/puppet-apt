@@ -104,6 +104,8 @@ class apt {
       include apt::preferences::absent
     }
     default: {
+      # When squeeze becomes the stable branch, transform this file's header
+      # into a preferences.d file
       include apt::preferences
     }
   }
@@ -119,12 +121,13 @@ class apt {
                  ],
   }
 
-  if $apt_unattended_upgrades {
-    include apt::unattended_upgrades
-  }
-
-  # watch apt.conf.d
+  # watch .d directories and ensure they are present
   file { "/etc/apt/apt.conf.d": ensure => directory, checksum => mtime; }
+  file { "/etc/apt/sources.list.d":
+    ensure => directory,
+    checksum => mtime,
+    notify => Exec['refresh_apt'],
+  }
 
   exec {
     # "&& sleep 1" is workaround for older(?) clients
@@ -164,7 +167,11 @@ class apt {
       alias => "custom_keys",
       subscribe => File["${apt_base_dir}/keys.d"],
       refreshonly => true,
-      before => Concatenated_file[apt_config];
+    }
+    if $custom_preferences != false {
+      Exec["custom_keys"] {
+        before => Concatenated_file[apt_config],
+      }
     }
   }
 
