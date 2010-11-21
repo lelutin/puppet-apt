@@ -4,7 +4,7 @@ class apt::unattended_upgrades {
     require => undef,
   }
 
-  apt_conf_snippet { "50unattended-upgrades":
+  apt_conf { "50unattended-upgrades":
     source  => ["puppet:///modules/site-apt/50unattended-upgrades",
 		"puppet:///modules/apt/50unattended-upgrades" ],
 

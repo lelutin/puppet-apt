@@ -5,8 +5,6 @@
 
 class apt {
 
-  import "custom_sources.pp"
-
   # See README
   $real_apt_clean = $apt_clean ? {
     '' => 'auto',
@@ -86,8 +84,7 @@ class apt {
 
   config_file {
     # include main, security and backports
-    # additional sources should be included via the custom_sources_template
-    # define
+    # additional sources should be included via the apt::sources_list define
     "/etc/apt/sources.list":
       content => $custom_sources_list ? {
         '' => template( "apt/$operatingsystem/sources.list.erb"),
@@ -96,13 +93,13 @@ class apt {
       require => Package['lsb'];
   }
 
-  apt_conf_snippet{ "02show_upgraded":
+  apt_conf { "02show_upgraded":
     source => ["puppet:///modules/site-apt/${fqdn}/02show_upgraded",
                "puppet:///modules/site-apt/02show_upgraded",
                "puppet:///modules/apt/02show_upgraded"]
   }
 
-  apt_conf_snippet{ "03clean":
+  apt_conf { "03clean":
     source => ["puppet:///modules/site-apt/${fqdn}/03clean",
                "puppet:///modules/site-apt/03clean",
                "puppet:///modules/apt/03clean"]
