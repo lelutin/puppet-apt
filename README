@@ -167,14 +167,14 @@ the following classes.
 apt::cron::download
 -------------------
 
-This class sets up cron-apt so that it downloads upgradable packages,
-does not actually do any upgrade and email when the output changes.
+This class sets up cron-apt so that it downloads upgradable packages, does not
+actually do any upgrade and emails when the output changes.
 
 apt::cron::dist-upgrade
 -----------------------
 
 This class sets up cron-apt so that it dist-upgrades the system and
-email when upgrades are performed.
+emails when upgrades are performed.
 
 apt::dselect
 ------------
@@ -261,7 +261,7 @@ apt::upgrade_package
 --------------------
 
 This simplifies upgrades for DSA security announcements or point-releases. This
-will ensure that the named package is upgrade to the version specified, only if
+will ensure that the named package is upgraded to the version specified, only if
 the package is installed, otherwise nothing happens. If the specified version
 is 'latest' (the default), then the package is ensured to be upgraded to the
 latest package revision when it becomes available.
