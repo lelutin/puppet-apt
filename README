@@ -159,7 +159,7 @@ apt
 ---
 
 The apt class sets up most of the documented functionality. To use
-functionality that is not enabled by default, you must inlucde one of
+functionality that is not enabled by default, you must include one of
 the following classes.
 
 apt::cron::download
