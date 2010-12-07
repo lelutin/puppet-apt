@@ -75,15 +75,9 @@ installation will not accidentally pull in packages from those suites
 unless you explicitly specify the version number. This file will be
 complemented with all of the preferences_snippet calls (see below).
 
-If the default preferences template doesn't suit your needs, you can
-create a file named 'preferences' in a site-apt module's files
-directory. You can also create a host-specific file:
-
-  site-apt
-   - files/
-     - server.domain.com/
-       - preferences
-       preferences
+If the default preferences template doesn't suit your needs, you can create a
+template located in your site-apt module, and set $custom_preferences with the
+location (eg. $custom_preferences = "puppet:///modules/site-apt/preferences")
 
 Setting this variable to false before including this class will force the
 apt/preferences file to be absent:
