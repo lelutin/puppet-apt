@@ -1,5 +1,6 @@
 class apt::unattended_upgrades {
-  package{'unattended-upgrades':
+
+  package { 'unattended-upgrades':
     ensure => present,
     require => undef,
   }

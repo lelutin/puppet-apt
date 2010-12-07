@@ -1,4 +1,5 @@
 define apt::upgrade_package ($version = "") {
+
   case $version {
     '': {
       exec { "aptitude -y install $name":

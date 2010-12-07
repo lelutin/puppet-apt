@@ -88,23 +88,23 @@ class apt {
   }
 
   apt_conf { "02show_upgraded":
-    source => ["puppet:///modules/site-apt/${fqdn}/02show_upgraded",
-               "puppet:///modules/site-apt/02show_upgraded",
-               "puppet:///modules/apt/02show_upgraded"]
+    source => [ "puppet:///modules/site-apt/${fqdn}/02show_upgraded",
+                "puppet:///modules/site-apt/02show_upgraded",
+                "puppet:///modules/apt/02show_upgraded" ]
   }
 
   if ( $virtual == "vserver" ) {
     apt_conf { "03clean_vserver":
-      source => ["puppet:///modules/site-apt/${fqdn}/03clean_vserver",
-                 "puppet:///modules/site-apt/03clean_vserver",
-                 "puppet:///modules/apt/03clean_vserver"]
+      source => [ "puppet:///modules/site-apt/${fqdn}/03clean_vserver",
+                  "puppet:///modules/site-apt/03clean_vserver",
+                  "puppet:///modules/apt/03clean_vserver" ]
     }
   }
   else {
     apt_conf { "03clean":
-      source => ["puppet:///modules/site-apt/${fqdn}/03clean",
-                 "puppet:///modules/site-apt/03clean",
-                 "puppet:///modules/apt/03clean"]
+      source => [ "puppet:///modules/site-apt/${fqdn}/03clean",
+                  "puppet:///modules/site-apt/03clean",
+                  "puppet:///modules/apt/03clean" ]
     }
   }
     
@@ -121,13 +121,9 @@ class apt {
 
   # backward compatibility: upgrade from previous versions of this module.
   file {
-    ["/etc/apt/apt.conf.d/from_puppet",
-     "/etc/apt/apt.conf.d/99from_puppet"
-    ]:
+    [ "/etc/apt/apt.conf.d/from_puppet", "/etc/apt/apt.conf.d/99from_puppet" ]:
       ensure  => 'absent',
-      require => [ Apt_conf['02show_upgraded'],
-                   Apt_conf['03clean'],
-                 ],
+      require => [ Apt_conf['02show_upgraded'], Apt_conf['03clean'] ];
   }
 
   # watch .d directories and ensure they are present
@@ -143,13 +139,12 @@ class apt {
     'refresh_apt':
       command => '/usr/bin/apt-get update && sleep 1',
       refreshonly => true,
-      subscribe => [ File['/etc/apt/apt.conf.d'],
-                     Config_file['/etc/apt/sources.list'] ];
+      subscribe => [ File['/etc/apt/apt.conf.d'], Config_file['/etc/apt/sources.list'] ];
+
     'update_apt':
       command => '/usr/bin/apt-get update && /usr/bin/apt-get autoclean',
       refreshonly => true,
-      require => [ File['/etc/apt/apt.conf.d',
-                        '/etc/apt/preferences'],
+      require => [ File['/etc/apt/apt.conf.d', '/etc/apt/preferences' ],
                    Config_file['/etc/apt/sources.list'] ],
       loglevel => info,
       # Another Semaphor for all packages to reference

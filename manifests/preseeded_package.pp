@@ -5,7 +5,7 @@ define apt::preseeded_package ($content = "", $ensure = "installed") {
     default => $content
   }   
 
-  file{ $seedfile:
+  file { $seedfile:
     content => $real_content,
     mode => 0600, owner => root, group => root,
   }   
