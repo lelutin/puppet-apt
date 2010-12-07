@@ -21,7 +21,7 @@ class apt {
   }
 
   $debian_url = $apt_debian_url ? {
-    ''      => 'http://ftp.debian.org/debian/',
+    ''      => 'http://cdn.debian.net/debian/',
     default => "${apt_debian_url}",
   }
   $security_url = $apt_security_url ? {
