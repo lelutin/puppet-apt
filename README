@@ -20,10 +20,10 @@ This module needs:
 - lsb-release installed
 - the common module: git://labs.riseup.net/shared-common
 
-By default, this module sets the configuration option DSelect::Clean to 'auto'.
-It is the recommended value on normal hosts.  On virtual servers, the
-recommended value is 'pre-auto', since virtual servers are usually more
-space-bound and have better recovery mechanisms via the host:
+By default, on normal hosts, this module sets the configuration option
+DSelect::Clean to 'auto'. On virtual servers, the value is set by default to
+'pre-auto', because virtual servers are usually more space-bound and have better
+recovery mechanisms via the host:
 
 From apt.conf(5), 0.7.2:
      "Cache Clean mode; this value may be one of always, prompt, auto,
@@ -35,10 +35,11 @@ From apt.conf(5), 0.7.2:
      packages."
 
 To change the default setting for DSelect::Clean, you can create a file named
-"03clean" in a site-apt module's files directory. You can also define this for
-a specific host by creating a file in a subdirectory of the site-apt modules'
-files directory that is named the same as the host. (example:
-site-apt/files/some.host.com/03clean)
+"03clean" or "03clean_vserver" in your site-apt module's files directory. You
+can also define this for a specific host by creating a file in a subdirectory of
+the site-apt modules' files directory that is named the same as the
+host. (example: site-apt/files/some.host.com/03clean, or
+site-apt/files/some.host.com/03clean_vserver)
 
 Variables
 =========

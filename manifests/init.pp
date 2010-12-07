@@ -93,12 +93,21 @@ class apt {
                "puppet:///modules/apt/02show_upgraded"]
   }
 
-  apt_conf { "03clean":
-    source => ["puppet:///modules/site-apt/${fqdn}/03clean",
-               "puppet:///modules/site-apt/03clean",
-               "puppet:///modules/apt/03clean"]
+  if ( $virtual == "vserver" ) {
+    apt_conf { "03clean_vserver":
+      source => ["puppet:///modules/site-apt/${fqdn}/03clean_vserver",
+                 "puppet:///modules/site-apt/03clean_vserver",
+                 "puppet:///modules/apt/03clean_vserver"]
+    }
   }
-
+  else {
+    apt_conf { "03clean":
+      source => ["puppet:///modules/site-apt/${fqdn}/03clean",
+                 "puppet:///modules/site-apt/03clean",
+                 "puppet:///modules/apt/03clean"]
+    }
+  }
+    
   case $custom_preferences {
     false: {
       include apt::preferences::absent
