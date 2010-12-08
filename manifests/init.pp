@@ -97,7 +97,8 @@ class apt {
     apt_conf { "03clean_vserver":
       source => [ "puppet:///modules/site-apt/${fqdn}/03clean_vserver",
                   "puppet:///modules/site-apt/03clean_vserver",
-                  "puppet:///modules/apt/03clean_vserver" ]
+                  "puppet:///modules/apt/03clean_vserver" ],
+      alias => "03clean";
     }
   }
   else {
