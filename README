@@ -233,11 +233,11 @@ following in your manifest:
 
   apt::preseeded_package { locales: }
 
-You can also specify 'content' to define this file via a template. Here's an
-example for preseeding installation of the 'mysql' package with a template:
+You can also specify the content of the seed via the content parameter, 
+for example:
 
-  apt::preseeded_package { "mysql":
-    content => template("site-apt/mysql.seed.erb"),
+  apt::preseeded_package { "apticron":
+    content => "apticron   apticron/notification   string  root@example.com",
   }
 
 apt::sources_list
