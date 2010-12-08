@@ -1,6 +1,6 @@
 Explanation: Debian <%= codename %>
 Package: *
-Pin: release o=Debian,n=<%= codename %>
+Pin: release o=Debian,a=<%= release %>
 Pin-Priority: 990
 
 Explanation: Debian backports
@@ -8,14 +8,14 @@ Package: *
 Pin: origin backports.debian.org
 Pin-Priority: 200
 
-Explanation: Debian <%= next_codename %>
+Explanation: Debian <%= next_release %>
 Package: *
-Pin: release o=Debian,n=<%= next_codename %>
+Pin: release o=Debian,a=<%= next_release %>
 Pin-Priority: 2
 
 Explanation: Debian sid
 Package: *
-Pin: release o=Debian,n=sid
+Pin: release o=Debian,a=unstable
 Pin-Priority: 1
 
 Explanation: Debian fallback
