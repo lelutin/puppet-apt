@@ -1,7 +1,7 @@
 define apt::preseeded_package ($content = "", $ensure = "installed") {
   $seedfile = "/var/cache/local/preseeding/$name.seeds"
   $real_content = $content ? { 
-    ""      => template ( "site-apt/$lsbdistcodename/$name.seeds" )
+    ""      => template ( "site-apt/$lsbdistcodename/$name.seeds" ),
     default => $content
   }   
 
