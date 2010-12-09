@@ -162,6 +162,24 @@ The apt class sets up most of the documented functionality. To use
 functionality that is not enabled by default, you must include one of
 the following classes.
 
+apt::apticron
+-------------
+
+When you include this class, apticron will be installed, with the following
+defaults, which you are free to change before you include the class:
+
+ $apticron_ensure_version = "present"
+ $apticron_email = "root" 
+ $apticron_config = "apt/${operatingsystem}/apticron_${lsbrelease}.erb"
+ $apticron_diff_only = "1"
+ $apticron_listchanges_profile = "apticron"
+ $apticron_system = false 
+ $apticron_ipaddressnum = false 
+ $apticron_ipaddresses = false 
+ $apticron_notifyholds = "0"
+ $apticron_notifynew = "0"
+ $apticron_customsubject = ""
+
 apt::cron::download
 -------------------
 
