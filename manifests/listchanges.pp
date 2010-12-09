@@ -5,7 +5,7 @@ class apt::listchanges {
   }
 
   case $listchanges_config {
-    '': { $listchanges_config = "apt/${operatingsystem}/listchanges_${lsbrelease}.erb" }
+    '': { $listchanges_config = "apt/${operatingsystem}/listchanges_${lsbdistcodename}.erb" }
   }
 
   case $listchanges_frontend {

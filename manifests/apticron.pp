@@ -5,7 +5,7 @@ class apt::apticron {
   }
 
   case $apticron_config {
-    '': { $apticron_config = "apt/${operatingsystem}/apticron_${lsbrelease}.erb" }
+    '': { $apticron_config = "apt/${operatingsystem}/apticron_${lsbdistcodename}.erb" }
   }
 
   case $apticron_email {
