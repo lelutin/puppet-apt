@@ -9,7 +9,7 @@ class apt::listchanges {
   }
 
   case $listchanges_frontend {
-    '' { $listchanges_frontend = "pager" }
+    '': { $listchanges_frontend = "pager" }
   }
 
   case $listchanges_email {
