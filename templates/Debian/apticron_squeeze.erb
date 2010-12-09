@@ -27,6 +27,7 @@ LISTCHANGES_PROFILE="<%= apticron_listchanges_profile %>"
 # SYSTEM="foobar.example.com"
 <%- if has_variable?(apticron_system) and instance_variable_get("@#{apticron_system}").to_s != "false" -%>
 <%= 'SYSTEM="' + instance_variable_get("@#{apticron_system}").to_s + '"' %>
+<%- end %>
 
 #
 # Set IPADDRESSNUM if you would like to configure the maximal number of IP
@@ -36,6 +37,7 @@ LISTCHANGES_PROFILE="<%= apticron_listchanges_profile %>"
 # IPADDRESSNUM="1"
 <%- if has_variable?(apticron_ipaddressnum) and instance_variable_get("@#{apticron_ipaddressnum}").to_s != "false" -%>
 <%= 'IPADDRESSNUM="' + instance_variable_get("@#{apticron_ipaddressnum}").to_s + '"' %>
+<%- end -%>
 
 #
 # Set IPADDRESSES to a whitespace separated list of reachable addresses for
@@ -45,6 +47,7 @@ LISTCHANGES_PROFILE="<%= apticron_listchanges_profile %>"
 # IPADDRESSES="192.0.2.1 2001:db8:1:2:3::1"
 <%- if has_variable?(apticron_ipaddresses) and instance_variable_get("@#{apticron_ipaddresses}").to_s != "false" -%>
 <%= 'IPADDRESSES="' + instance_variable_get("@#{apticron_ipaddresses}").to_s + '"' %>
+<%- end -%>
 
 #
 # Set NOTIFY_HOLDS="0" if you don't want to be notified about new versions of
