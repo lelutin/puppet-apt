@@ -22,5 +22,5 @@ deb-src <%= ubuntu_url %> <%= lsbdistcodename %>-security <%= repos %>
 # backports
 deb <%= ubuntu_url %> <%= lsbdistcodename %>-backports main <%= repos %>
 <% if include_src then -%>
-deb-src <%= ubuntu_url %> <%= lsbdistcodename %>-backports <%= repos >
+deb-src <%= ubuntu_url %> <%= lsbdistcodename %>-backports <%= repos %>
 <% end -%>
