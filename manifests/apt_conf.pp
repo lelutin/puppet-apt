@@ -15,7 +15,7 @@ define apt::apt_conf(
   file { "/etc/apt/apt.conf.d/${name}":
     ensure => $ensure,
     notify => Exec["refresh_apt"],
-    owner => root, group => 0, mode => 0600;
+    owner => root, group => 0, mode => 0644;
   }
 
   if $source {
