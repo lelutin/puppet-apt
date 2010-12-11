@@ -186,11 +186,23 @@ apt::cron::download
 This class sets up cron-apt so that it downloads upgradable packages, does not
 actually do any upgrade and emails when the output changes.
 
+cron-apt defaults to run at 4 AM. You may want to set the
+$apt_cron_hours variable before you include the class: its value will
+be passed as the "hours" parameter of a cronjob. Example:
+
+ # Run cron-apt every three hours
+ $apt_cron_hours = "*/3"
+
+Note that the default 4 AM cronjob won't be disabled.
+
 apt::cron::dist-upgrade
 -----------------------
 
 This class sets up cron-apt so that it dist-upgrades the system and
 emails when upgrades are performed.
+
+See apt::cron::download above if you need to run cron-apt more often
+than once a day.
 
 apt::dselect
 ------------
