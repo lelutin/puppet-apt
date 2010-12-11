@@ -218,6 +218,13 @@ apt::proxy_client
 This class adds the right configuration to apt to make it fetch packages via a
 proxy. The variables $apt_proxy and $apt_proxy_port need to be set (see above).
 
+apt::reboot_required_notify
+---------------------------
+
+This class installs a daily cronjob that checks if a package upgrade
+requires the system to be rebooted; if so, cron sends a notification
+email to root.
+
 apt::unattended_upgrades
 ------------------------
 
