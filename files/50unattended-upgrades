@@ -22,7 +22,7 @@ Unattended-Upgrade::Package-Blacklist {
 
         "linux-image-*";
 
-	// unfortunately there seems to be a bug in unattended-upgrades <= 0.25.1 that wildcards aren't recognized:
+	// unfortunately there seems to be a bug in unattended-upgrades <= 0.62 that wildcards aren't recognized:
 	//2009-12-11 13:41:43,267 INFO Initial blacklisted packages: linux-image-*
 	//2009-12-11 13:41:43,267 INFO Starting unattended upgrades script
 	//2009-12-11 13:41:43,267 INFO Allowed origins are: ["['Debian', 'stable']", "['Debian-Security', 'stable']"]
