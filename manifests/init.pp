@@ -21,7 +21,7 @@ class apt {
   }
 
   $debian_url = $apt_debian_url ? {
-    ''      => 'http://ftp.debian.org/debian/',
+    ''      => 'http://cdn.debian.net/debian/',
     default => "${apt_debian_url}",
   }
   $security_url = $apt_security_url ? {
@@ -88,17 +88,27 @@ class apt {
   }
 
   apt_conf { "02show_upgraded":
-    source => ["puppet:///modules/site-apt/${fqdn}/02show_upgraded",
-               "puppet:///modules/site-apt/02show_upgraded",
-               "puppet:///modules/apt/02show_upgraded"]
+    source => [ "puppet:///modules/site-apt/${fqdn}/02show_upgraded",
+                "puppet:///modules/site-apt/02show_upgraded",
+                "puppet:///modules/apt/02show_upgraded" ]
   }
 
-  apt_conf { "03clean":
-    source => ["puppet:///modules/site-apt/${fqdn}/03clean",
-               "puppet:///modules/site-apt/03clean",
-               "puppet:///modules/apt/03clean"]
+  if ( $virtual == "vserver" ) {
+    apt_conf { "03clean_vserver":
+      source => [ "puppet:///modules/site-apt/${fqdn}/03clean_vserver",
+                  "puppet:///modules/site-apt/03clean_vserver",
+                  "puppet:///modules/apt/03clean_vserver" ],
+      alias => "03clean";
+    }
   }
-
+  else {
+    apt_conf { "03clean":
+      source => [ "puppet:///modules/site-apt/${fqdn}/03clean",
+                  "puppet:///modules/site-apt/03clean",
+                  "puppet:///modules/apt/03clean" ]
+    }
+  }
+    
   case $custom_preferences {
     false: {
       include apt::preferences::absent
@@ -112,13 +122,9 @@ class apt {
 
   # backward compatibility: upgrade from previous versions of this module.
   file {
-    ["/etc/apt/apt.conf.d/from_puppet",
-     "/etc/apt/apt.conf.d/99from_puppet"
-    ]:
+    [ "/etc/apt/apt.conf.d/from_puppet", "/etc/apt/apt.conf.d/99from_puppet" ]:
       ensure  => 'absent',
-      require => [ Apt_conf['02show_upgraded'],
-                   Apt_conf['03clean'],
-                 ],
+      require => [ Apt_conf['02show_upgraded'], Apt_conf['03clean'] ];
   }
 
   # watch .d directories and ensure they are present
@@ -134,13 +140,12 @@ class apt {
     'refresh_apt':
       command => '/usr/bin/apt-get update && sleep 1',
       refreshonly => true,
-      subscribe => [ File['/etc/apt/apt.conf.d'],
-                     Config_file['/etc/apt/sources.list'] ];
+      subscribe => [ File['/etc/apt/apt.conf.d'], Config_file['/etc/apt/sources.list'] ];
+
     'update_apt':
       command => '/usr/bin/apt-get update && /usr/bin/apt-get autoclean',
       refreshonly => true,
-      require => [ File['/etc/apt/apt.conf.d',
-                        '/etc/apt/preferences'],
+      require => [ File['/etc/apt/apt.conf.d', '/etc/apt/preferences' ],
                    Config_file['/etc/apt/sources.list'] ],
       loglevel => info,
       # Another Semaphor for all packages to reference
@@ -163,8 +168,8 @@ class apt {
       recurse => true,
       mode => 0755, owner => root, group => root,
     }
-    exec { "find ${apt_base_dir}/keys.d -type f -exec apt-key add '{}' \\; && apt-get update":
-      alias => "custom_keys",
+    exec { "custom_keys":
+      command => "find ${apt_base_dir}/keys.d -type f -exec apt-key add '{}' \\; && apt-get update",
       subscribe => File["${apt_base_dir}/keys.d"],
       refreshonly => true,
     }

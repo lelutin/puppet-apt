@@ -1,5 +1,6 @@
 class apt::preferences::absent {
-  file {'/etc/apt/preferences':
+
+  file { '/etc/apt/preferences':
     ensure => absent,
   }
 }

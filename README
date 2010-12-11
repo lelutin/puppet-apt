@@ -20,10 +20,10 @@ This module needs:
 - lsb-release installed
 - the common module: git://labs.riseup.net/shared-common
 
-By default, this module sets the configuration option DSelect::Clean to 'auto'.
-It is the recommended value on normal hosts.  On virtual servers, the
-recommended value is 'pre-auto', since virtual servers are usually more
-space-bound and have better recovery mechanisms via the host:
+By default, on normal hosts, this module sets the configuration option
+DSelect::Clean to 'auto'. On virtual servers, the value is set by default to
+'pre-auto', because virtual servers are usually more space-bound and have better
+recovery mechanisms via the host:
 
 From apt.conf(5), 0.7.2:
      "Cache Clean mode; this value may be one of always, prompt, auto,
@@ -35,10 +35,11 @@ From apt.conf(5), 0.7.2:
      packages."
 
 To change the default setting for DSelect::Clean, you can create a file named
-"03clean" in a site-apt module's files directory. You can also define this for
-a specific host by creating a file in a subdirectory of the site-apt modules'
-files directory that is named the same as the host. (example:
-site-apt/files/some.host.com/03clean)
+"03clean" or "03clean_vserver" in your site-apt module's files directory. You
+can also define this for a specific host by creating a file in a subdirectory of
+the site-apt modules' files directory that is named the same as the
+host. (example: site-apt/files/some.host.com/03clean, or
+site-apt/files/some.host.com/03clean_vserver)
 
 Variables
 =========
@@ -74,15 +75,9 @@ installation will not accidentally pull in packages from those suites
 unless you explicitly specify the version number. This file will be
 complemented with all of the preferences_snippet calls (see below).
 
-If the default preferences template doesn't suit your needs, you can
-create a file named 'preferences' in a site-apt module's files
-directory. You can also create a host-specific file:
-
-  site-apt
-   - files/
-     - server.domain.com/
-       - preferences
-       preferences
+If the default preferences template doesn't suit your needs, you can create a
+template located in your site-apt module, and set $custom_preferences with the
+location (eg. $custom_preferences = "puppet:///modules/site-apt/preferences")
 
 Setting this variable to false before including this class will force the
 apt/preferences file to be absent:
@@ -96,6 +91,9 @@ If you have different apt-key files that you want to get added to your
 apt keyring, you can set this variable to a path in your fileserver
 where individual key files can be placed. If this is set and keys
 exist there, this module will 'apt-key add' each key.
+
+The debian-archive-keyring package is installed and kept current up to the
+latest revision (this includes the backports archive keyring).
 
 $apt_proxy / $apt_proxy_port
 ----------------------------
@@ -161,8 +159,26 @@ apt
 ---
 
 The apt class sets up most of the documented functionality. To use
-functionality that is not enabled by default, you must inlucde one of
+functionality that is not enabled by default, you must include one of
 the following classes.
+
+apt::apticron
+-------------
+
+When you include this class, apticron will be installed, with the following
+defaults, which you are free to change before you include the class:
+
+ $apticron_ensure_version = "present"
+ $apticron_email = "root" 
+ $apticron_config = "apt/${operatingsystem}/apticron_${lsbrelease}.erb"
+ $apticron_diff_only = "1"
+ $apticron_listchanges_profile = "apticron"
+ $apticron_system = false 
+ $apticron_ipaddressnum = false 
+ $apticron_ipaddresses = false 
+ $apticron_notifyholds = "0"
+ $apticron_notifynew = "0"
+ $apticron_customsubject = ""
 
 apt::cron::download
 -------------------
@@ -181,6 +197,19 @@ apt::dselect
 
 This class, when included, installs dselect and switches it to expert mode to
 suppress superfluous help screens.
+
+apt::listchanges
+
+This class, when included, installs apt-listchanges and configures it using the
+following variables, the defaults are below:
+
+ $listchanges_version = "present"
+ $listchanges_config = "apt/${operatingsystem}/listchanges_${lsbrelease}.erb" 
+ $listchanges_frontend = "pager" 
+ $listchanges_email = "root" 
+ $listchanges_confirm = "0" 
+ $listchanges_saveseen = "/var/lib/apt/listchanges.db" 
+ $listchanges_which = "both" 
 
 apt::proxy_client
 -----------------
@@ -228,18 +257,18 @@ apt::preseeded_package
 ----------------------
 
 This simplifies installation of packages for which you wish to preseed the
-answers to debconf. For example, if you wish to provide a preseed file
-for the locales package, you would place the locales.seed file in
-'templates/$debian_version/locales.seeds' and then include the following
-in your manifest:
+answers to debconf. For example, if you wish to provide a preseed file for the
+locales package, you would place the locales.seed file in
+'site-apt/templates/$lsbdistcodename/locales.seeds' and then include the
+following in your manifest:
 
   apt::preseeded_package { locales: }
 
-You can also specify 'content' to define this file via a template. Here's an
-example for preseeding installation of the 'mysql' package with a template:
+You can also specify the content of the seed via the content parameter, 
+for example:
 
-  apt::preseeded_package { "mysql":
-    content => template("site-apt/mysql.seed.erb"),
+  apt::preseeded_package { "apticron":
+    content => "apticron   apticron/notification   string  root@example.com",
   }
 
 apt::sources_list
@@ -295,10 +324,6 @@ Package { require => Exec[apt_updated] }
 
 TODO
 ====
-
-Currently this module updates the caches on every run. Running apt-get update is
-an expensive operation and should be done only on schedule by using
-apticron or cron-apt.
 
 Sometimes -- especially when initially starting management or deploying new
 packages -- a immediate update is really needed to be able to install the right

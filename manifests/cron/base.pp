@@ -1,3 +1,4 @@
 class apt::cron::base {
-	package { cron-apt: ensure => installed }
+
+  package { cron-apt: ensure => installed }
 }
