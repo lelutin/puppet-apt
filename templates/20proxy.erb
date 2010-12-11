@@ -2,3 +2,4 @@
 // all local modifications will be overwritten
 
 Acquire::http { Proxy "<%= real_apt_proxy %>:<%= real_apt_proxy_port %>"; };
+Acquire::HTTP::Proxy::bugs.debian.org "DIRECT";
