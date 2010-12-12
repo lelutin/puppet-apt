@@ -62,7 +62,7 @@ class apt {
 
   include lsb
 
-  # init $release, $next_release, $codename, $next_codename
+  # init $release, $next_release, $codename, $next_codename, $release_version
   case $lsbdistcodename {
     '': {
       $codename = $lsbdistcodename
@@ -73,6 +73,7 @@ class apt {
       $release = debian_release($codename)
     }
   }
+  $release_version = debian_release_version($codename)
   $next_codename = debian_nextcodename($codename)
   $next_release = debian_nextrelease($release)
 
