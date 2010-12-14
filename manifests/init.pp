@@ -170,7 +170,7 @@ class apt {
       mode => 0755, owner => root, group => root,
     }
     exec { "custom_keys":
-      command => "find ${apt_base_dir}/keys.d -type f -exec apt-key add '{}' \\; && apt-get update",
+      command => "find ${apt_base_dir}/keys.d -type f -exec apt-key add '{}' \\; && /usr/bin/apt-get update",
       subscribe => File["${apt_base_dir}/keys.d"],
       refreshonly => true,
     }
