@@ -1,12 +1,7 @@
 define apt::upgrade_package ($version = "") {
 
   case $version {
-    '': {
-      exec { "aptitude -y install $name":
-        onlyif => [ "grep-status -F Status installed -a -P $name -q", "apt-show-versions -u $name | grep -q upgradeable" ],
-      }
-    }
-    'latest': {
+    '', 'latest': {
       exec { "aptitude -y install $name":
         onlyif => [ "grep-status -F Status installed -a -P $name -q", "apt-show-versions -u $name | grep -q upgradeable" ],
       }
