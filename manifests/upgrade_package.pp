@@ -10,7 +10,10 @@ define apt::upgrade_package ($version = "") {
 
   exec { "aptitude -y install ${name}${version_suffix}":
     onlyif => [ "grep-status -F Status installed -a -P $name -q", "apt-show-versions -u $name | grep -q upgradeable" ],
-    require => Exec['apt_updated'],
+    require => [
+      Exec['apt_updated'],
+      Package['apt-show-versions', 'dctrl-tools'],
+    ],
   }
 
 }
