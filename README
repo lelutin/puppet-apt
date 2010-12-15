@@ -337,15 +337,16 @@ Use this resource to depend on or add to a completed apt configuration
 Exec[apt_updated]
 -----------------
 
-After this point, current packages can be installed via apt. It is usually used
-like this:
+After this point the APT indexes are up-to-date.
 
-Package { require => Exec[apt_updated] }
+This resource is usually used like this to ensure current packages are
+installed by Package resources:
 
-TODO
-====
+  include apt::update
+  Package { require => Exec[apt_updated] }
 
-Sometimes -- especially when initially starting management or deploying new
-packages -- a immediate update is really needed to be able to install the right
-packages without errors. Thus a method should be devised to be able to specify
-with high fidelity when a update should be run and when it is not needed.
+Please note that the apt::upgrade_package define automatically uses
+this resource so you don't have to manage this yourself if you need to
+make sure APT indexes are up-to-date before a package upgrade is
+attempted, but don't want "apt-get update" to happen on every Puppet
+run.

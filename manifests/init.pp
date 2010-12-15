@@ -142,15 +142,6 @@ class apt {
       command => '/usr/bin/apt-get update && sleep 1',
       refreshonly => true,
       subscribe => [ File['/etc/apt/apt.conf.d'], Config_file['/etc/apt/sources.list'] ];
-
-    'update_apt':
-      command => '/usr/bin/apt-get update && /usr/bin/apt-get autoclean',
-      refreshonly => true,
-      require => [ File['/etc/apt/apt.conf.d', '/etc/apt/preferences' ],
-                   Config_file['/etc/apt/sources.list'] ],
-      loglevel => info,
-      # Another Semaphor for all packages to reference
-      alias => "apt_updated";
   }
 
   ## This package should really always be current
