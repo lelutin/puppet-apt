@@ -1,37 +1,37 @@
 class apt::listchanges {
 
-  case $listchanges_version {
+  case $apt_listchanges_version {
     '': { $listchanges_version = "present" }
   }
 
-  case $listchanges_config {
+  case $apt_listchanges_config {
     '': { $listchanges_config = "apt/${operatingsystem}/listchanges_${lsbdistcodename}.erb" }
   }
 
-  case $listchanges_frontend {
+  case $apt_listchanges_frontend {
     '': { $listchanges_frontend = "mail" }
   }
 
-  case $listchanges_email {
+  case $apt_listchanges_email {
     '': { $listchanges_email = "root" }
   }
 
-  case $listchanges_confirm {
+  case $apt_listchanges_confirm {
     '': { $listchanges_confirm = "0" }
   }
 
-  case $listchanges_saveseen {
+  case $apt_listchanges_saveseen {
     '': { $listchanges_saveseen = "/var/lib/apt/listchanges.db" }
   }
 
-  case $listchanges_which {
+  case $apt_listchanges_which {
     '': { $listchanges_which = "both" }
   }
 
-  package { apt-listchanges: ensure => $listchanges_ensure_version }
+  package { apt-listchanges: ensure => $apt_listchanges_ensure_version }
   
   file { "/etc/apt/listchanges.conf":
-    content => template($listchanges_config),
+    content => template($apt_listchanges_config),
     mode => 0644, owner => root, group => root,
     require => Package["apt-listchanges"];
   }
