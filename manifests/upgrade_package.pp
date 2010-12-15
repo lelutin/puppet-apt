@@ -8,6 +8,11 @@ define apt::upgrade_package ($version = "") {
     default  => "=${version}",
   }
 
+  package { ['apt-show-versions', 'dctrl-tools']:
+    ensure => installed,
+    require => undef,
+  }
+
   exec { "aptitude -y install ${name}${version_suffix}":
     onlyif => [ "grep-status -F Status installed -a -P $name -q", "apt-show-versions -u $name | grep -q upgradeable" ],
     require => [
