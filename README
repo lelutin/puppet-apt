@@ -216,13 +216,13 @@ apt::listchanges
 This class, when included, installs apt-listchanges and configures it using the
 following variables, the defaults are below:
 
- $listchanges_version = "present"
- $listchanges_config = "apt/${operatingsystem}/listchanges_${lsbrelease}.erb" 
- $listchanges_frontend = "pager" 
- $listchanges_email = "root" 
- $listchanges_confirm = "0" 
- $listchanges_saveseen = "/var/lib/apt/listchanges.db" 
- $listchanges_which = "both" 
+ $apt_listchanges_version = "present"
+ $apt_listchanges_config = "apt/${operatingsystem}/listchanges_${lsbrelease}.erb"
+ $apt_listchanges_frontend = "pager"
+ $apt_listchanges_email = "root"
+ $apt_listchanges_confirm = "0"
+ $apt_listchanges_saveseen = "/var/lib/apt/listchanges.db"
+ $apt_listchanges_which = "both"
 
 apt::proxy_client
 -----------------
