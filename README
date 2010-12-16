@@ -204,6 +204,20 @@ emails when upgrades are performed.
 See apt::cron::download above if you need to run cron-apt more often
 than once a day.
 
+apt::dist_upgrade
+-----------------
+
+This class provides the Exec['apt_dist-upgrade'] resource that
+dist-upgrade's the system.
+
+This exec is set as refreshonly so including this class does not
+trigger any action per-se: other resources may notify it, other
+classes may inherit from this one and add to its subscription list
+using the plusignment ('+>') operator.
+
+When this class is included the APT indexes are updated on every
+Puppet run due to the author's lack of Puppet wizardry.
+
 apt::dselect
 ------------
 
