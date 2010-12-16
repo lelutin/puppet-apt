@@ -8,9 +8,18 @@ define apt::upgrade_package ($version = "") {
     default  => "=${version}",
   }
 
-  package { ['apt-show-versions', 'dctrl-tools']:
-    ensure => installed,
-    require => undef,
+  if !defined(Package['apt-show-versions']) {
+    package { 'apt-show-versions':
+      ensure => installed,
+      require => undef,
+    }
+  }
+
+  if !defined(Package['dctrl-tools']) {
+    package { 'dctrl-tools':
+      ensure => installed,
+      require => undef,
+    }
   }
 
   exec { "aptitude -y install ${name}${version_suffix}":
