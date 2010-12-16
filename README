@@ -213,7 +213,31 @@ dist-upgrade's the system.
 This exec is set as refreshonly so including this class does not
 trigger any action per-se: other resources may notify it, other
 classes may inherit from this one and add to its subscription list
-using the plusignment ('+>') operator.
+using the plusignment ('+>') operator. A real-world example can be
+seen in the apt::dist_upgrade::initiator source.
+
+When this class is included the APT indexes are updated on every
+Puppet run due to the author's lack of Puppet wizardry.
+
+apt::dist_upgrade::initiator
+----------------------------
+
+This class automatically dist-upgrade's the system when an initiator
+file's content changes. The initiator file is copied from the first
+available source amongst the following ones, in decreasing priority
+order:
+
+- puppet:///site-apt/${fqdn}/upgrade_initiator
+- puppet:///site-apt/upgrade_initiator
+- puppet:///apt/upgrade_initiator
+
+This is useful when one does not want to setup a fully automated
+upgrade process but still needs a way to manually trigger full
+upgrades of any number of systems at scheduled times.
+
+Beware: a dist-upgrade is triggered the first time Puppet runs after
+this class has been included. This is actually the single reason why
+this class is not enabled by default.
 
 When this class is included the APT indexes are updated on every
 Puppet run due to the author's lack of Puppet wizardry.
