@@ -1,0 +1,19 @@
+Explanation: Ubuntu <%= codename %>
+Package: *
+Pin: release o=Ubuntu,a=<%= release %>,v=<%= release_version %>*
+Pin-Priority: 990
+
+Explanation: Ubuntu backports
+Package: *
+Pin: release a=<%= codename %>-backports
+Pin-Priority: 200
+
+Explanation: Ubuntu <%= next_release %>
+Package: *
+Pin: release o=Ubuntu,a=<%= next_release %>
+Pin-Priority: 2
+
+Explanation: Ubuntu fallback
+Package: *
+Pin: release o=Ubuntu
+Pin-Priority: -10
