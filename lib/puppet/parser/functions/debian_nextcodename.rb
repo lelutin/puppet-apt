@@ -3,7 +3,8 @@ module Puppet::Parser::Functions
     case args[0]
       when "etch"    then "lenny"
       when "lenny"   then "squeeze"
-      when "squeeze" then "sid"
+      when "squeeze" then "wheezy"
+      when "wheezy"  then "sid"
       when "sid"     then "experimental"
       else "sid"
     end
