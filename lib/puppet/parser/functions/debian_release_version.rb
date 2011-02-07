@@ -3,6 +3,7 @@ module Puppet::Parser::Functions
     case args[0]
       when 'etch'         then '4.0'
       when 'lenny'        then '5.0'
+      when 'squeeze'      then '6.0'
       else ''
     end
   end
