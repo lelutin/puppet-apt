@@ -22,7 +22,7 @@ define apt::upgrade_package ($version = "") {
     }
   }
 
-  exec { "aptitude -y install ${name}${version_suffix}":
+  exec { "apt-get -q -y -o 'DPkg::Options::=--force-confold' install ${name}${version_suffix}":
     onlyif => [ "grep-status -F Status installed -a -P $name -q", "apt-show-versions -u $name | grep -q upgradeable" ],
     require => [
       Exec['apt_updated'],

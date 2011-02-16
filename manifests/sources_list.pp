@@ -13,7 +13,7 @@ define apt::sources_list (
 
   file { "/etc/apt/sources.list.d/${name}":
     ensure => $ensure,
-    owner => root, group => 0, mode => 0600;
+    owner => root, group => 0, mode => 0644;
   }
 
   if $source {
