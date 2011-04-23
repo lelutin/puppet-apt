@@ -77,7 +77,7 @@ complemented with all of the preferences_snippet calls (see below).
 
 If the default preferences template doesn't suit your needs, you can create a
 template located in your site-apt module, and set $custom_preferences with the
-location (eg. $custom_preferences = "puppet:///modules/site-apt/preferences")
+content (eg. $custom_preferences = template('site-apt/preferences') )
 
 Setting this variable to false before including this class will force the
 apt/preferences file to be absent:
