@@ -67,16 +67,6 @@ deb-src <%= security_url %> <%= next_codename %>/updates <%= repos %>
 <% end -%>
 <% end -%>
 
-# backports
-<% if (next_release == "testing" || next_release == "unstable" || next_release == "experimental") -%>
-# There is no backports archive for <%= next_release %>
-<% else -%>
-deb <%= backports_url %> <%= next_codename %>-backports <%= repos %>
-<% if include_src then -%>
-deb-src <%= backports_url %> <%= next_codename %>-backports <%= repos %>
-<% end -%>
-<% end -%>
-
 <% if use_volatile -%>
 # volatile
 <% if (next_release == "testing" || next_release == "unstable" || next_release == "experimental") -%>
