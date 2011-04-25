@@ -5,8 +5,6 @@
 
 class apt {
 
-  import "custom_sources.pp"
-
   $use_volatile = $apt_volatile_enabled ? {
     ''      => false,
     default => $apt_volatile_enabled,
