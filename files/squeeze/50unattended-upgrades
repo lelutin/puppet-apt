@@ -1,0 +1,57 @@
+// this file is managed by puppet !
+//
+//See https://wiki.ubuntu.com/AutomaticUpdates for more details about this feature.
+
+// allowed (origin, archive) pairs
+Unattended-Upgrade::Allowed-Origins {
+	"Debian squeeze";
+	"Debian-Security squeeze";
+//	"Debian testing";
+};
+
+APT::Periodic::Update-Package-Lists "1";
+APT::Periodic::Unattended-Upgrade "1";
+Unattended-Upgrade::Mail "root";
+
+APT::UnattendedUpgrades::LogDir "/var/log/";
+APT::UnattendedUpgrades::LogFile "unattended_upgrades.log";
+
+Unattended-Upgrade::Package-Blacklist {
+	// we don't want the kernel to be updated so nagios still can give a warning if there is
+	// a manual update (and reboot) left
+
+        "linux-image-*";
+
+	// unfortunately there seems to be a bug in unattended-upgrades <= 0.62 that wildcards aren't recognized:
+	//2009-12-11 13:41:43,267 INFO Initial blacklisted packages: linux-image-*
+	//2009-12-11 13:41:43,267 INFO Starting unattended upgrades script
+	//2009-12-11 13:41:43,267 INFO Allowed origins are: ["['Debian', 'stable']", "['Debian-Security', 'stable']"]
+	//2009-12-11 13:41:45,233 INFO Packages that are upgraded: linux-image-2.6.26-2-amd64
+	//2009-12-11 13:41:45,233 INFO Writing dpkg log to '/var/log/unattended-upgrades-dpkg_2009-12-11_13:41:45.233713.log'
+	//2009-12-11 13:42:11,988 INFO All upgrades installed
+
+        // lenny
+	"linux-image-2.6.26-1-686";
+	"linux-image-2.6.26-1-amd64";
+        "linux-image-2.6.26-1-xen-686";
+        "linux-image-2.6.26-1-xen-amd64";
+	"linux-image-2.6.26-1-vserver-686";
+	"linux-image-2.6.26-1-vserver-amd64";
+
+	"linux-image-2.6.26-2-686";
+	"linux-image-2.6.26-2-amd64";
+        "linux-image-2.6.26-2-xen-686";
+        "linux-image-2.6.26-2-xen-amd64";
+	"linux-image-2.6.26-2-vserver-686";
+	"linux-image-2.6.26-2-vserver-amd64";
+
+	// squeeze
+	"linux-image-2.6.32-5-686";
+	"linux-image-2.6.32-5-amd64";
+	"linux-image-2.6.32-5-xen-686";
+	"linux-image-2.6.32-5-xen-amd64";
+	"linux-image-2.6.32-5-vserver-686";
+	"linux-image-2.6.32-5-vserver-amd64";
+
+};
+
