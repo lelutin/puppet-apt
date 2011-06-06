@@ -4,8 +4,8 @@
 
 // allowed (origin, archive) pairs
 Unattended-Upgrade::Allowed-Origins {
-	"Debian lenny";
-	"Debian-Security lenny";
+	"Debian oldstable";
+	"Debian-Security oldstable";
 //	"Debian testing";
 };
 

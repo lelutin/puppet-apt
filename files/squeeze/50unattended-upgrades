@@ -4,8 +4,8 @@
 
 // allowed (origin, archive) pairs
 Unattended-Upgrade::Allowed-Origins {
-	"Debian squeeze";
-	"Debian-Security squeeze";
+	"Debian stable";
+	"Debian-Security stable";
 //	"Debian testing";
 };
 
