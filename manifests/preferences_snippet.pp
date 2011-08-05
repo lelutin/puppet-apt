@@ -11,11 +11,9 @@ define apt::preferences_snippet(
 
   include apt::preferences
 
-  file { "${apt::preferences::apt_preferences_dir}/${name}":
+  concat::fragment{"apt_preference_${name}":
     ensure => $ensure,
-    #TODO this template is somewhat limited
-    notify => Exec["concat_${apt::preferences::apt_preferences_dir}"],
-    owner => root, group => 0, mode => 0600;
+    target => '/etc/apt/preferences',
   }
 
   # This should really work in the same manner as sources_list and apt_conf
@@ -23,12 +21,12 @@ define apt::preferences_snippet(
   # lenny, we can't generalize without going into ugly special-casing.
   case $source {
     '': {
-      File["${apt::preferences::apt_preferences_dir}/${name}"] {
+      Concat::Fragment[$name]{
         content => template("apt/preferences_snippet.erb")
       }
     }
     default: {
-      File["${apt::preferences::apt_preferences_dir}/${name}"] {
+      Concat::Fragment[$name]{
         source => $source
       }
     }
