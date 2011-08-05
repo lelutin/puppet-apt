@@ -154,7 +154,7 @@ class apt {
     }
     if $custom_preferences != false {
       Exec["custom_keys"] {
-        before => Concatenated_file[apt_config],
+        before => Concat[apt_config],
       }
     }
   }
