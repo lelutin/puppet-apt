@@ -14,7 +14,7 @@ class apt::unattended_upgrades {
 
   if $custom_preferences != false {
     Apt_conf["50unattended-upgrades"] {
-      before => Concatenated_file[apt_config],
+      before => Concat[apt_config],
     }
   }
 }

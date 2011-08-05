@@ -370,7 +370,7 @@ upgrade_package { "perl":
 Resources
 =========
 
-Concatenated_file[apt_config]
+Concat[apt_config]
 -----------------------------
 
 Use this resource to depend on or add to a completed apt configuration
