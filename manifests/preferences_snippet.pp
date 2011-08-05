@@ -21,12 +21,12 @@ define apt::preferences_snippet(
   # lenny, we can't generalize without going into ugly special-casing.
   case $source {
     '': {
-      Concat::Fragment[$name]{
+      Concat::Fragment["apt_preference_${name}"]{
         content => template("apt/preferences_snippet.erb")
       }
     }
     default: {
-      Concat::Fragment[$name]{
+      Concat::Fragment["apt_preference_${name}"]{
         source => $source
       }
     }
