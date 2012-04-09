@@ -12,6 +12,8 @@ define apt::apt_conf(
     fail("Only one of \$source or \$content must specified for apt_conf ${name}")
   }
 
+  include apt::dot_d_directories
+
   file { "/etc/apt/apt.conf.d/${name}":
     ensure => $ensure,
     notify => Exec["refresh_apt"],

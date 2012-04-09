@@ -11,6 +11,8 @@ define apt::sources_list (
     fail("Only one of \$source or \$content must specified for apt_sources_snippet ${name}")
   }
 
+  include apt::dot_d_directories
+
   file { "/etc/apt/sources.list.d/${name}":
     ensure => $ensure,
     owner => root, group => 0, mode => 0644;
