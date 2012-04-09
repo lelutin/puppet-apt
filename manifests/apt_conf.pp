@@ -14,10 +14,13 @@ define apt::apt_conf(
 
   include apt::dot_d_directories
 
+  # One would expect the 'file' resource on sources.list.d to trigger an
+  # apt-get update when files are added or modified in the directory, but it
+  # apparently doesn't.
   file { "/etc/apt/apt.conf.d/${name}":
     ensure => $ensure,
+    owner => root, group => 0, mode => 0644,
     notify => Exec["refresh_apt"],
-    owner => root, group => 0, mode => 0644;
   }
 
   if $source {

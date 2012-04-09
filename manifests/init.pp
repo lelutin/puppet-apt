@@ -85,7 +85,8 @@ class apt {
         '' => template( "apt/$operatingsystem/sources.list.erb"),
         default => $custom_sources_list
       },
-      require => Package['lsb'];
+      require => Package['lsb'],
+      notify => Exec['refresh_apt'],
   }
 
   apt_conf { "02show_upgraded":
