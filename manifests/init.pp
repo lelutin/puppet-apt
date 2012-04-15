@@ -90,23 +90,23 @@ class apt {
   }
 
   apt_conf { "02show_upgraded":
-    source => [ "puppet:///modules/site-apt/${fqdn}/02show_upgraded",
-                "puppet:///modules/site-apt/02show_upgraded",
+    source => [ "puppet:///modules/site_apt/${fqdn}/02show_upgraded",
+                "puppet:///modules/site_apt/02show_upgraded",
                 "puppet:///modules/apt/02show_upgraded" ]
   }
 
   if ( $virtual == "vserver" ) {
     apt_conf { "03clean_vserver":
-      source => [ "puppet:///modules/site-apt/${fqdn}/03clean_vserver",
-                  "puppet:///modules/site-apt/03clean_vserver",
+      source => [ "puppet:///modules/site_apt/${fqdn}/03clean_vserver",
+                  "puppet:///modules/site_apt/03clean_vserver",
                   "puppet:///modules/apt/03clean_vserver" ],
       alias => "03clean";
     }
   }
   else {
     apt_conf { "03clean":
-      source => [ "puppet:///modules/site-apt/${fqdn}/03clean",
-                  "puppet:///modules/site-apt/03clean",
+      source => [ "puppet:///modules/site_apt/${fqdn}/03clean",
+                  "puppet:///modules/site_apt/03clean",
                   "puppet:///modules/apt/03clean" ]
     }
   }

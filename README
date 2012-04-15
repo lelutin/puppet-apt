@@ -36,11 +36,11 @@ From apt.conf(5), 0.7.2:
      packages."
 
 To change the default setting for DSelect::Clean, you can create a file named
-"03clean" or "03clean_vserver" in your site-apt module's files directory. You
+"03clean" or "03clean_vserver" in your site_apt module's files directory. You
 can also define this for a specific host by creating a file in a subdirectory of
-the site-apt modules' files directory that is named the same as the
-host. (example: site-apt/files/some.host.com/03clean, or
-site-apt/files/some.host.com/03clean_vserver)
+the site_apt modules' files directory that is named the same as the
+host. (example: site_apt/files/some.host.com/03clean, or
+site_apt/files/some.host.com/03clean_vserver)
 
 Variables
 =========
@@ -61,9 +61,9 @@ e.g. changing the sections included in the source, etc. you can set
 this variable to the content that you desire to use instead.
 
 For example, setting the following variable before including this class will
-pull in the templates/site-apt/sources.list file:
+pull in the templates/site_apt/sources.list file:
 
-  $custom_sources_list = template("site-apt/sources.list")
+  $custom_sources_list = template("site_apt/sources.list")
 
 $custom_preferences
 -------------------
@@ -77,8 +77,8 @@ unless you explicitly specify the version number. This file will be
 complemented with all of the preferences_snippet calls (see below).
 
 If the default preferences template doesn't suit your needs, you can create a
-template located in your site-apt module, and set $custom_preferences with the
-content (eg. $custom_preferences = template('site-apt/preferences') )
+template located in your site_apt module, and set $custom_preferences with the
+content (eg. $custom_preferences = template('site_apt/preferences') )
 
 Setting this variable to false before including this class will force the
 apt/preferences file to be absent:
@@ -198,7 +198,7 @@ be passed as the "hours" parameter of a cronjob. Example:
 
 Note that the default 4 AM cronjob won't be disabled.
 
-apt::cron::dist-upgrade
+apt::cron::dist_upgrade
 -----------------------
 
 This class sets up cron-apt so that it dist-upgrades the system and
@@ -230,8 +230,8 @@ file's content changes. The initiator file is copied from the first
 available source amongst the following ones, in decreasing priority
 order:
 
-- puppet:///site-apt/${fqdn}/upgrade_initiator
-- puppet:///site-apt/upgrade_initiator
+- puppet:///site_apt/${fqdn}/upgrade_initiator
+- puppet:///site_apt/upgrade_initiator
 - puppet:///apt/upgrade_initiator
 
 This is useful when one does not want to setup a fully automated
@@ -298,7 +298,7 @@ meta-parameter to define content inline or with the help of a template.
 Example:
 
   apt::apt_conf { "80download-only":
-    source => "puppet:///modules/site-apt/80download-only",
+    source => "puppet:///modules/site_apt/80download-only",
   }
 
 apt::preferences_snippet
@@ -320,7 +320,7 @@ apt::preseeded_package
 This simplifies installation of packages for which you wish to preseed the
 answers to debconf. For example, if you wish to provide a preseed file for the
 locales package, you would place the locales.seed file in
-'site-apt/templates/$lsbdistcodename/locales.seeds' and then include the
+'site_apt/templates/$lsbdistcodename/locales.seeds' and then include the
 following in your manifest:
 
   apt::preseeded_package { locales: }
@@ -343,8 +343,8 @@ meta-parameter to define content inline or with the help of a template.
 Example:
 
   apt::sources_list { "company_internals.list":
-    source => ["puppet:///modules/site-apt/${fqdn}/company_internals.list",
-               "puppet:///modules/site-apt/company_internals.list"],
+    source => ["puppet:///modules/site_apt/${fqdn}/company_internals.list",
+               "puppet:///modules/site_apt/company_internals.list"],
   }
 
 apt::upgrade_package
