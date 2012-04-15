@@ -19,7 +19,7 @@ This module needs:
 
 - lsb-release installed
 - the common module: git://labs.riseup.net/shared-common
-- the concat module: https://github.com/ripienaar/puppet-concat
+- the concat module: git://labs.riseup.net/shared-concat
 
 By default, on normal hosts, this module sets the configuration option
 DSelect::Clean to 'auto'. On virtual servers, the value is set by default to
@@ -371,7 +371,7 @@ Resources
 =========
 
 Concat[apt_config]
------------------------------
+------------------
 
 Use this resource to depend on or add to a completed apt configuration
 

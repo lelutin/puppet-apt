@@ -12,6 +12,7 @@ Unattended-Upgrade::Allowed-Origins {
 APT::Periodic::Update-Package-Lists "1";
 APT::Periodic::Unattended-Upgrade "1";
 Unattended-Upgrade::Mail "root";
+Unattended-Upgrade::MailOnlyOnError "true";
 
 APT::UnattendedUpgrades::LogDir "/var/log/";
 APT::UnattendedUpgrades::LogFile "unattended_upgrades.log";
