@@ -45,7 +45,7 @@ site_apt/files/some.host.com/03clean_vserver)
 Variables
 =========
 
-$lsbdistcodename
+$::lsbdistcodename
 ----------------
 
 Contains the codename ("etch", "lenny", ...) of the client's
@@ -173,7 +173,7 @@ defaults, which you are free to change before you include the class:
 
  $apticron_ensure_version = "present"
  $apticron_email = "root" 
- $apticron_config = "apt/${operatingsystem}/apticron_${lsbrelease}.erb"
+ $apticron_config = "apt/${::operatingsystem}/apticron_${::lsbrelease}.erb"
  $apticron_diff_only = "1"
  $apticron_listchanges_profile = "apticron"
  $apticron_system = false 
@@ -230,7 +230,7 @@ file's content changes. The initiator file is copied from the first
 available source amongst the following ones, in decreasing priority
 order:
 
-- puppet:///site_apt/${fqdn}/upgrade_initiator
+- puppet:///site_apt/${::fqdn}/upgrade_initiator
 - puppet:///site_apt/upgrade_initiator
 - puppet:///apt/upgrade_initiator
 
@@ -258,7 +258,7 @@ This class, when included, installs apt-listchanges and configures it using the
 following variables, the defaults are below:
 
  $apt_listchanges_version = "present"
- $apt_listchanges_config = "apt/${operatingsystem}/listchanges_${lsbrelease}.erb"
+ $apt_listchanges_config = "apt/${::operatingsystem}/listchanges_${::lsbrelease}.erb"
  $apt_listchanges_frontend = "pager"
  $apt_listchanges_email = "root"
  $apt_listchanges_confirm = "0"
@@ -320,7 +320,7 @@ apt::preseeded_package
 This simplifies installation of packages for which you wish to preseed the
 answers to debconf. For example, if you wish to provide a preseed file for the
 locales package, you would place the locales.seed file in
-'site_apt/templates/$lsbdistcodename/locales.seeds' and then include the
+'site_apt/templates/${::lsbdistcodename}/locales.seeds' and then include the
 following in your manifest:
 
   apt::preseeded_package { locales: }
@@ -343,7 +343,7 @@ meta-parameter to define content inline or with the help of a template.
 Example:
 
   apt::sources_list { "company_internals.list":
-    source => ["puppet:///modules/site_apt/${fqdn}/company_internals.list",
+    source => ["puppet:///modules/site_apt/${::fqdn}/company_internals.list",
                "puppet:///modules/site_apt/company_internals.list"],
   }
 

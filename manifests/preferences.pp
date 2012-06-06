@@ -1,10 +1,10 @@
 class apt::preferences {
 
   concat::fragment{"apt_preferences_header":
-    content => $custom_preferences ? {
-      '' => $operatingsystem ? {
-        'debian' => template("apt/${operatingsystem}/preferences_${codename}.erb"),
-        'ubuntu' => template("apt/${operatingsystem}/preferences_${codename}.erb"),
+    content => $apt::custom_preferences ? {
+      '' => $::operatingsystem ? {
+        'debian' => template("apt/${::operatingsystem}/preferences_${::codename}.erb"),
+        'ubuntu' => template("apt/${::operatingsystem}/preferences_${::codename}.erb"),
       },
       default => $custom_preferences
     },
