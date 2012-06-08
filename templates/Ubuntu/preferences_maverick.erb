@@ -1,26 +1,26 @@
-Explanation: Ubuntu <%= codename %> security 
+Explanation: Ubuntu <%= scope.lookupvar('::lsbdistcodename') %> security
 Package: *
-Pin: release o=Ubuntu,a=<%= codename %>-security
+Pin: release o=Ubuntu,a=<%= scope.lookupvar('::lsbdistcodename') %>-security
 Pin-Priority: 990
 
-Explanation: Ubuntu <%= codename %> updates
+Explanation: Ubuntu <%= scope.lookupvar('::lsbdistcodename') %> updates
 Package: *
-Pin: release o=Ubuntu,a=<%= codename %>-updates
+Pin: release o=Ubuntu,a=<%= scope.lookupvar('::lsbdistcodename') %>-updates
 Pin-Priority: 980
 
-Explanation: Ubuntu <%= codename %>
+Explanation: Ubuntu <%= scope.lookupvar('::lsbdistcodename') %>
 Package: *
-Pin: release o=Ubuntu,a=<%= codename %>
+Pin: release o=Ubuntu,a=<%= scope.lookupvar('::lsbdistcodename') %>
 Pin-Priority: 970
 
 Explanation: Ubuntu backports
 Package: *
-Pin: release a=<%= codename %>-backports
+Pin: release a=<%= scope.lookupvar('::lsbdistcodename') %>-backports
 Pin-Priority: 200
 
-Explanation: Ubuntu <%= next_release %>
+Explanation: Ubuntu <%= scope.lookupvar('apt::next_release') %>
 Package: *
-Pin: release o=Ubuntu,a=<%= next_release %>
+Pin: release o=Ubuntu,a=<%= scope.lookupvar('apt::next_release') %>
 Pin-Priority: 2
 
 Explanation: Ubuntu fallback

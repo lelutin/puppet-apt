@@ -6,7 +6,7 @@
 class apt(
   $use_volatile = hiera('apt_volatile_enabled',false),
   $include_src = hiera('apt_include_src',false),
-  $use_next_release = hiera('apt_use_next_release'),
+  $use_next_release = hiera('apt_use_next_release',false),
   $debian_url = hiera('apt_debian_url','http://cdn.debian.net/debian/'),
   $security_url = hiera('apt_security_url','http://security.debian.org/'),
   $backports_url = hiera('apt_backports_url','http://backports.debian.org/debian-backports/'),
@@ -40,16 +40,14 @@ class apt(
   # init $release, $next_release, $codename, $next_codename, $release_version
   case $::lsbdistcodename {
     '': {
-      $codename = $::lsbdistcodename
       $release = $::lsbdistrelease
     }
     default: {
-      $codename = $::lsbdistcodename
-      $release = debian_release($codename)
+      $release = debian_release($::lsbdistcodename)
     }
   }
-  $release_version = debian_release_version($codename)
-  $next_codename = debian_nextcodename($codename)
+  $release_version = debian_release_version($::lsbdistcodename)
+  $next_codename = debian_nextcodename($::lsbdistcodename)
   $next_release = debian_nextrelease($release)
 
   config_file {
