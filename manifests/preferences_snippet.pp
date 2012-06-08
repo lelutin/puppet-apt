@@ -1,4 +1,5 @@
 define apt::preferences_snippet(
+  $package = $name,
   $ensure = 'present',
   $source = '',
   $release,

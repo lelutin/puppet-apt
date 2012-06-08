@@ -314,6 +314,13 @@ Example:
       priority => 999;
   }
 
+  apt::preferences_snippet{
+    'unstable_fallback':
+      package => '*',
+      release => 'unstable',
+      priority => 1;
+  }
+
 apt::preseeded_package
 ----------------------
 
