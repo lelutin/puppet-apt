@@ -2,12 +2,20 @@ define apt::preferences_snippet(
   $package = $name,
   $ensure = 'present',
   $source = '',
-  $release,
+  $release = '',
+  $pin = '',
   $priority )
 {
 
   if $custom_preferences == false {
     fail("Trying to define a preferences_snippet with \$custom_preferences set to false.")
+  }
+
+  if !$pin and !$release {
+    fail("apt::preferences_snippet requires one of the 'pin' or 'release' argument to be set")
+  }
+  if $pin and $release {
+    fail("apt::preferences_snippet requires either a 'pin' or 'release' argument, not both")
   }
 
   include apt::preferences
@@ -22,8 +30,17 @@ define apt::preferences_snippet(
   # lenny, we can't generalize without going into ugly special-casing.
   case $source {
     '': {
-      Concat::Fragment["apt_preference_${name}"]{
-        content => template("apt/preferences_snippet.erb")
+      case $release {
+        '': {
+          Concat::Fragment["apt_preference_${name}"]{
+            content => template("apt/preferences_snippet.erb")
+          }
+        }
+        default: {
+          Concat::Fragment["apt_preference_${name}"]{
+            content => template("apt/preferences_snippet_release.erb")
+          }
+        }
       }
     }
     default: {

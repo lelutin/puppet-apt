@@ -321,6 +321,12 @@ Example:
       priority => 1;
   }
 
+  apt::preferences_snippet{
+    'ttdnsd':
+      pin => 'origin deb.torproject.org',
+      priority => 999;
+  }
+
 apt::preseeded_package
 ----------------------
 
