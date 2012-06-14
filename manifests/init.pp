@@ -4,17 +4,17 @@
 # See LICENSE for the full license granted to you.
 
 class apt(
-  $use_volatile = hiera('apt_volatile_enabled',false),
-  $include_src = hiera('apt_include_src',false),
-  $use_next_release = hiera('apt_use_next_release',false),
-  $debian_url = hiera('apt_debian_url','http://cdn.debian.net/debian/'),
-  $security_url = hiera('apt_security_url','http://security.debian.org/'),
-  $backports_url = hiera('apt_backports_url','http://backports.debian.org/debian-backports/'),
-  $volatile_url = hiera('apt_volatile_url', 'http://volatile.debian.org/debian-volatile/'),
-  $ubuntu_url = hiera('apt_ubuntu_url', 'http://archive.ubuntu.com/ubuntu'),
-  $repos = hiera('apt_repos','auto'),
-  $custom_preferences = hiera('apt_custom_preferences','')
-) {
+  $use_volatile = false,
+  $include_src = false,
+  $use_next_release = false,
+  $debian_url = 'http://cdn.debian.net/debian/',
+  $security_url = 'http://security.debian.org/',
+  $backports_url = 'http://backports.debian.org/debian-backports/',
+  $volatile_url = 'http://volatile.debian.org/debian-volatile/',
+  $ubuntu_url = 'http://archive.ubuntu.com/ubuntu',
+  $repos = 'auto',
+  $custom_preferences = ''
+){
   case $::operatingsystem {
     'debian': {
       $real_repos = $repos ? {
