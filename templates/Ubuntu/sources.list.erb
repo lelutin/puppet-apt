@@ -2,25 +2,25 @@
 # all local modifications will be overwritten
 
 # basic <%= lsbdistcodename=scope.lookupvar('::lsbdistcodename') %>
-deb <%= ubuntu_url=scope.lookupvar('apt::ubuntu_url') %> <%= lsbdistcodename %> <%= repos=scope.lookupvar('apt::repos') %>
+deb <%= ubuntu_url=scope.lookupvar('apt::ubuntu_url') %> <%= lsbdistcodename %> <%= lrepos=scope.lookupvar('apt::real_repos') %>
 <% if include_src=scope.lookupvar('apt::include_src') -%>
-deb-src <%= ubuntu_url %> <%= lsbdistcodename %> <%= repos %>
+deb-src <%= ubuntu_url %> <%= lsbdistcodename %> <%= lrepos %>
 <% end -%>
 
 # updates
-deb <%= ubuntu_url %> <%= lsbdistcodename %>-updates <%= repos %>
+deb <%= ubuntu_url %> <%= lsbdistcodename %>-updates <%= lrepos %>
 <% if include_src -%>
-deb-src <%= ubuntu_url %> <%= lsbdistcodename %>-updates <%= repos %>
+deb-src <%= ubuntu_url %> <%= lsbdistcodename %>-updates <%= lrepos %>
 <% end -%>
 
 # security suppport
-deb <%= ubuntu_url %> <%= lsbdistcodename %>-security <%= repos %>
+deb <%= ubuntu_url %> <%= lsbdistcodename %>-security <%= lrepos %>
 <% if include_src -%>
-deb-src <%= ubuntu_url %> <%= lsbdistcodename %>-security <%= repos %>
+deb-src <%= ubuntu_url %> <%= lsbdistcodename %>-security <%= lrepos %>
 <% end -%>
 
 # backports
-deb <%= ubuntu_url %> <%= lsbdistcodename %>-backports main <%= repos %>
+deb <%= ubuntu_url %> <%= lsbdistcodename %>-backports main <%= lrepos %>
 <% if include_src -%>
-deb-src <%= ubuntu_url %> <%= lsbdistcodename %>-backports <%= repos %>
+deb-src <%= ubuntu_url %> <%= lsbdistcodename %>-backports <%= lrepos %>
 <% end -%>

@@ -4,18 +4,18 @@
 ### Debian current: <%= codename = scope.lookupvar('::lsbdistcodename') %>
 
 # basic
-deb <%= debian_url=scope.lookupvar('apt::debian_url') %> <%= codename %> <%= repos=scope.lookupvar('apt::repos') %>
+deb <%= debian_url=scope.lookupvar('apt::debian_url') %> <%= codename %> <%= lrepos=scope.lookupvar('apt::real_repos') %>
 <% if scope.lookupvar('apt::include_src')  -%>
-deb-src <%= debian_url %> <%= codename %> <%= repos %>
+deb-src <%= debian_url %> <%= codename %> <%= lrepos %>
 <% end -%>
 
 # security
 <% if ((release=scope.lookupvar('apt::release')) == "unstable" || release == "experimental") -%>
 # There is no security support for <%= release %>
 <% else -%>
-deb <%= security_url=scope.lookupvar('apt::security_url') %> <%= codename %>/updates <%= repos %>
+deb <%= security_url=scope.lookupvar('apt::security_url') %> <%= codename %>/updates <%= lrepos %>
 <% if include_src -%>
-deb-src <%= security_url %> <%= codename %>/updates <%= repos %>
+deb-src <%= security_url %> <%= codename %>/updates <%= lrepos %>
 <% end -%>
 <% end -%>
 
@@ -23,9 +23,9 @@ deb-src <%= security_url %> <%= codename %>/updates <%= repos %>
 <% if (release == "testing" || release == "unstable" || release == "experimental") -%>
 # There is no backports archive for <%= release %>
 <% else -%>
-deb <%= backports_url=scope.lookupvar('apt::backports_url') %> <%= codename %>-backports <%= repos %>
+deb <%= backports_url=scope.lookupvar('apt::backports_url') %> <%= codename %>-backports <%= lrepos %>
 <% if include_src -%>
-deb-src <%= backports_url %> <%= codename %>-backports <%= repos %>
+deb-src <%= backports_url %> <%= codename %>-backports <%= lrepos %>
 <% end -%>
 <% end -%>
 
@@ -35,14 +35,14 @@ deb-src <%= backports_url %> <%= codename %>-backports <%= repos %>
 # There is no volatile archive for <%= release %>
 <% else -%>
 <% if (codename == "lenny" || codename == "etch") -%>
-deb <%= volatile_url=scope.lookupvar('apt::volatile_url') %> <%= codename %>/volatile <%= repos %>
+deb <%= volatile_url=scope.lookupvar('apt::volatile_url') %> <%= codename %>/volatile <%= lrepos %>
 <% if include_src -%>
-deb-src <%= volatile_url %> <%= codename %>/volatile <%= repos %>
+deb-src <%= volatile_url %> <%= codename %>/volatile <%= lrepos %>
 <% end -%>
 <% else -%>
-deb <%= debian_url %> <%= codename %>-updates <%= repos %>
+deb <%= debian_url %> <%= codename %>-updates <%= lrepos %>
 <% if include_src -%>
-deb-src <%= debian_url %> <%= codename %>-updates <%= repos %>
+deb-src <%= debian_url %> <%= codename %>-updates <%= lrepos %>
 <% end -%>
 <% end -%>
 <% end -%>
@@ -52,18 +52,18 @@ deb-src <%= debian_url %> <%= codename %>-updates <%= repos %>
 ### Debian next: <%= next_codename=scope.lookupvar('apt::next_codename') %>
 
 # basic
-deb <%= debian_url %> <%= next_codename %> <%= repos %>
+deb <%= debian_url %> <%= next_codename %> <%= lrepos %>
 <% if include_src then -%>
-deb-src <%= debian_url %> <%= next_codename %> <%= repos %>
+deb-src <%= debian_url %> <%= next_codename %> <%= lrepos %>
 <% end -%>
 
 # security
 <% if (next_release == "unstable" || next_release == "experimental") -%>
 # There is no security support for <%= next_release %>
 <% else -%>
-deb <%= security_url %> <%= next_codename %>/updates <%= repos %>
+deb <%= security_url %> <%= next_codename %>/updates <%= lrepos %>
 <% if include_src then -%>
-deb-src <%= security_url %> <%= next_codename %>/updates <%= repos %>
+deb-src <%= security_url %> <%= next_codename %>/updates <%= lrepos %>
 <% end -%>
 <% end -%>
 
@@ -73,14 +73,14 @@ deb-src <%= security_url %> <%= next_codename %>/updates <%= repos %>
 # There is no volatile archive for <%= next_release %>
 <% else -%>
 <% if (next_codename == "lenny" || next_codename == "etch") -%>
-deb <%= volatile_url %> <%= next_codename %>/volatile <%= repos %>
+deb <%= volatile_url %> <%= next_codename %>/volatile <%= lrepos %>
 <% if include_src then -%>
-deb-src <%= volatile_url %> <%= next_codename %>/volatile <%= repos %>
+deb-src <%= volatile_url %> <%= next_codename %>/volatile <%= lrepos %>
 <% end -%>
 <% else -%>
-deb <%= debian_url %> <%= next_codename %>-updates <%= repos %>
+deb <%= debian_url %> <%= next_codename %>-updates <%= lrepos %>
 <% if include_src then -%>
-deb-src <%= debian_url %> <%= next_codename %>-updates <%= repos %>
+deb-src <%= debian_url %> <%= next_codename %>-updates <%= lrepos %>
 <% end -%>
 <% end -%>
 <% end -%>
