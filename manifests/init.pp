@@ -50,7 +50,7 @@ class apt(
   $next_codename = debian_nextcodename($::lsbdistcodename)
   $next_release = debian_nextrelease($release)
 
-  config_file {
+  file {
     # include main, security and backports
     # additional sources should be included via the apt::sources_list define
     "/etc/apt/sources.list":
@@ -60,6 +60,7 @@ class apt(
       },
       require => Package['lsb'],
       notify => Exec['refresh_apt'],
+      owner => root, group => 0, mode => 0644;
   }
 
   apt_conf { "02show_upgraded":
