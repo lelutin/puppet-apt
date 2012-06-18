@@ -14,7 +14,7 @@ dist-upgrade -d -y -o APT::Get::Show-Upgraded=true
     owner => root, group => 0, mode => 0644;
   }
 
-  config_file { "/etc/cron-apt/config.d/MAILON":
+  file { "/etc/cron-apt/config.d/MAILON":
     content => "MAILON=changes\n",
     require => Package[cron-apt],
     owner => root, group => 0, mode => 0644;
