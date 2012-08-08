@@ -17,7 +17,7 @@ Ubuntu support is lagging behind but not absent either.
 
 This module needs:
 
-- lsb-release installed
+- the lsb module: git://labs.riseup.net/shared-lsb
 - the common module: git://labs.riseup.net/shared-common
 - the concat module: git://labs.riseup.net/shared-concat
 
