@@ -17,7 +17,7 @@ Ubuntu support is lagging behind but not absent either.
 
 This module needs:
 
-- lsb-release installed
+- the lsb module: git://labs.riseup.net/shared-lsb
 - the common module: git://labs.riseup.net/shared-common
 - the concat module: git://labs.riseup.net/shared-concat
 
@@ -314,6 +314,19 @@ Example:
       priority => 999;
   }
 
+  apt::preferences_snippet{
+    'unstable_fallback':
+      package => '*',
+      release => 'unstable',
+      priority => 1;
+  }
+
+  apt::preferences_snippet{
+    'ttdnsd':
+      pin => 'origin deb.torproject.org',
+      priority => 999;
+  }
+
 apt::preseeded_package
 ----------------------
 
@@ -391,3 +404,15 @@ this resource so you don't have to manage this yourself if you need to
 make sure APT indexes are up-to-date before a package upgrade is
 attempted, but don't want "apt-get update" to happen on every Puppet
 run.
+
+
+Licensing
+=========
+
+This puppet module is licensed under the GPL version 3 or later. Redistribution
+and modification is encouraged.
+
+The GPL version 3 license text can be found in the "LICENSE" file accompanying
+this puppet module, or at the following URL:
+
+http://www.gnu.org/licenses/gpl-3.0.html
