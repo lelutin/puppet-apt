@@ -169,17 +169,17 @@ apt::apticron
 When you include this class, apticron will be installed, with the following
 defaults, which you are free to change before you include the class:
 
- $apticron_ensure_version = "present"
- $apticron_email = "root" 
+ $apticron_ensure_version = 'present'
+ $apticron_email = 'root'
  $apticron_config = "apt/${operatingsystem}/apticron_${lsbrelease}.erb"
- $apticron_diff_only = "1"
- $apticron_listchanges_profile = "apticron"
+ $apticron_diff_only = 1
+ $apticron_listchanges_profile = 'apticron'
  $apticron_system = false 
  $apticron_ipaddressnum = false 
  $apticron_ipaddresses = false 
- $apticron_notifyholds = "0"
- $apticron_notifynew = "0"
- $apticron_customsubject = ""
+ $apticron_notifyholds = 0
+ $apticron_notifynew = 0
+ $apticron_customsubject = ''
 
 apt::cron::download
 -------------------
@@ -192,7 +192,7 @@ $apt_cron_hours variable before you include the class: its value will
 be passed as the "hours" parameter of a cronjob. Example:
 
  # Run cron-apt every three hours
- $apt_cron_hours = "*/3"
+ $apt_cron_hours = '*/3'
 
 Note that the default 4 AM cronjob won't be disabled.
 
@@ -228,9 +228,9 @@ file's content changes. The initiator file is copied from the first
 available source amongst the following ones, in decreasing priority
 order:
 
-- puppet:///site_apt/${fqdn}/upgrade_initiator
-- puppet:///site_apt/upgrade_initiator
-- puppet:///apt/upgrade_initiator
+- puppet:///modules/site_apt/${fqdn}/upgrade_initiator
+- puppet:///modules/site_apt/upgrade_initiator
+- puppet:///modules/apt/upgrade_initiator
 
 This is useful when one does not want to setup a fully automated
 upgrade process but still needs a way to manually trigger full
@@ -255,13 +255,13 @@ apt::listchanges
 This class, when included, installs apt-listchanges and configures it using the
 following variables, the defaults are below:
 
- $apt_listchanges_version = "present"
+ $apt_listchanges_version = 'present'
  $apt_listchanges_config = "apt/${operatingsystem}/listchanges_${lsbrelease}.erb"
- $apt_listchanges_frontend = "pager"
- $apt_listchanges_email = "root"
- $apt_listchanges_confirm = "0"
- $apt_listchanges_saveseen = "/var/lib/apt/listchanges.db"
- $apt_listchanges_which = "both"
+ $apt_listchanges_frontend = 'pager'
+ $apt_listchanges_email = 'root'
+ $apt_listchanges_confirm = 0
+ $apt_listchanges_saveseen = '/var/lib/apt/listchanges.db'
+ $apt_listchanges_which = 'both'
 
 apt::proxy_client
 -----------------
@@ -295,8 +295,8 @@ meta-parameter to define content inline or with the help of a template.
 
 Example:
 
-  apt::apt_conf { "80download-only":
-    source => "puppet:///modules/site_apt/80download-only",
+  apt::apt_conf { '80download-only':
+    source => 'puppet:///modules/site_apt/80download-only',
   }
 
 apt::preferences_snippet
@@ -306,20 +306,20 @@ A way to add pinning information to /etc/apt/preferences
 
 Example:
 
-  apt::preferences_snippet{
+  apt::preferences_snippet {
     'irssi-plugin-otr':
       release => 'lenny-backports',
       priority => 999;
   }
 
-  apt::preferences_snippet{
+  apt::preferences_snippet {
     'unstable_fallback':
       package => '*',
       release => 'unstable',
       priority => 1;
   }
 
-  apt::preferences_snippet{
+  apt::preferences_snippet {
     'ttdnsd':
       pin => 'origin deb.torproject.org',
       priority => 999;
@@ -339,8 +339,8 @@ following in your manifest:
 You can also specify the content of the seed via the content parameter, 
 for example:
 
-  apt::preseeded_package { "apticron":
-    content => "apticron   apticron/notification   string  root@example.com",
+  apt::preseeded_package { 'apticron':
+    content => 'apticron   apticron/notification   string  root@example.com',
   }
 
 apt::sources_list
@@ -386,7 +386,7 @@ File['apt_config']
 
 Use this resource to depend on or add to a completed apt configuration
 
-Exec[apt_updated]
+Exec['apt_updated']
 -----------------
 
 After this point the APT indexes are up-to-date.
@@ -395,7 +395,7 @@ This resource is usually used like this to ensure current packages are
 installed by Package resources:
 
   include apt::update
-  Package { require => Exec[apt_updated] }
+  Package { require => Exec['apt_updated'] }
 
 Please note that the apt::upgrade_package define automatically uses
 this resource so you don't have to manage this yourself if you need to
