@@ -302,7 +302,7 @@ Example:
 apt::preferences_snippet
 ------------------------
 
-A way to add pinning information to /etc/apt/preferences
+A way to add pinning information to files in /etc/apt/preferences.d/
 
 Example:
 
@@ -324,6 +324,17 @@ Example:
       pin => 'origin deb.torproject.org',
       priority => 999;
   }
+
+The names of the resources will be used as the names of the files in the
+preferences.d directory, so you should ensure that resource names follow the
+prescribed naming scheme.
+
+From apt_preferences(5):
+     Note that the files in the /etc/apt/preferences.d directory are parsed in
+     alphanumeric ascending order and need to obey the following naming
+     convention: The files have no or "pref" as filename extension and which
+     only contain alphanumeric, hyphen (-), underscore (_) and period (.)
+     characters - otherwise they will be silently ignored.
 
 apt::preseeded_package
 ----------------------
