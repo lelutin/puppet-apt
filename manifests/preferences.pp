@@ -1,20 +1,18 @@
 class apt::preferences {
 
-  concat::fragment{"apt_preferences_header":
-    content => $custom_preferences ? {
-      '' => $operatingsystem ? {
-        'debian' => template("apt/${operatingsystem}/preferences_${codename}.erb"),
-        'ubuntu' => template("apt/${operatingsystem}/preferences_${codename}.erb"),
-      },
-      default => $custom_preferences
+  $pref_contents = $custom_preferences ? {
+    '' => $operatingsystem ? {
+      'debian' => template("apt/${operatingsystem}/preferences_${codename}.erb"),
+      'ubuntu' => template("apt/${operatingsystem}/preferences_${codename}.erb"),
     },
-    order => 00,
-    target => '/etc/apt/preferences',
+    default => $custom_preferences
   }
 
-  concat{'/etc/apt/preferences':
-    alias => apt_config,
+  file { '/etc/apt/preferences':
+    ensure => present,
+    alias => 'apt_config',
     # only update together
+    content => $pref_contents,
     require => File["/etc/apt/sources.list"],
     owner => root, group => 0, mode => 0644;
   }

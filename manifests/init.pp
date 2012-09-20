@@ -138,10 +138,6 @@ class apt {
   # backports uses the normal archive key now
   package { "debian-backports-keyring": ensure => absent }
 
-  include common::moduledir
-  $apt_base_dir = "${common::moduledir::module_dir_path}/apt"
-  modules_dir { apt: }
-
   if $custom_key_dir {
     file { "${apt_base_dir}/keys.d":
       source => "$custom_key_dir",
@@ -155,7 +151,7 @@ class apt {
     }
     if $custom_preferences != false {
       Exec["custom_keys"] {
-        before => Concat[apt_config],
+        before => File['apt_config'],
       }
     }
   }

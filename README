@@ -18,8 +18,6 @@ Ubuntu support is lagging behind but not absent either.
 This module needs:
 
 - the lsb module: git://labs.riseup.net/shared-lsb
-- the common module: git://labs.riseup.net/shared-common
-- the concat module: git://labs.riseup.net/shared-concat
 
 By default, on normal hosts, this module sets the configuration option
 DSelect::Clean to 'auto'. On virtual servers, the value is set by default to
@@ -383,7 +381,7 @@ upgrade_package { "perl":
 Resources
 =========
 
-Concat[apt_config]
+File['apt_config']
 ------------------
 
 Use this resource to depend on or add to a completed apt configuration

@@ -23,11 +23,9 @@ define apt::preferences_snippet(
     fail("apt::preferences_snippet requires either a 'pin' or 'release' argument, not both")
   }
 
-  include apt::preferences
-
-  concat::fragment{"apt_preference_${name}":
+  file { "/etc/apt/preferences.d/${name}":
     ensure => $ensure,
-    target => '/etc/apt/preferences',
+    owner => root, group => 0, mode => 0644;
   }
 
   # This should really work in the same manner as sources_list and apt_conf
@@ -37,19 +35,19 @@ define apt::preferences_snippet(
     '': {
       case $release {
         '': {
-          Concat::Fragment["apt_preference_${name}"]{
+          File["/etc/apt/preferences.d/${name}"]{
             content => template("apt/preferences_snippet.erb")
           }
         }
         default: {
-          Concat::Fragment["apt_preference_${name}"]{
+          File["/etc/apt/preferences.d/${name}"]{
             content => template("apt/preferences_snippet_release.erb")
           }
         }
       }
     }
     default: {
-      Concat::Fragment["apt_preference_${name}"]{
+      File["/etc/apt/preferences.d/${name}"]{
         source => $source
       }
     }
