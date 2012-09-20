@@ -77,7 +77,7 @@ class apt {
   $next_codename = debian_nextcodename($codename)
   $next_release = debian_nextrelease($release)
 
-  config_file {
+  file {
     # include main, security and backports
     # additional sources should be included via the apt::sources_list define
     "/etc/apt/sources.list":
@@ -85,6 +85,7 @@ class apt {
         '' => template( "apt/$operatingsystem/sources.list.erb"),
         default => $custom_sources_list
       },
+      mode => 0644, owner => root, group => 0,
       require => Package['lsb'],
       notify => Exec['refresh_apt'],
   }

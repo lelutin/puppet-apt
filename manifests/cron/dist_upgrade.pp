@@ -10,14 +10,15 @@ dist-upgrade -y -o APT::Get::Show-Upgraded=true -o 'DPkg::Options::=--force-conf
 
   package { "apt-listbugs": ensure => absent }
 
-  config_file { "/etc/cron-apt/action.d/4-dist-upgrade":
-    content => $action,
-    require => Package[cron-apt]
-  }
-
-  config_file { "/etc/cron-apt/config.d/MAILON":
-    content => "MAILON=upgrade\n",
-    require => Package[cron-apt]
+  file {
+    "/etc/cron-apt/action.d/4-dist-upgrade":
+      content => $action,
+      mode => 0644, owner => root, group => 0,
+      require => Package[cron-apt];
+    "/etc/cron-apt/config.d/MAILON":
+      content => "MAILON=upgrade\n",
+      mode => 0644, owner => root, group => 0,
+      require => Package[cron-apt];
   }
 
 }
