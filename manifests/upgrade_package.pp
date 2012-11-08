@@ -1,6 +1,8 @@
 define apt::upgrade_package ($version = "") {
 
-  include apt::update
+  if $apt::disable_update == false { 
+    include apt::update 
+  }
 
   $version_suffix = $version ? {
     ''       => '',
@@ -24,10 +26,11 @@ define apt::upgrade_package ($version = "") {
 
   exec { "apt-get -q -y -o 'DPkg::Options::=--force-confold' install ${name}${version_suffix}":
     onlyif => [ "grep-status -F Status installed -a -P $name -q", "apt-show-versions -u $name | grep -q upgradeable" ],
-    require => [
-      Exec['apt_updated'],
-      Package['apt-show-versions', 'dctrl-tools'],
-    ],
+    require => $apt::disable_update ? {
+      true    => Package['apt-show-versions', 'dctrl-tools'],
+      default => [ Exec['apt_updated'], 
+                 Package['apt-show-versions', 'dctrl-tools'] ],
+    } 
   }
 
 }
