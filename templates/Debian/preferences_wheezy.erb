@@ -1,11 +1,11 @@
-Explanation: Debian <%= scope.lookupvar('::lsbdistcodename') %>
+Explanation: Debian <%= codename=scope.lookupvar('apt::codename') %>
 Package: *
-Pin: release o=Debian,n=<%= scope.lookupvar('::lsbdistcodename') %>
+Pin: release o=Debian,n=<%= codename %>
 Pin-Priority: 990
 
-Explanation: Debian <%= scope.lookupvar('::lsbdistcodename') %>-updates
+Explanation: Debian <%= codename %>-updates
 Package: *
-Pin: release o=Debian,n=<%= scope.lookupvar('::lsbdistcodename') %>-updates
+Pin: release o=Debian,n=<%= codename %>-updates
 Pin-Priority: 990
 
 Explanation: Debian sid

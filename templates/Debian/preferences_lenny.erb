@@ -1,4 +1,4 @@
-Explanation: Debian <%= scope.lookupvar('::lsbdistcodename') %>
+Explanation: Debian <%= codename=scope.lookupvar('apt::codename') %>
 Package: *
 Pin: release o=Debian,a=<%= scope.lookupvar('apt::release') %>,v=<%= scope.lookupvar('apt::release_version') %>*
 Pin-Priority: 990
@@ -8,9 +8,9 @@ Package: *
 Pin: origin backports.debian.org
 Pin-Priority: 200
 
-Explanation: Debian <%= scope.lookupvar('apt::next_release') %>
+Explanation: Debian <%= next_release=scope.lookupvar('apt::next_release') %>
 Package: *
-Pin: release o=Debian,a=<%= scope.lookupvar('apt::next_release') %>
+Pin: release o=Debian,a=<%= next_release %>
 Pin-Priority: 2
 
 Explanation: Debian sid

@@ -1,7 +1,7 @@
 # This file is managed by puppet
 # all local modifications will be overwritten
 
-### Debian current: <%= codename = scope.lookupvar('::lsbdistcodename') %>
+### Debian current: <%= codename=scope.lookupvar('apt::codename') %>
 
 # basic
 deb <%= debian_url=scope.lookupvar('apt::debian_url') %> <%= codename %> <%= lrepos=scope.lookupvar('apt::real_repos') %>

@@ -1,16 +1,16 @@
-Explanation: Debian <%= scope.lookupvar('::lsbdistcodename') %>
+Explanation: Debian <%= codename=scope.lookupvar('apt::codename') %>
 Package: *
-Pin: release o=Debian,n=<%= scope.lookupvar('::lsbdistcodename') %>
+Pin: release o=Debian,n=<%= codename %>
 Pin-Priority: 990
 
-Explanation: Debian <%= scope.lookupvar('::lsbdistcodename') %>-updates
+Explanation: Debian <%= codename %>-updates
 Package: *
-Pin: release o=Debian,n=<%= scope.lookupvar('::lsbdistcodename') %>-updates
+Pin: release o=Debian,n=<%= codename %>-updates
 Pin-Priority: 990
 
-Explanation: Debian <%= scope.lookupvar('apt::next_codename') %>
+Explanation: Debian <%= next_codename=scope.lookupvar('apt::next_codename') %>
 Package: *
-Pin: release o=Debian,n=<%= scope.lookupvar('apt::next_codename') %>
+Pin: release o=Debian,n=<%= next_codename %>
 Pin-Priority: 2
 
 Explanation: Debian sid

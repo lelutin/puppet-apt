@@ -1,26 +1,26 @@
 # This file is managed by puppet
 # all local modifications will be overwritten
 
-# basic <%= lsbdistcodename=scope.lookupvar('::lsbdistcodename') %>
-deb <%= ubuntu_url=scope.lookupvar('apt::ubuntu_url') %> <%= lsbdistcodename %> <%= lrepos=scope.lookupvar('apt::real_repos') %>
+# basic <%= codename=scope.lookupvar('apt::codename') %>
+deb <%= ubuntu_url=scope.lookupvar('apt::ubuntu_url') %> <%= codename %> <%= lrepos=scope.lookupvar('apt::real_repos') %>
 <% if include_src=scope.lookupvar('apt::include_src') -%>
-deb-src <%= ubuntu_url %> <%= lsbdistcodename %> <%= lrepos %>
+deb-src <%= ubuntu_url %> <%= codename %> <%= lrepos %>
 <% end -%>
 
 # updates
-deb <%= ubuntu_url %> <%= lsbdistcodename %>-updates <%= lrepos %>
+deb <%= ubuntu_url %> <%= codename %>-updates <%= lrepos %>
 <% if include_src -%>
-deb-src <%= ubuntu_url %> <%= lsbdistcodename %>-updates <%= lrepos %>
+deb-src <%= ubuntu_url %> <%= codename %>-updates <%= lrepos %>
 <% end -%>
 
 # security suppport
-deb <%= ubuntu_url %> <%= lsbdistcodename %>-security <%= lrepos %>
+deb <%= ubuntu_url %> <%= codename %>-security <%= lrepos %>
 <% if include_src -%>
-deb-src <%= ubuntu_url %> <%= lsbdistcodename %>-security <%= lrepos %>
+deb-src <%= ubuntu_url %> <%= codename %>-security <%= lrepos %>
 <% end -%>
 
 # backports
-deb <%= ubuntu_url %> <%= lsbdistcodename %>-backports main <%= lrepos %>
+deb <%= ubuntu_url %> <%= codename %>-backports main <%= lrepos %>
 <% if include_src -%>
-deb-src <%= ubuntu_url %> <%= lsbdistcodename %>-backports <%= lrepos %>
+deb-src <%= ubuntu_url %> <%= codename %>-backports <%= lrepos %>
 <% end -%>

@@ -31,6 +31,17 @@ Ubuntu support is lagging behind but not absent either.
 
     class { 'apt': debian_url => "http://localhost:9999/debian/", use_next_release => true }
 
+   previously, you could manually set $lsbdistcodename which would enable forced
+   upgrades, but because this is a top-level facter variable, and newer puppet
+   versions do not let you assign variables to other namespaces, this is no
+   longer possible. However, there is a way to obtain this functionality, and
+   that is to pass the 'codename' parameter to the apt class, which will change
+   the sources.list and preferences files to be the codename you set, allowing
+   you to trigger upgrades:
+
+   include apt::dist_upgrade
+   class { 'apt': codename => 'wheezy', notify => Exec['apt_dist-upgrade'] }
+
  * the apticron class has been moved to a parameterized class.  if you were
    including this class before, you will need to move to instantiating the
    class instead. For example, if you had the following in your manifests:
@@ -105,13 +116,6 @@ site_apt/files/some.host.com/03clean_vserver)
 
 Variables
 =========
-
-$::lsbdistcodename
-----------------
-
-Contains the codename ("etch", "lenny", ...) of the client's
-release. While these values come from lsb-release by default, this
-value can be set manually too, e.g. to enable forced upgrades.
 
 $custom_sources_list
 --------------------
@@ -218,6 +222,16 @@ Setting this variable to false before including this class will force the
 apt/preferences file to be absent:
 
   class { 'apt': custom_preferences => false }
+
+codename
+--------
+
+Contains the codename ("squeeze", "wheezy", ...) of the client's release. While
+these values come from lsb-release by default, this parameter can be set
+manually, e.g. to enable forced upgrades. For example:
+
+   include apt::dist_upgrade
+   class { 'apt': codename => 'wheezy', notify => Exec['apt_dist-upgrade'] }
 
 
 apt::apticron

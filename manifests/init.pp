@@ -4,6 +4,7 @@
 # See LICENSE for the full license granted to you.
 
 class apt(
+  $codename = '',
   $use_volatile = false,
   $include_src = false,
   $use_next_release = false,
@@ -38,16 +39,17 @@ class apt(
   include lsb
 
   # init $release, $next_release, $codename, $next_codename, $release_version
-  case $::lsbdistcodename {
+  case $codename {
     '': {
+      $codename = $::lsbdistcodename
       $release = $::lsbdistrelease
     }
     default: {
-      $release = debian_release($::lsbdistcodename)
+      $release = debian_release($codename)
     }
   }
-  $release_version = debian_release_version($::lsbdistcodename)
-  $next_codename = debian_nextcodename($::lsbdistcodename)
+  $release_version = debian_release_version($codename)
+  $next_codename = debian_nextcodename($codename)
   $next_release = debian_nextrelease($release)
 
   file {
