@@ -1,0 +1,12 @@
+// this file is managed by puppet !
+
+Unattended-Upgrade::Allowed-Origins {
+        "${distro_id}:${distro_codename}-security";
+        "${distro_id}:${distro_codename}-updates";
+        "${distro_id}:${distro_codename}-proposed";
+        "${distro_id}:${distro_codename}-backports";
+};
+
+Unattended-Upgrade::Mail "root";
+Unattended-Upgrade::MailOnlyOnError "true";
+
