@@ -1,12 +1,19 @@
 // this file is managed by puppet !
 
 Unattended-Upgrade::Origins-Pattern {
-  "o=${distro_id},n=${distro_codename}";
-  "o=${distro_id},n=${distro_codename}-updates";  
-  "o=${distro_id},n=${distro_codename}-proposed-updates";
-  "o=${distro_id},n=${distro_codename},l=Debian-security";
+  // Debian
+  "o=${distro_id},a=${distro_codename}";
+  "o=${distro_id},a=${distro_codename},l=Debian-security";
+  "o=${distro_id} Backports,a=${distro_codename}-backports";  
+  // Ubuntu specific 
+  "o=${distro_id},a=${distro_codename}-security";
+  "o=${distro_id},a=${distro_codename}-backports";
+  "o=${distro_id},a=${distro_codename}-proposed";
 };
+
+APT::Periodic::Update-Package-Lists "1";
+APT::Periodic::Download-Upgradeable-Packages "1";
+APT::Periodic::Unattended-Upgrade "1";
 
 Unattended-Upgrade::Mail "root";
 Unattended-Upgrade::MailOnlyOnError "true";
-
