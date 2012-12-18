@@ -68,6 +68,9 @@ class apt {
       $codename = $lsbdistcodename
       $release = $lsbdistrelease
     }
+    'n/a': {
+      fail("Unknown lsbdistcodename reported by facter: '$lsbdistcodename', please fix this by setting this variable in your manifest.")
+    } 
     default: {
       $codename = $lsbdistcodename
       $release = debian_release($codename)
