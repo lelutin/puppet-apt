@@ -40,6 +40,11 @@ class apt {
     ''      => 'http://archive.ubuntu.com/ubuntu',
     default => "${apt_ubuntu_url}",
   }
+  $disable_update = $apt_disable_update ? {
+    ''      => false,
+    default => $apt_disable_update  
+  }
+
   case $operatingsystem {
     'debian': {
       $repos = $apt_repos ? {
