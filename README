@@ -153,6 +153,15 @@ $apt_repos
 If this variable is set the default repositories list ("main contrib non-free")
 is overriden.
 
+$apt_disable_update
+-------------------
+
+Disable "apt-get update" which is normally triggered by apt::upgrade_package 
+and apt::dist_upgrade. 
+Note that nodes can be updated once a day by using 
+  APT::Periodic::Update-Package-Lists "1";
+in i.e. /etc/apt/apt.conf.d/80_apt_update_daily.
+
 Classes
 =======
 

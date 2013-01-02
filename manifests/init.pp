@@ -21,7 +21,7 @@ class apt {
   }
 
   $debian_url = $apt_debian_url ? {
-    ''      => 'http://cdn.debian.net/debian/',
+    ''      => 'http://http.debian.net/debian/',
     default => "${apt_debian_url}",
   }
   $security_url = $apt_security_url ? {
@@ -40,6 +40,11 @@ class apt {
     ''      => 'http://archive.ubuntu.com/ubuntu',
     default => "${apt_ubuntu_url}",
   }
+  $disable_update = $apt_disable_update ? {
+    ''      => false,
+    default => $apt_disable_update  
+  }
+
   case $operatingsystem {
     'debian': {
       $repos = $apt_repos ? {
@@ -68,6 +73,9 @@ class apt {
       $codename = $lsbdistcodename
       $release = $lsbdistrelease
     }
+    'n/a': {
+      fail("Unknown lsbdistcodename reported by facter: '$lsbdistcodename', please fix this by setting this variable in your manifest.")
+    } 
     default: {
       $codename = $lsbdistcodename
       $release = debian_release($codename)
