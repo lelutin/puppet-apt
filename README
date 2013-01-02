@@ -15,6 +15,78 @@ prevent accidental upgrades.
 
 Ubuntu support is lagging behind but not absent either.
 
+! Upgrade Notice !
+
+ * the apt class has been moved to a paramterized class. if you were including
+   this class before, after passing some variables, you will need to move to
+   instantiating the class with those variables instead. For example, if you 
+   had the following in your manifests:
+
+    $apt_debian_url = "http://localhost:9999/debian/"
+    $apt_use_next_release = true
+    include apt
+ 
+   you will need to remove the variables, and the include and instead do
+   the following:
+
+    class { 'apt': debian_url => "http://localhost:9999/debian/", use_next_release => true }
+
+   previously, you could manually set $lsbdistcodename which would enable forced
+   upgrades, but because this is a top-level facter variable, and newer puppet
+   versions do not let you assign variables to other namespaces, this is no
+   longer possible. However, there is a way to obtain this functionality, and
+   that is to pass the 'codename' parameter to the apt class, which will change
+   the sources.list and preferences files to be the codename you set, allowing
+   you to trigger upgrades:
+
+   include apt::dist_upgrade
+   class { 'apt': codename => 'wheezy', notify => Exec['apt_dist-upgrade'] }
+
+ * the apticron class has been moved to a parameterized class.  if you were
+   including this class before, you will need to move to instantiating the
+   class instead. For example, if you had the following in your manifests:
+
+    $apticron_email = "foo@example.com"
+    $apticron_notifynew = "1"
+    ... any $apticron_* variables
+    include apticron
+
+   you will need to remove the variables, and the include and instead do the
+   following:
+
+    class { 'apt::apticron': email => "foo@example.com", notifynew => '1' }
+
+ * the apt::listchanges class has been moved to a paramterized class. if you
+   were including this class before, after passing some variables, you will need
+   to move to instantiating the class with those variables instead. For example,
+   if you had the following in your manifests:
+
+    $apt_listchanges_email = "foo@example.com"
+    ... any $apt_listchanges_* variables
+    include apt::listchanges
+
+   you will need to remove the variables, and the include and instead do the
+   following:
+ 
+    class { 'apt::listchanges': email => "foo@example.com" }
+   
+ * the apt::proxy_client class has been moved to a paramterized class. if you
+   were including this class before, after passing some variables, you will need
+   to move to instantiating the class with those variables instead. For example,
+   if you had the following in your manifests:
+
+    $apt_proxy = 'http://proxy.domain'
+    $apt_proxy_port = 666
+    include apt::proxy_client
+
+   you will need to remove the variables, and the include and instead do the
+   following:
+
+    class { 'apt::proxy_client': proxy => 'http://proxy.domain', port => '666' }
+
+Requirements
+============
+
 This module needs:
 
 - the lsb module: git://labs.riseup.net/shared-lsb
@@ -43,12 +115,14 @@ site_apt/files/some.host.com/03clean_vserver)
 Variables
 =========
 
-$lsbdistcodename
-----------------
+$apt_disable_update
+-------------------
 
-Contains the codename ("etch", "lenny", ...) of the client's
-release. While these values come from lsb-release by default, this
-value can be set manually too, e.g. to enable forced upgrades.
+Disable "apt-get update" which is normally triggered by apt::upgrade_package 
+and apt::dist_upgrade. 
+Note that nodes can be updated once a day by using 
+  APT::Periodic::Update-Package-Lists "1";
+in i.e. /etc/apt/apt.conf.d/80_apt_update_daily.
 
 $custom_sources_list
 --------------------
@@ -63,26 +137,6 @@ pull in the templates/site_apt/sources.list file:
 
   $custom_sources_list = template("site_apt/sources.list")
 
-$custom_preferences
--------------------
-
-Since Debian Lenny's version of APT doesn't support the use of the
-preferences.d directory for putting fragments of 'preferences', this
-module will manage a default generic apt/preferences file with more
-recent releases pinned to very low values so that any package
-installation will not accidentally pull in packages from those suites
-unless you explicitly specify the version number. This file will be
-complemented with all of the preferences_snippet calls (see below).
-
-If the default preferences template doesn't suit your needs, you can create a
-template located in your site_apt module, and set $custom_preferences with the
-content (eg. $custom_preferences = template('site_apt/preferences') )
-
-Setting this variable to false before including this class will force the
-apt/preferences file to be absent:
-
-  $custom_preferences = false
-
 $custom_key_dir
 ---------------
 
@@ -94,73 +148,6 @@ exist there, this module will 'apt-key add' each key.
 The debian-archive-keyring package is installed and kept current up to the
 latest revision (this includes the backports archive keyring).
 
-$apt_proxy / $apt_proxy_port
-----------------------------
-
-When you include the apt::proxy_client class in your nodes, you can set the
-$apt_proxy variable to the URL of the proxy that will be used.
-By default, the proxy will be queried on port 3142, but you can change the port
-number by setting the $apt_proxy_port variable.
-
-Here's an example of setting the proxy to 'http://proxy.domain' at port 666:
-
-  $apt_proxy = 'http://proxy.domain'
-  $apt_proxy_port = 666
-  include apt::proxy_client
-
-$apt_volatile_enabled
------------------
-
-If this variable is set to true the Debian Volatile sources (until
-Lenny) or CODENAME-updates (such as squeeze-updates, supported since
-Squeeze) are added.
-By default this is false for backward compatibility with older
-versions of this module.
-
-$apt_include_src
-----------------
-
-If this variable is set to true a deb-src source is added for every
-added binary archive source.
-By default this is false for backward compatibility with older
-versions of this module.
-
-$apt_use_next_release
----------------------
-
-If this variable is set to true the sources for the next Debian
-release are added. The default pinning configuration pins it to very
-low values.
-By default this is false for backward compatibility with older
-versions of this module.
-
-$apt_debian_url, $apt_security_url, $apt_backports_url, $apt_volatile_url
--------------------------------------------------------------------------
-
-These variables allow to override the default APT mirrors respectively
-used for the standard Debian archives, the Debian security archive,
-the Debian official backports and the Debian Volatile archive.
-
-$apt_ubuntu_url
----------------
-
-These variables allows to override the default APT mirror used for all
-standard Ubuntu archives (including updates, security, backports).
-
-$apt_repos
-----------
-
-If this variable is set the default repositories list ("main contrib non-free")
-is overriden.
-
-$apt_disable_update
--------------------
-
-Disable "apt-get update" which is normally triggered by apt::upgrade_package 
-and apt::dist_upgrade. 
-Note that nodes can be updated once a day by using 
-  APT::Periodic::Update-Package-Lists "1";
-in i.e. /etc/apt/apt.conf.d/80_apt_update_daily.
 
 Classes
 =======
@@ -168,27 +155,113 @@ Classes
 apt
 ---
 
-The apt class sets up most of the documented functionality. To use
-functionality that is not enabled by default, you must include one of
-the following classes.
+The apt class sets up most of the documented functionality. To use functionality
+that is not enabled by default, you must set one of the following parameters.
+
+Example usage:
+
+ class { 'apt': use_next_release => true, debian_url => 'http://localhost:9999/debian/" }
+
+volatile_enabled
+-----------------
+
+If this variable is set to true the Debian Volatile sources (until
+Lenny) or CODENAME-updates (such as squeeze-updates, supported since
+Squeeze) are added.
+
+By default this is false for backward compatibility with older
+versions of this module.
+
+include_src
+------------
+
+If this variable is set to true a deb-src source is added for every
+added binary archive source.
+
+By default this is false for backward compatibility with older
+versions of this module.
+
+use_next_release
+-----------------
+
+If this variable is set to true the sources for the next Debian
+release are added. The default pinning configuration pins it to very
+low values.
+
+By default this is false for backward compatibility with older
+versions of this module.
+
+debian_url, security_url, backports_url, volatile_url
+------------------------------------------------------
+
+These variables allow to override the default APT mirrors respectively
+used for the standard Debian archives, the Debian security archive,
+the Debian official backports and the Debian Volatile archive.
+
+apt_ubuntu_url
+---------------
+
+These variables allows to override the default APT mirror used for all
+standard Ubuntu archives (including updates, security, backports).
+
+apt_repos
+----------
+
+If this variable is set the default repositories list ("main contrib non-free")
+is overriden.
+
+custom_preferences
+-------------------
+
+Since Debian Lenny's version of APT doesn't support the use of the
+preferences.d directory for putting fragments of 'preferences', this
+module will manage a default generic apt/preferences file with more
+recent releases pinned to very low values so that any package
+installation will not accidentally pull in packages from those suites
+unless you explicitly specify the version number. This file will be
+complemented with all of the preferences_snippet calls (see below).
+
+If the default preferences template doesn't suit your needs, you can create a
+template located in your site_apt module, and set custom_preferences with the
+content (eg. custom_preferences => template('site_apt/preferences') )
+
+Setting this variable to false before including this class will force the
+apt/preferences file to be absent:
+
+  class { 'apt': custom_preferences => false }
+
+codename
+--------
+
+Contains the codename ("squeeze", "wheezy", ...) of the client's release. While
+these values come from lsb-release by default, this parameter can be set
+manually, e.g. to enable forced upgrades. For example:
+
+   include apt::dist_upgrade
+   class { 'apt': codename => 'wheezy', notify => Exec['apt_dist-upgrade'] }
+
 
 apt::apticron
 -------------
 
-When you include this class, apticron will be installed, with the following
-defaults, which you are free to change before you include the class:
+When you instantiate this class, apticron will be installed, with the following
+defaults, which you are free to change:
 
- $apticron_ensure_version = 'present'
- $apticron_email = 'root'
- $apticron_config = "apt/${operatingsystem}/apticron_${lsbrelease}.erb"
- $apticron_diff_only = 1
- $apticron_listchanges_profile = 'apticron'
- $apticron_system = false 
- $apticron_ipaddressnum = false 
- $apticron_ipaddresses = false 
- $apticron_notifyholds = 0
- $apticron_notifynew = 0
- $apticron_customsubject = ''
+  $ensure_version = 'installed',
+  $config = "apt/${::operatingsystem}/apticron_${::lsbdistcodename}.erb",
+  $email = 'root',
+  $diff_only = '1',
+  $listchanges_profile = 'apticron',
+  $system = false,
+  $ipaddressnum = false,
+  $ipaddresses = false,
+  $notifyholds = '0',
+  $notifynew = '0',
+  $customsubject = ''
+
+Example usage:
+
+ class { 'apt::apticron': email => "foo@example.com", notifynew => '1' }
 
 apt::cron::download
 -------------------
@@ -237,7 +310,7 @@ file's content changes. The initiator file is copied from the first
 available source amongst the following ones, in decreasing priority
 order:
 
-- puppet:///modules/site_apt/${fqdn}/upgrade_initiator
+- puppet:///modules/site_apt/${::fqdn}/upgrade_initiator
 - puppet:///modules/site_apt/upgrade_initiator
 - puppet:///modules/apt/upgrade_initiator
 
@@ -261,22 +334,33 @@ suppress superfluous help screens.
 apt::listchanges
 ----------------
 
-This class, when included, installs apt-listchanges and configures it using the
-following variables, the defaults are below:
+This class, when instantiated, installs apt-listchanges and configures it using
+the following parameterized variables, which can be changed:
 
- $apt_listchanges_version = 'present'
- $apt_listchanges_config = "apt/${operatingsystem}/listchanges_${lsbrelease}.erb"
- $apt_listchanges_frontend = 'pager'
- $apt_listchanges_email = 'root'
- $apt_listchanges_confirm = 0
- $apt_listchanges_saveseen = '/var/lib/apt/listchanges.db'
- $apt_listchanges_which = 'both'
+ version = "present"
+ config = "apt/${::operatingsystem}/listchanges_${::lsbrelease}.erb"
+ frontend = 'pager'
+ email = 'root'
+ confirm = 0
+ saveseen = '/var/lib/apt/listchanges.db'
+ which = 'both'
 
+ Example usage:
+  class { 'apt::listchanges': email => "foo@example.com" }
+ 
 apt::proxy_client
 -----------------
 
 This class adds the right configuration to apt to make it fetch packages via a
-proxy. The variables $apt_proxy and $apt_proxy_port need to be set (see above).
+proxy. The class parameters apt_proxy and apt_proxy_port need to be set:
+
+You can set the 'proxy' class parameter variable to the URL of the proxy that
+will be used.  By default, the proxy will be queried on port 3142, but you can
+change the port number by setting the 'port' class parameter.
+
+Example:
+
+ class { 'apt::proxy_client': proxy => 'http://proxy.domain', port => '666' }
 
 apt::reboot_required_notify
 ---------------------------
@@ -351,7 +435,7 @@ apt::preseeded_package
 This simplifies installation of packages for which you wish to preseed the
 answers to debconf. For example, if you wish to provide a preseed file for the
 locales package, you would place the locales.seed file in
-'site_apt/templates/$lsbdistcodename/locales.seeds' and then include the
+'site_apt/templates/${::lsbdistcodename}/locales.seeds' and then include the
 following in your manifest:
 
   apt::preseeded_package { locales: }
@@ -374,7 +458,7 @@ meta-parameter to define content inline or with the help of a template.
 Example:
 
   apt::sources_list { "company_internals.list":
-    source => ["puppet:///modules/site_apt/${fqdn}/company_internals.list",
+    source => ["puppet:///modules/site_apt/${::fqdn}/company_internals.list",
                "puppet:///modules/site_apt/company_internals.list"],
   }
 

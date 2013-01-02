@@ -8,15 +8,16 @@ dist-upgrade -d -y -o APT::Get::Show-Upgraded=true
     ensure => absent,
   }
 
-  file {
-    "/etc/cron-apt/action.d/3-download":
-      content => $action,
-      mode => 0644, owner => root, group => 0,
-      require => Package[cron-apt];
-    "/etc/cron-apt/config.d/MAILON":
-      content => "MAILON=changes\n",
-      mode => 0644, owner => root, group => 0,
-      require => Package[cron-apt];
+  file { "/etc/cron-apt/action.d/3-download":
+    content => $action,
+    require => Package[cron-apt],
+    owner => root, group => 0, mode => 0644;
+  }
+
+  file { "/etc/cron-apt/config.d/MAILON":
+    content => "MAILON=changes\n",
+    require => Package[cron-apt],
+    owner => root, group => 0, mode => 0644;
   }
 
 }

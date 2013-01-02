@@ -2,7 +2,7 @@
 #
 # set EMAIL to a list of addresses which will be notified of impending updates
 #
-EMAIL="<%= apticron_email %>"
+EMAIL="<%= scope.lookupvar('apt::apticron::email') %>"
 
 #
 # Set DIFF_ONLY to "1" to only output the difference of the current run
@@ -10,22 +10,22 @@ EMAIL="<%= apticron_email %>"
 # are no differences, no output/email will be generated. By default, apticron
 # will output everything that needs to be upgraded.
 #
-DIFF_ONLY="<%= apticron_diff_only %>"
+DIFF_ONLY="<%= scope.lookupvar('apt::apticron::diff_only') %>"
 
 #
 # Set LISTCHANGES_PROFILE if you would like apticron to invoke apt-listchanges
 # with the --profile option. You should add a corresponding profile to
 # /etc/apt/listchanges.conf
 #
-LISTCHANGES_PROFILE="<%= apticron_listchanges_profile %>"
+LISTCHANGES_PROFILE="<%= scope.lookupvar('apt::apticron::listchanges_profile') %>"
 
 #
 # Set SYSTEM if you would like apticron to use something other than the output
 # of "hostname -f" for the system name in the mails it generates
 #
 # SYSTEM="foobar.example.com"
-<%- if has_variable?('apticron_system') and instance_variable_get("@#{'apticron_system'}").to_s != "false" -%>
-<%= 'SYSTEM="' + instance_variable_get("@#{'apticron_system'}").to_s + '"' %>
+<%- unless scope.lookupvar('apt::apticron::system').to_s == "false" -%>
+<%= "SYSTEM=\"#{scope.lookupvar('apt::apticron::system')}\"" %>
 <%- end -%>
 
 #
@@ -34,8 +34,8 @@ LISTCHANGES_PROFILE="<%= apticron_listchanges_profile %>"
 # family type (inet, inet6), if available.
 #
 # IPADDRESSNUM="1"
-<%- if has_variable?('apticron_ipaddressnum') and instance_variable_get("@#{'apticron_ipaddressnum'}").to_s != "false" -%>
-<%= 'IPADDRESSNUM="' + instance_variable_get("@#{'apticron_ipaddressnum'}").to_s + '"' %>
+<%- unless scope.lookupvar('apt::apticron::ipaddressnum').to_s == "false" -%>
+<%= "IPADDRESSNUM=\"#{scope.lookupvar('apt::apticron::ipaddressnum')}\"" %>
 <%- end -%>
 
 #
@@ -44,6 +44,7 @@ LISTCHANGES_PROFILE="<%= apticron_listchanges_profile %>"
 # "ip" command
 #
 # IPADDRESSES="192.0.2.1 2001:db8:1:2:3::1"
-<%- if has_variable?('apticron_ipaddresses') and instance_variable_get("@#{'apticron_ipaddresses'}").to_s != "false" -%>
-<%= 'IPADDRESSES="' + instance_variable_get("@#{'apticron_ipaddresses'}").to_s + '"' %>
+<%- unless scope.lookupvar('apt::apticron::ipaddresses').to_s == "false" -%>
+<%= "IPADDRESSES=\"#{scope.lookupvar('apt::apticron::ipaddresses')}\"" %>
 <%- end -%>
+
