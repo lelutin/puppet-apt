@@ -4,7 +4,7 @@
 # See LICENSE for the full license granted to you.
 
 class apt(
-  $codename = '',
+  $codename = $::lsbdistcodename,
   $use_volatile = false,
   $include_src = false,
   $use_next_release = false,
@@ -39,12 +39,8 @@ class apt(
 
   include lsb
 
-  # init $release, $next_release, $codename, $next_codename, $release_version
+  # init $release, $next_release, $next_codename, $release_version
   case $codename {
-    '': {
-      $codename = $::lsbdistcodename
-      $release = $::lsbdistrelease
-    }
     'n/a': {
       fail("Unknown lsbdistcodename reported by facter: '$lsbdistcodename', please fix this by setting this variable in your manifest.")
     }
