@@ -12,11 +12,13 @@ class apt::apticron(
   $customsubject = ''
 ) {
 
-  package { apticron: ensure => $ensure_version }
+  package { 'apticron': ensure => $ensure_version }
 
-  file { "/etc/apticron/apticron.conf":
+  file { '/etc/apticron/apticron.conf':
     content => template($apt::apticron::config),
-    mode => 0644, owner => root, group => root,
-    require => Package["apticron"];  
+    owner   => root,
+    group   => root,
+    mode    => '0644',
+    require => Package['apticron'];
   }
 }

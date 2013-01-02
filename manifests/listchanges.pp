@@ -7,11 +7,13 @@ class apt::listchanges(
   $saveseen = '/var/lib/apt/listchanges.db',
   $which = 'both'
 ){
-  package { apt-listchanges: ensure => $ensure_version }
-  
-  file { "/etc/apt/listchanges.conf":
+  package { 'apt-listchanges': ensure => $ensure_version }
+
+  file { '/etc/apt/listchanges.conf':
     content => template($apt::listchanges::config),
-    mode => 0644, owner => root, group => root,
-    require => Package["apt-listchanges"];
+    owner   => root,
+    group   => root,
+    mode    => '0644',
+    require => Package['apt-listchanges'];
   }
 }

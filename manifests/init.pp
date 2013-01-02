@@ -20,7 +20,7 @@ class apt(
   case $::operatingsystem {
     'debian': {
       $real_repos = $repos ? {
-        'auto'      => 'main contrib non-free',
+        'auto'  => 'main contrib non-free',
         default => $repos,
       }
     }
@@ -32,8 +32,8 @@ class apt(
     }
   }
 
-  package { apt:
-    ensure => installed,
+  package { 'apt':
+    ensure  => installed,
     require => undef,
   }
 
@@ -42,7 +42,7 @@ class apt(
   # init $release, $next_release, $next_codename, $release_version
   case $codename {
     'n/a': {
-      fail("Unknown lsbdistcodename reported by facter: '$lsbdistcodename', please fix this by setting this variable in your manifest.")
+      fail("Unknown lsbdistcodename reported by facter: '$::lsbdistcodename', please fix this by setting this variable in your manifest.")
     }
     default: {
       $release = debian_release($codename)
@@ -52,41 +52,44 @@ class apt(
   $next_codename = debian_nextcodename($codename)
   $next_release = debian_nextrelease($release)
 
+  $sources_content = $::custom_sources_list ? {
+    ''      => template( "apt/${::operatingsystem}/sources.list.erb"),
+    default => $::custom_sources_list
+  }
   file {
     # include main, security and backports
     # additional sources should be included via the apt::sources_list define
-    "/etc/apt/sources.list":
-      content => $custom_sources_list ? {
-        '' => template( "apt/${::operatingsystem}/sources.list.erb"),
-        default => $custom_sources_list
-      },
+    '/etc/apt/sources.list':
+      content => $sources_content,
       require => Package['lsb'],
-      notify => Exec['refresh_apt'],
-      owner => root, group => 0, mode => 0644;
+      notify  => Exec['refresh_apt'],
+      owner   => root,
+      group   => 0,
+      mode    => '0644';
   }
 
-  apt_conf { "02show_upgraded":
+  apt_conf { '02show_upgraded':
     source => [ "puppet:///modules/site_apt/${::fqdn}/02show_upgraded",
-                "puppet:///modules/site_apt/02show_upgraded",
-                "puppet:///modules/apt/02show_upgraded" ]
+                'puppet:///modules/site_apt/02show_upgraded',
+                'puppet:///modules/apt/02show_upgraded' ]
   }
 
-  if ( $::virtual == "vserver" ) {
-    apt_conf { "03clean_vserver":
+  if ( $::virtual == 'vserver' ) {
+    apt_conf { '03clean_vserver':
       source => [ "puppet:///modules/site_apt/${::fqdn}/03clean_vserver",
-                  "puppet:///modules/site_apt/03clean_vserver",
-                  "puppet:///modules/apt/03clean_vserver" ],
-      alias => "03clean";
+                  'puppet:///modules/site_apt/03clean_vserver',
+                  'puppet:///modules/apt/03clean_vserver' ],
+      alias => '03clean';
     }
   }
   else {
-    apt_conf { "03clean":
+    apt_conf { '03clean':
       source => [ "puppet:///modules/site_apt/${::fqdn}/03clean",
-                  "puppet:///modules/site_apt/03clean",
-                  "puppet:///modules/apt/03clean" ]
+                  'puppet:///modules/site_apt/03clean',
+                  'puppet:///modules/apt/03clean' ]
     }
   }
-    
+
   case $custom_preferences {
     false: {
       include apt::preferences::absent
@@ -101,29 +104,35 @@ class apt(
   include apt::dot_d_directories
 
   ## This package should really always be current
-  package { "debian-archive-keyring": ensure => latest }
+  package { 'debian-archive-keyring': ensure => latest }
 
   # backports uses the normal archive key now
-  package { "debian-backports-keyring": ensure => absent }
+  package { 'debian-backports-keyring': ensure => absent }
 
-  if $custom_key_dir {
+  include common::moduledir
+  $apt_base_dir = "${common::moduledir::module_dir_path}/apt"
+  modules_dir { 'apt': }
+
+  if $::custom_key_dir {
     file { "${apt_base_dir}/keys.d":
-      source => "$custom_key_dir",
+      source  => $::custom_key_dir,
       recurse => true,
-      mode => 0755, owner => root, group => root,
+      owner   => root,
+      group   => root,
+      mode    => '0755',
     }
-    exec { "custom_keys":
-      command => "find ${apt_base_dir}/keys.d -type f -exec apt-key add '{}' \\; && /usr/bin/apt-get update",
-      subscribe => File["${apt_base_dir}/keys.d"],
+    exec { 'custom_keys':
+      command     => "find ${apt_base_dir}/keys.d -type f -exec apt-key add '{}' \\; && /usr/bin/apt-get update",
+      subscribe   => File["${apt_base_dir}/keys.d"],
       refreshonly => true,
     }
     if $custom_preferences != false {
-      Exec["custom_keys"] {
+      Exec['custom_keys'] {
         before => File['apt_config'],
       }
     }
   }
 
   # workaround for preseeded_package component
-  file { [ "/var/cache", "/var/cache/local", "/var/cache/local/preseeding" ]: ensure => directory }
+  file { [ '/var/cache', '/var/cache/local', '/var/cache/local/preseeding' ]: ensure => directory }
 }

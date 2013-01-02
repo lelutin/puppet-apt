@@ -1,11 +1,11 @@
-define apt::preferences_snippet(
+define apt::preferences_snippet (
+  $priority,
   $package = false,
   $ensure = 'present',
   $source = '',
   $release = '',
-  $pin = '',
-  $priority )
-{
+  $pin = ''
+) {
 
   $real_package = $package ? {
     false   => $name,
@@ -13,19 +13,19 @@ define apt::preferences_snippet(
   }
 
   if $custom_preferences == false {
-    fail("Trying to define a preferences_snippet with \$custom_preferences set to false.")
+    fail('Trying to define a preferences_snippet with $custom_preferences set to false.')
   }
 
   if !$pin and !$release {
-    fail("apt::preferences_snippet requires one of the 'pin' or 'release' argument to be set")
+    fail('apt::preferences_snippet requires one of the \'pin\' or \'release\' argument to be set')
   }
   if $pin and $release {
-    fail("apt::preferences_snippet requires either a 'pin' or 'release' argument, not both")
+    fail('apt::preferences_snippet requires either a \'pin\' or \'release\' argument, not both')
   }
 
   file { "/etc/apt/preferences.d/${name}":
     ensure => $ensure,
-    owner => root, group => 0, mode => 0644;
+    owner  => root, group => 0, mode => '0644';
   }
 
   # This should really work in the same manner as sources_list and apt_conf
@@ -36,12 +36,12 @@ define apt::preferences_snippet(
       case $release {
         '': {
           File["/etc/apt/preferences.d/${name}"]{
-            content => template("apt/preferences_snippet.erb")
+            content => template('apt/preferences_snippet.erb')
           }
         }
         default: {
           File["/etc/apt/preferences.d/${name}"]{
-            content => template("apt/preferences_snippet_release.erb")
+            content => template('apt/preferences_snippet_release.erb')
           }
         }
       }

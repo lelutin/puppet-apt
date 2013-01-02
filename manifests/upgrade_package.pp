@@ -1,7 +1,9 @@
-define apt::upgrade_package ($version = "") {
+define apt::upgrade_package (
+  $version = ''
+) {
 
-  if $apt::disable_update == false { 
-    include apt::update 
+  if $apt::disable_update == false {
+    include apt::update
   }
 
   $version_suffix = $version ? {
@@ -12,25 +14,29 @@ define apt::upgrade_package ($version = "") {
 
   if !defined(Package['apt-show-versions']) {
     package { 'apt-show-versions':
-      ensure => installed,
+      ensure  => installed,
       require => undef,
     }
   }
 
   if !defined(Package['dctrl-tools']) {
     package { 'dctrl-tools':
-      ensure => installed,
+      ensure  => installed,
       require => undef,
     }
   }
 
+  $req = $apt::disable_update ? {
+    true    => Package['apt-show-versions', 'dctrl-tools'],
+    default => [
+                Exec['apt_updated'],
+                Package['apt-show-versions', 'dctrl-tools']
+              ],
+  }
+
   exec { "apt-get -q -y -o 'DPkg::Options::=--force-confold' install ${name}${version_suffix}":
-    onlyif => [ "grep-status -F Status installed -a -P $name -q", "apt-show-versions -u $name | grep -q upgradeable" ],
-    require => $apt::disable_update ? {
-      true    => Package['apt-show-versions', 'dctrl-tools'],
-      default => [ Exec['apt_updated'], 
-                 Package['apt-show-versions', 'dctrl-tools'] ],
-    } 
+    onlyif  => [ "grep-status -F Status installed -a -P $name -q", "apt-show-versions -u $name | grep -q upgradeable" ],
+    require => $req
   }
 
 }

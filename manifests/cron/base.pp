@@ -1,6 +1,6 @@
 class apt::cron::base {
 
-  package { cron-apt: ensure => installed }
+  package { 'cron-apt': ensure => installed }
 
   case $apt_cron_hours {
     '': {}

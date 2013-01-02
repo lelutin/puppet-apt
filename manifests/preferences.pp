@@ -1,20 +1,20 @@
 class apt::preferences {
 
-  $pref_contents = $custom_preferences ? {
-    '' => $operatingsystem ? {
+  $pref_contents = $apt::custom_preferences ? {
+    ''      => $::operatingsystem ? {
       'debian' => template("apt/${::operatingsystem}/preferences_${apt::codename}.erb"),
       'ubuntu' => template("apt/${::operatingsystem}/preferences_${apt::codename}.erb"),
     },
-    default => $custom_preferences
+    default => $apt::custom_preferences
   }
 
   file { '/etc/apt/preferences':
-    ensure => present,
-    alias => 'apt_config',
+    ensure  => present,
+    alias   => 'apt_config',
     # only update together
     content => $pref_contents,
-    require => File["/etc/apt/sources.list"],
-    owner => root, group => 0, mode => 0644;
+    require => File['/etc/apt/sources.list'],
+    owner   => root, group => 0, mode => '0644';
   }
 
 }

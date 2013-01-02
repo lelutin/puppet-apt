@@ -3,7 +3,7 @@ class apt::reboot_required_notify {
   # This package installs the script that created /var/run/reboot-required*.
   # This script (/usr/share/update-notifier/notify-reboot-required) is
   # triggered e.g. by kernel packages.
-  package { update-notifier-common:
+  package { 'update-notifier-common':
     ensure => installed,
   }
 
