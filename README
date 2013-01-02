@@ -441,7 +441,7 @@ for example:
   }
 
 apt::sources_list
--------------
+-----------------
 
 Creates a file in the apt/sources.list.d directory to easily add additional apt
 sources. One can use either the 'source' meta-parameter to specify a list of
@@ -484,7 +484,7 @@ File['apt_config']
 Use this resource to depend on or add to a completed apt configuration
 
 Exec['apt_updated']
------------------
+-------------------
 
 After this point the APT indexes are up-to-date.
 
