@@ -49,7 +49,7 @@ deb-src <%= debian_url %> <%= codename %>-updates <%= lrepos %>
 <% end -%>
 
 <% if next_release=scope.lookupvar('apt::use_next_release') -%>
-### Debian next: <%= next_codename=scope.lookupvar('apt::next_codename') %>
+### Debian next: <%= next_release=scope.lookupvar('apt::next_release') ; next_codename=scope.lookupvar('apt::next_codename') %>
 
 # basic
 deb <%= debian_url %> <%= next_codename %> <%= lrepos %>
