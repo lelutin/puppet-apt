@@ -64,7 +64,6 @@ class apt(
         '' => template( "apt/${::operatingsystem}/sources.list.erb"),
         default => $custom_sources_list
       },
-      mode => 0644, owner => root, group => 0,
       require => Package['lsb'],
       notify => Exec['refresh_apt'],
       owner => root, group => 0, mode => 0644;
