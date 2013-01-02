@@ -115,15 +115,6 @@ site_apt/files/some.host.com/03clean_vserver)
 Variables
 =========
 
-$apt_disable_update
--------------------
-
-Disable "apt-get update" which is normally triggered by apt::upgrade_package 
-and apt::dist_upgrade. 
-Note that nodes can be updated once a day by using 
-  APT::Periodic::Update-Package-Lists "1";
-in i.e. /etc/apt/apt.conf.d/80_apt_update_daily.
-
 $custom_sources_list
 --------------------
 
@@ -162,84 +153,86 @@ Example usage:
 
  class { 'apt': use_next_release => true, debian_url => 'http://localhost:9999/debian/" }
 
-volatile_enabled
------------------
+Class parameters:
 
-If this variable is set to true the Debian Volatile sources (until
-Lenny) or CODENAME-updates (such as squeeze-updates, supported since
-Squeeze) are added.
+* use_volatile
 
-By default this is false for backward compatibility with older
-versions of this module.
+  If this variable is set to true the Debian Volatile sources (until
+  Lenny) or CODENAME-updates (such as squeeze-updates, supported since
+  Squeeze) are added.
 
-include_src
-------------
+  By default this is false for backward compatibility with older
+  versions of this module.
 
-If this variable is set to true a deb-src source is added for every
-added binary archive source.
+* include_src
 
-By default this is false for backward compatibility with older
-versions of this module.
+  If this variable is set to true a deb-src source is added for every
+  added binary archive source.
 
-use_next_release
------------------
+  By default this is false for backward compatibility with older
+  versions of this module.
 
-If this variable is set to true the sources for the next Debian
-release are added. The default pinning configuration pins it to very
-low values.
+* use_next_release
 
-By default this is false for backward compatibility with older
-versions of this module.
+  If this variable is set to true the sources for the next Debian
+  release are added. The default pinning configuration pins it to very
+  low values.
 
-debian_url, security_url, backports_url, volatile_url
-------------------------------------------------------
+  By default this is false for backward compatibility with older
+  versions of this module.
 
-These variables allow to override the default APT mirrors respectively
-used for the standard Debian archives, the Debian security archive,
-the Debian official backports and the Debian Volatile archive.
+* debian_url, security_url, backports_url, volatile_url
 
-apt_ubuntu_url
----------------
+  These variables allow to override the default APT mirrors respectively
+  used for the standard Debian archives, the Debian security archive,
+  the Debian official backports and the Debian Volatile archive.
 
-These variables allows to override the default APT mirror used for all
-standard Ubuntu archives (including updates, security, backports).
+* ubuntu_url
 
-apt_repos
-----------
+  These variables allows to override the default APT mirror used for all
+  standard Ubuntu archives (including updates, security, backports).
 
-If this variable is set the default repositories list ("main contrib non-free")
-is overriden.
+* repos
 
-custom_preferences
--------------------
+  If this variable is set the default repositories list ("main contrib non-free")
+  is overriden.
 
-Since Debian Lenny's version of APT doesn't support the use of the
-preferences.d directory for putting fragments of 'preferences', this
-module will manage a default generic apt/preferences file with more
-recent releases pinned to very low values so that any package
-installation will not accidentally pull in packages from those suites
-unless you explicitly specify the version number. This file will be
-complemented with all of the preferences_snippet calls (see below).
+* disable_update
 
-If the default preferences template doesn't suit your needs, you can create a
-template located in your site_apt module, and set custom_preferences with the
-content (eg. custom_preferences => template('site_apt/preferences') )
+  Disable "apt-get update" which is normally triggered by apt::upgrade_package 
+  and apt::dist_upgrade. 
 
-Setting this variable to false before including this class will force the
-apt/preferences file to be absent:
+  Note that nodes can be updated once a day by using 
+    APT::Periodic::Update-Package-Lists "1";
+  in i.e. /etc/apt/apt.conf.d/80_apt_update_daily.
 
-  class { 'apt': custom_preferences => false }
+* custom_preferences
 
-codename
---------
+  Since Debian Lenny's version of APT doesn't support the use of the
+  preferences.d directory for putting fragments of 'preferences', this
+  module will manage a default generic apt/preferences file with more
+  recent releases pinned to very low values so that any package
+  installation will not accidentally pull in packages from those suites
+  unless you explicitly specify the version number. This file will be
+  complemented with all of the preferences_snippet calls (see below).
 
-Contains the codename ("squeeze", "wheezy", ...) of the client's release. While
-these values come from lsb-release by default, this parameter can be set
-manually, e.g. to enable forced upgrades. For example:
+  If the default preferences template doesn't suit your needs, you can create a
+  template located in your site_apt module, and set custom_preferences with the
+  content (eg. custom_preferences => template('site_apt/preferences') )
 
-   include apt::dist_upgrade
-   class { 'apt': codename => 'wheezy', notify => Exec['apt_dist-upgrade'] }
+  Setting this variable to false before including this class will force the
+  apt/preferences file to be absent:
 
+    class { 'apt': custom_preferences => false }
+  
+* codename
+
+  Contains the codename ("squeeze", "wheezy", ...) of the client's release. While
+  these values come from lsb-release by default, this parameter can be set
+  manually, e.g. to enable forced upgrades. For example:
+
+     include apt::dist_upgrade
+     class { 'apt': codename => 'wheezy', notify => Exec['apt_dist-upgrade'] }
 
 apt::apticron
 -------------
