@@ -90,6 +90,7 @@ Requirements
 This module needs:
 
 - the lsb module: git://labs.riseup.net/shared-lsb
+- the common module: git://labs.riseup.net/shared-common
 
 By default, on normal hosts, this module sets the configuration option
 DSelect::Clean to 'auto'. On virtual servers, the value is set by default to
