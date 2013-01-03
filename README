@@ -22,14 +22,14 @@ Ubuntu support is lagging behind but not absent either.
    instantiating the class with those variables instead. For example, if you 
    had the following in your manifests:
 
-    $apt_debian_url = "http://localhost:9999/debian/"
+    $apt_debian_url = 'http://localhost:9999/debian/'
     $apt_use_next_release = true
     include apt
  
    you will need to remove the variables, and the include and instead do
    the following:
 
-    class { 'apt': debian_url => "http://localhost:9999/debian/", use_next_release => true }
+    class { 'apt': debian_url => 'http://localhost:9999/debian/', use_next_release => true }
 
    previously, you could manually set $lsbdistcodename which would enable forced
    upgrades, but because this is a top-level facter variable, and newer puppet
@@ -46,29 +46,29 @@ Ubuntu support is lagging behind but not absent either.
    including this class before, you will need to move to instantiating the
    class instead. For example, if you had the following in your manifests:
 
-    $apticron_email = "foo@example.com"
-    $apticron_notifynew = "1"
+    $apticron_email = 'foo@example.com'
+    $apticron_notifynew = '1'
     ... any $apticron_* variables
     include apticron
 
    you will need to remove the variables, and the include and instead do the
    following:
 
-    class { 'apt::apticron': email => "foo@example.com", notifynew => '1' }
+    class { 'apt::apticron': email => 'foo@example.com', notifynew => '1' }
 
  * the apt::listchanges class has been moved to a paramterized class. if you
    were including this class before, after passing some variables, you will need
    to move to instantiating the class with those variables instead. For example,
    if you had the following in your manifests:
 
-    $apt_listchanges_email = "foo@example.com"
+    $apt_listchanges_email = 'foo@example.com'
     ... any $apt_listchanges_* variables
     include apt::listchanges
 
    you will need to remove the variables, and the include and instead do the
    following:
  
-    class { 'apt::listchanges': email => "foo@example.com" }
+    class { 'apt::listchanges': email => 'foo@example.com' }
    
  * the apt::proxy_client class has been moved to a paramterized class. if you
    were including this class before, after passing some variables, you will need
@@ -127,7 +127,7 @@ this variable to the content that you desire to use instead.
 For example, setting the following variable before including this class will
 pull in the templates/site_apt/sources.list file:
 
-  $custom_sources_list = template("site_apt/sources.list")
+  $custom_sources_list = template('site_apt/sources.list')
 
 $custom_key_dir
 ---------------
@@ -152,7 +152,7 @@ that is not enabled by default, you must set one of the following parameters.
 
 Example usage:
 
- class { 'apt': use_next_release => true, debian_url => 'http://localhost:9999/debian/" }
+ class { 'apt': use_next_release => true, debian_url => 'http://localhost:9999/debian/' }
 
 Class parameters:
 
@@ -255,7 +255,7 @@ defaults, which you are free to change:
 
 Example usage:
 
- class { 'apt::apticron': email => "foo@example.com", notifynew => '1' }
+ class { 'apt::apticron': email => 'foo@example.com', notifynew => '1' }
 
 apt::cron::download
 -------------------
@@ -331,7 +331,7 @@ apt::listchanges
 This class, when instantiated, installs apt-listchanges and configures it using
 the following parameterized variables, which can be changed:
 
- version = "present"
+ version = 'present'
  config = "apt/${::operatingsystem}/listchanges_${::lsbrelease}.erb"
  frontend = 'pager'
  email = 'root'
@@ -340,7 +340,7 @@ the following parameterized variables, which can be changed:
  which = 'both'
 
  Example usage:
-  class { 'apt::listchanges': email => "foo@example.com" }
+  class { 'apt::listchanges': email => 'foo@example.com' }
  
 apt::proxy_client
 -----------------
@@ -395,7 +395,7 @@ Example:
 
   apt::preferences_snippet {
     'irssi-plugin-otr':
-      release => 'lenny-backports',
+      release => 'squeeze-backports',
       priority => 999;
   }
 
@@ -451,9 +451,9 @@ meta-parameter to define content inline or with the help of a template.
 
 Example:
 
-  apt::sources_list { "company_internals.list":
-    source => ["puppet:///modules/site_apt/${::fqdn}/company_internals.list",
-               "puppet:///modules/site_apt/company_internals.list"],
+  apt::sources_list { 'company_internals.list':
+    source => [ "puppet:///modules/site_apt/${::fqdn}/company_internals.list",
+                'puppet:///modules/site_apt/company_internals.list' ],
   }
 
 apt::upgrade_package
@@ -469,11 +469,11 @@ For example, the following upgrades the perl package to version 5.8.8-7etch1
 (if it is installed), it also upgrades the syslog-ng and perl-modules packages
 to their latest (also, only if they are installed):
 
-upgrade_package { "perl":
+upgrade_package { 'perl':
 			version => '5.8.8-7etch1';
-		  "syslog-ng":
+		  'syslog-ng':
 			version => latest;
-		  "perl-modules":
+		  'perl-modules':
 }
 
 Resources
