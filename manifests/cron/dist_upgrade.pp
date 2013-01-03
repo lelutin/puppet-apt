@@ -19,7 +19,7 @@ dist-upgrade -y -o APT::Get::Show-Upgraded=true -o 'DPkg::Options::=--force-conf
   }
 
   file { '/etc/cron-apt/config.d/MAILON':
-    content => 'MAILON=upgrade\n',
+    content => "MAILON=upgrade\n",
     owner   => root,
     group   => 0,
     mode    => '0644',
