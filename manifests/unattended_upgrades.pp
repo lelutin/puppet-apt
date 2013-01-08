@@ -9,7 +9,8 @@ class apt::unattended_upgrades {
     source  => [
                 "puppet:///modules/site_apt/${::lsbdistcodename}/50unattended-upgrades",
                 'puppet:///modules/site_apt/50unattended-upgrades',
-                "puppet:///modules/apt/${::lsbdistcodename}/50unattended-upgrades" ],
+                "puppet:///modules/apt/${::lsbdistcodename}/50unattended-upgrades",
+                'puppet:///modules/apt/50unattended-upgrades' ],
     require => Package['unattended-upgrades'],
   }
 
