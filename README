@@ -129,18 +129,6 @@ pull in the templates/site_apt/sources.list file:
 
   $custom_sources_list = template('site_apt/sources.list')
 
-$custom_key_dir
----------------
-
-If you have different apt-key files that you want to get added to your
-apt keyring, you can set this variable to a path in your fileserver
-where individual key files can be placed. If this is set and keys
-exist there, this module will 'apt-key add' each key.
-
-The debian-archive-keyring package is installed and kept current up to the
-latest revision (this includes the backports archive keyring).
-
-
 Classes
 =======
 
@@ -234,6 +222,16 @@ Class parameters:
 
      include apt::dist_upgrade
      class { 'apt': codename => 'wheezy', notify => Exec['apt_dist-upgrade'] }
+
+* custom_key_dir
+
+  If you have different apt-key files that you want to get added to your
+  apt keyring, you can set this variable to a path in your fileserver
+  where individual key files can be placed. If this is set and keys
+  exist there, this module will 'apt-key add' each key.
+
+  The debian-archive-keyring package is installed and kept current up to the
+  latest revision (this includes the backports archive keyring).
 
 apt::apticron
 -------------
