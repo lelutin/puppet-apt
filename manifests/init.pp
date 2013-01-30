@@ -3,81 +3,48 @@
 # Copyright (C) 2007 David Schmitt <david@schmitt.edv-bus.at>
 # See LICENSE for the full license granted to you.
 
-class apt {
-
-  $use_volatile = $apt_volatile_enabled ? {
-    ''      => false,
-    default => $apt_volatile_enabled,
-  }
-
-  $include_src = $apt_include_src ? {
-    ''      => false,
-    default => $apt_include_src,
-  }
-
-  $use_next_release = $apt_use_next_release ? {
-    ''      => false,
-    default => $apt_use_next_release,
-  }
-
-  $debian_url = $apt_debian_url ? {
-    ''      => 'http://cdn.debian.net/debian/',
-    default => "${apt_debian_url}",
-  }
-  $security_url = $apt_security_url ? {
-    ''      => 'http://security.debian.org/',
-    default => "${apt_security_url}",
-  }
-  $backports_url = $apt_backports_url ? {
-    ''      => 'http://backports.debian.org/debian-backports/',
-    default => "${apt_backports_url}",
-  }
-  $volatile_url = $apt_volatile_url ? {
-    ''      => 'http://volatile.debian.org/debian-volatile/',
-    default => "${apt_volatile_url}",
-  }
-  $ubuntu_url = $apt_ubuntu_url ? {
-    ''      => 'http://archive.ubuntu.com/ubuntu',
-    default => "${apt_ubuntu_url}",
-  }
-  $disable_update = $apt_disable_update ? {
-    ''      => false,
-    default => $apt_disable_update  
-  }
-
-  case $operatingsystem {
+class apt(
+  $codename = $::lsbdistcodename,
+  $use_volatile = false,
+  $include_src = false,
+  $use_next_release = false,
+  $debian_url = 'http://http.debian.net/debian/',
+  $security_url = 'http://security.debian.org/',
+  $backports_url = 'http://backports.debian.org/debian-backports/',
+  $volatile_url = 'http://volatile.debian.org/debian-volatile/',
+  $ubuntu_url = 'http://archive.ubuntu.com/ubuntu',
+  $repos = 'auto',
+  $custom_preferences = '',
+  $disable_update = false
+){
+  case $::operatingsystem {
     'debian': {
-      $repos = $apt_repos ? {
-        ''      => 'main contrib non-free',
-        default => "${apt_repos}",
+      $real_repos = $repos ? {
+        'auto'  => 'main contrib non-free',
+        default => $repos,
       }
     }
     'ubuntu': {
-      $repos = $apt_repos ? {
+      $real_repos = $repos ? {
         ''      => 'main restricted universe multiverse',
-        default => "${apt_repos}",
+        default => $repos,
       }
     }
   }
 
-  package { apt:
-    ensure => installed,
+  package { 'apt':
+    ensure  => installed,
     require => undef,
   }
 
   include lsb
 
-  # init $release, $next_release, $codename, $next_codename, $release_version
-  case $lsbdistcodename {
-    '': {
-      $codename = $lsbdistcodename
-      $release = $lsbdistrelease
-    }
+  # init $release, $next_release, $next_codename, $release_version
+  case $codename {
     'n/a': {
-      fail("Unknown lsbdistcodename reported by facter: '$lsbdistcodename', please fix this by setting this variable in your manifest.")
-    } 
+      fail("Unknown lsbdistcodename reported by facter: '$::lsbdistcodename', please fix this by setting this variable in your manifest.")
+    }
     default: {
-      $codename = $lsbdistcodename
       $release = debian_release($codename)
     }
   }
@@ -85,40 +52,44 @@ class apt {
   $next_codename = debian_nextcodename($codename)
   $next_release = debian_nextrelease($release)
 
-  config_file {
+  $sources_content = $::custom_sources_list ? {
+    ''      => template( "apt/${::operatingsystem}/sources.list.erb"),
+    default => $::custom_sources_list
+  }
+  file {
     # include main, security and backports
     # additional sources should be included via the apt::sources_list define
-    "/etc/apt/sources.list":
-      content => $custom_sources_list ? {
-        '' => template( "apt/$operatingsystem/sources.list.erb"),
-        default => $custom_sources_list
-      },
+    '/etc/apt/sources.list':
+      content => $sources_content,
       require => Package['lsb'],
-      notify => Exec['refresh_apt'],
+      notify  => Exec['refresh_apt'],
+      owner   => root,
+      group   => 0,
+      mode    => '0644';
   }
 
-  apt_conf { "02show_upgraded":
-    source => [ "puppet:///modules/site_apt/${fqdn}/02show_upgraded",
-                "puppet:///modules/site_apt/02show_upgraded",
-                "puppet:///modules/apt/02show_upgraded" ]
+  apt_conf { '02show_upgraded':
+    source => [ "puppet:///modules/site_apt/${::fqdn}/02show_upgraded",
+                'puppet:///modules/site_apt/02show_upgraded',
+                'puppet:///modules/apt/02show_upgraded' ]
   }
 
-  if ( $virtual == "vserver" ) {
-    apt_conf { "03clean_vserver":
-      source => [ "puppet:///modules/site_apt/${fqdn}/03clean_vserver",
-                  "puppet:///modules/site_apt/03clean_vserver",
-                  "puppet:///modules/apt/03clean_vserver" ],
-      alias => "03clean";
+  if ( $::virtual == 'vserver' ) {
+    apt_conf { '03clean_vserver':
+      source => [ "puppet:///modules/site_apt/${::fqdn}/03clean_vserver",
+                  'puppet:///modules/site_apt/03clean_vserver',
+                  'puppet:///modules/apt/03clean_vserver' ],
+      alias => '03clean';
     }
   }
   else {
-    apt_conf { "03clean":
-      source => [ "puppet:///modules/site_apt/${fqdn}/03clean",
-                  "puppet:///modules/site_apt/03clean",
-                  "puppet:///modules/apt/03clean" ]
+    apt_conf { '03clean':
+      source => [ "puppet:///modules/site_apt/${::fqdn}/03clean",
+                  'puppet:///modules/site_apt/03clean',
+                  'puppet:///modules/apt/03clean' ]
     }
   }
-    
+
   case $custom_preferences {
     false: {
       include apt::preferences::absent
@@ -130,43 +101,38 @@ class apt {
     }
   }
 
-  # backward compatibility: upgrade from previous versions of this module.
-  file {
-    [ "/etc/apt/apt.conf.d/from_puppet", "/etc/apt/apt.conf.d/99from_puppet" ]:
-      ensure  => 'absent',
-      require => [ Apt_conf['02show_upgraded'], Apt_conf['03clean'] ];
-  }
-
   include apt::dot_d_directories
 
   ## This package should really always be current
-  package { "debian-archive-keyring": ensure => latest }
+  package { 'debian-archive-keyring': ensure => latest }
 
   # backports uses the normal archive key now
-  package { "debian-backports-keyring": ensure => absent }
+  package { 'debian-backports-keyring': ensure => absent }
 
   include common::moduledir
   $apt_base_dir = "${common::moduledir::module_dir_path}/apt"
-  modules_dir { apt: }
+  modules_dir { 'apt': }
 
-  if $custom_key_dir {
+  if $::custom_key_dir {
     file { "${apt_base_dir}/keys.d":
-      source => "$custom_key_dir",
+      source  => $::custom_key_dir,
       recurse => true,
-      mode => 0755, owner => root, group => root,
+      owner   => root,
+      group   => root,
+      mode    => '0755',
     }
-    exec { "custom_keys":
-      command => "find ${apt_base_dir}/keys.d -type f -exec apt-key add '{}' \\; && /usr/bin/apt-get update",
-      subscribe => File["${apt_base_dir}/keys.d"],
+    exec { 'custom_keys':
+      command     => "find ${apt_base_dir}/keys.d -type f -exec apt-key add '{}' \\; && /usr/bin/apt-get update",
+      subscribe   => File["${apt_base_dir}/keys.d"],
       refreshonly => true,
     }
     if $custom_preferences != false {
-      Exec["custom_keys"] {
-        before => Concat[apt_config],
+      Exec['custom_keys'] {
+        before => File['apt_config'],
       }
     }
   }
 
   # workaround for preseeded_package component
-  file { [ "/var/cache", "/var/cache/local", "/var/cache/local/preseeding" ]: ensure => directory }
+  file { [ '/var/cache', '/var/cache/local', '/var/cache/local/preseeding' ]: ensure => directory }
 }

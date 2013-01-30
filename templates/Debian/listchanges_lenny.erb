@@ -1,7 +1,7 @@
 [apt]
-frontend=<%= apt_listchanges_frontend %>
-email_address=<%= apt_listchanges_email %>
-confirm=<%= apt_listchanges_confirm %>
-save_seen=<%= apt_listchanges_saveseen %>
-which=<%= apt_listchanges_which %>
+frontend=<%= scope.lookupvar('apt::listchanges::frontend') %>
+email_address=<%= scope.lookupvar('apt::listchanges::email') %>
+confirm=<%= scope.lookupvar('apt::listchanges::confirm') %>
+save_seen=<%= scope.lookupvar('apt::listchanges::saveseen') %>
+which=<%= scope.lookupvar('apt::listchanges::which') %>
 

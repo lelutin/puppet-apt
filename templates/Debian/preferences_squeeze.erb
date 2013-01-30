@@ -1,4 +1,4 @@
-Explanation: Debian <%= codename %>
+Explanation: Debian <%= codename=scope.lookupvar('apt::codename') %>
 Package: *
 Pin: release o=Debian,n=<%= codename %>
 Pin-Priority: 990
@@ -8,7 +8,7 @@ Package: *
 Pin: release o=Debian,n=<%= codename %>-updates
 Pin-Priority: 990
 
-Explanation: Debian <%= next_codename %>
+Explanation: Debian <%= next_codename=scope.lookupvar('apt::next_codename') %>
 Package: *
 Pin: release o=Debian,n=<%= next_codename %>
 Pin-Priority: 2

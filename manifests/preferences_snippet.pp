@@ -1,11 +1,11 @@
-define apt::preferences_snippet(
+define apt::preferences_snippet (
+  $priority,
   $package = false,
   $ensure = 'present',
   $source = '',
   $release = '',
-  $pin = '',
-  $priority )
-{
+  $pin = ''
+) {
 
   $real_package = $package ? {
     false   => $name,
@@ -13,21 +13,19 @@ define apt::preferences_snippet(
   }
 
   if $custom_preferences == false {
-    fail("Trying to define a preferences_snippet with \$custom_preferences set to false.")
+    fail('Trying to define a preferences_snippet with $custom_preferences set to false.')
   }
 
   if !$pin and !$release {
-    fail("apt::preferences_snippet requires one of the 'pin' or 'release' argument to be set")
+    fail('apt::preferences_snippet requires one of the \'pin\' or \'release\' argument to be set')
   }
   if $pin and $release {
-    fail("apt::preferences_snippet requires either a 'pin' or 'release' argument, not both")
+    fail('apt::preferences_snippet requires either a \'pin\' or \'release\' argument, not both')
   }
 
-  include apt::preferences
-
-  concat::fragment{"apt_preference_${name}":
+  file { "/etc/apt/preferences.d/${name}":
     ensure => $ensure,
-    target => '/etc/apt/preferences',
+    owner  => root, group => 0, mode => '0644';
   }
 
   # This should really work in the same manner as sources_list and apt_conf
@@ -37,19 +35,19 @@ define apt::preferences_snippet(
     '': {
       case $release {
         '': {
-          Concat::Fragment["apt_preference_${name}"]{
-            content => template("apt/preferences_snippet.erb")
+          File["/etc/apt/preferences.d/${name}"]{
+            content => template('apt/preferences_snippet.erb')
           }
         }
         default: {
-          Concat::Fragment["apt_preference_${name}"]{
-            content => template("apt/preferences_snippet_release.erb")
+          File["/etc/apt/preferences.d/${name}"]{
+            content => template('apt/preferences_snippet_release.erb')
           }
         }
       }
     }
     default: {
-      Concat::Fragment["apt_preference_${name}"]{
+      File["/etc/apt/preferences.d/${name}"]{
         source => $source
       }
     }
