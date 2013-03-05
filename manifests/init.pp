@@ -26,7 +26,7 @@ class apt(
     }
     'ubuntu': {
       $real_repos = $repos ? {
-        ''      => 'main restricted universe multiverse',
+        'auto'  => 'main restricted universe multiverse',
         default => $repos,
       }
     }
