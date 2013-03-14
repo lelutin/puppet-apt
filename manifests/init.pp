@@ -128,7 +128,11 @@ class apt(
     }
     if $custom_preferences != false {
       Exec['custom_keys'] {
-        before => File['apt_config'],
+        before => [ Exec[refresh_apt], File['apt_config'] ]
+      }
+    } else {
+      Exec['custom_keys'] {
+        before => Exec[refresh_apt]
       }
     }
   }
