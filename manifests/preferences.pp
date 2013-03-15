@@ -14,8 +14,7 @@ class apt::preferences {
     # only update together
     content => $pref_contents,
     require => File['/etc/apt/sources.list'],
-    owner   => root, group => 0, mode => '0644',
-    before  => File['apt_config'];
+    owner   => root, group => 0, mode => '0644';
   }
 
 }
