@@ -5,7 +5,10 @@ class apt::params () {
   $use_next_release = false
   $debian_url = 'http://http.debian.net/debian/'
   $security_url = 'http://security.debian.org/'
-  $backports_url = 'http://backports.debian.org/debian-backports/'
+  $backports_url = $::lsbdistcodename ? {
+    'wheezy' => $debian_url,
+    default  => 'http://backports.debian.org/debian-backports/',
+  }
   $volatile_url = 'http://volatile.debian.org/debian-volatile/'
   $ubuntu_url = 'http://archive.ubuntu.com/ubuntu'
   $repos = 'auto'
