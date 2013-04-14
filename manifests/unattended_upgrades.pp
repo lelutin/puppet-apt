@@ -2,7 +2,7 @@ class apt::unattended_upgrades {
 
   package { 'unattended-upgrades':
     ensure  => present,
-    require => undef,
+    require => undef
   }
 
   apt_conf { '50unattended-upgrades':
