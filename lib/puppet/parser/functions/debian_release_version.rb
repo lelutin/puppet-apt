@@ -4,6 +4,7 @@ module Puppet::Parser::Functions
       when 'etch'         then '4.0'
       when 'lenny'        then '5.0'
       when 'squeeze'      then '6.0'
+      when 'wheezy'       then '7.0'
       else ''
     end
   end
