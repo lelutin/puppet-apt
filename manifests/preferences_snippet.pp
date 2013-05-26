@@ -1,5 +1,5 @@
 define apt::preferences_snippet (
-  $priority,
+  $priority = undef,
   $package = false,
   $ensure = 'present',
   $source = '',
@@ -12,15 +12,21 @@ define apt::preferences_snippet (
     default => $package,
   }
 
-  if $custom_preferences == false {
-    fail('Trying to define a preferences_snippet with $custom_preferences set to false.')
-  }
+  if $ensure == 'present' {
+    if $custom_preferences == false {
+      fail('Trying to define a preferences_snippet with $custom_preferences set to false.')
+    }
 
-  if !$pin and !$release {
-    fail('apt::preferences_snippet requires one of the \'pin\' or \'release\' argument to be set')
-  }
-  if $pin and $release {
-    fail('apt::preferences_snippet requires either a \'pin\' or \'release\' argument, not both')
+    if $priority == undef {
+      fail('apt::preferences_snippet requires the \'priority\' argument to be set')
+    }
+
+    if !$pin and !$release {
+      fail('apt::preferences_snippet requires one of the \'pin\' or \'release\' argument to be set')
+    }
+    if $pin and $release {
+      fail('apt::preferences_snippet requires either a \'pin\' or \'release\' argument, not both')
+    }
   }
 
   file { "/etc/apt/preferences.d/${name}":

@@ -4,7 +4,8 @@ module Puppet::Parser::Functions
       when "etch"    then "lenny"
       when "lenny"   then "squeeze"
       when "squeeze" then "wheezy"
-      when "wheezy"  then "sid"
+      when "wheezy"  then "jessie"
+      when "jessie"  then "sid"
       when "sid"     then "experimental"
       else "sid"
     end

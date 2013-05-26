@@ -4,19 +4,19 @@
 # See LICENSE for the full license granted to you.
 
 class apt(
-  $codename = $::lsbdistcodename,
-  $use_volatile = false,
-  $include_src = false,
-  $use_next_release = false,
-  $debian_url = 'http://http.debian.net/debian/',
-  $security_url = 'http://security.debian.org/',
-  $backports_url = 'http://backports.debian.org/debian-backports/',
-  $volatile_url = 'http://volatile.debian.org/debian-volatile/',
-  $ubuntu_url = 'http://archive.ubuntu.com/ubuntu',
-  $repos = 'auto',
-  $custom_preferences = '',
-  $disable_update = false
-){
+  $codename = $apt::params::codename,
+  $use_volatile = $apt::params::use_volatile,
+  $include_src = $apt::params::include_src,
+  $use_next_release = $apt::params::use_next_release,
+  $debian_url = $apt::params::debian_url,
+  $security_url = $apt::params::security_url,
+  $backports_url = $apt::params::backports_url,
+  $volatile_url = $apt::params::volatile_url,
+  $ubuntu_url = $apt::params::ubuntu_url,
+  $repos = $apt::params::repos,
+  $custom_preferences = $apt::params::custom_preferences,
+  $disable_update = $apt::params::disable_update
+) inherits apt::params {
   case $::operatingsystem {
     'debian': {
       $real_repos = $repos ? {
@@ -26,7 +26,7 @@ class apt(
     }
     'ubuntu': {
       $real_repos = $repos ? {
-        ''      => 'main restricted universe multiverse',
+        'auto'  => 'main restricted universe multiverse',
         default => $repos,
       }
     }
