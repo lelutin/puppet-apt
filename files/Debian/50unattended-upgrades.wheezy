@@ -12,3 +12,4 @@ APT::Periodic::Download-Upgradeable-Packages "1";
 APT::Periodic::Unattended-Upgrade "1";
 
 Unattended-Upgrade::Mail "root";
+Unattended-Upgrade::MailOnlyOnError "true";
