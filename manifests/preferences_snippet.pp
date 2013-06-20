@@ -13,7 +13,7 @@ define apt::preferences_snippet (
   }
 
   if $ensure == 'present' {
-    if $custom_preferences == false {
+    if $apt::custom_preferences == false {
       fail('Trying to define a preferences_snippet with $custom_preferences set to false.')
     }
 
