@@ -18,10 +18,4 @@ class apt::unattended_upgrades {
   Apt_conf['50unattended-upgrades'] {
     notify => undef
   }
-
-  if $apt::custom_preferences != false {
-    Apt_conf['50unattended-upgrades'] {
-      before => File['apt_config'],
-    }
-  }
 }
