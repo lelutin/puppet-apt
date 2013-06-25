@@ -15,7 +15,8 @@ class apt(
   $ubuntu_url = $apt::params::ubuntu_url,
   $repos = $apt::params::repos,
   $custom_preferences = $apt::params::custom_preferences,
-  $disable_update = $apt::params::disable_update
+  $disable_update = $apt::params::disable_update,
+  $custom_key_dir = $apt::params::custom_key_dir
 ) inherits apt::params {
   case $::operatingsystem {
     'debian': {
@@ -113,9 +114,9 @@ class apt(
   $apt_base_dir = "${common::moduledir::module_dir_path}/apt"
   modules_dir { 'apt': }
 
-  if $::custom_key_dir {
+  if $custom_key_dir {
     file { "${apt_base_dir}/keys.d":
-      source  => $::custom_key_dir,
+      source  => $custom_key_dir,
       recurse => true,
       owner   => root,
       group   => root,
