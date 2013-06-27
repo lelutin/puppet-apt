@@ -1,8 +1,7 @@
 class apt::unattended_upgrades {
 
   package { 'unattended-upgrades':
-    ensure  => present,
-    require => Exec[refresh_apt]
+    ensure  => present
   }
 
   apt_conf { '50unattended-upgrades':
@@ -12,9 +11,5 @@ class apt::unattended_upgrades {
                 "puppet:///modules/apt/${::lsbdistid}/50unattended-upgrades.${::lsbdistcodename}",
                 "puppet:///modules/apt/${::lsbdistid}/50unattended-upgrades" ],
     require => Package['unattended-upgrades'],
-  }
-
-  Apt_conf['50unattended-upgrades'] {
-    notify => undef
   }
 }
