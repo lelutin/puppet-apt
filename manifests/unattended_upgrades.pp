@@ -1,6 +1,7 @@
 class apt::unattended_upgrades (
   $config_content = undef,
   $mailonlyonerror = true,
+  $mail_recipient = 'root',
 ) {
 
   package { 'unattended-upgrades':
