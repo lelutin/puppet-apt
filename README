@@ -113,22 +113,6 @@ the site_apt modules' files directory that is named the same as the
 host. (example: site_apt/files/some.host.com/03clean, or
 site_apt/files/some.host.com/03clean_vserver)
 
-Variables
-=========
-
-$custom_sources_list
---------------------
-
-By default this module will use a basic apt/sources.list template with
-a generic Debian mirror. If you need to set more specific sources,
-e.g. changing the sections included in the source, etc. you can set
-this variable to the content that you desire to use instead.
-
-For example, setting the following variable before including this class will
-pull in the templates/site_apt/sources.list file:
-
-  $custom_sources_list = template('site_apt/sources.list')
-
 Classes
 =======
 
@@ -214,6 +198,18 @@ Class parameters:
 
     class { 'apt': custom_preferences => false }
   
+* custom_sources_list
+
+  By default this module will use a basic apt/sources.list template with
+  a generic Debian mirror. If you need to set more specific sources,
+  e.g. changing the sections included in the source, etc. you can set
+  this variable to the content that you desire to use instead.
+
+  For example, setting this variable will pull in the
+  templates/site_apt/sources.list file:
+
+  class { 'apt': custom_sources_list => template('site_apt/sources.list') }
+
 * codename
 
   Contains the codename ("squeeze", "wheezy", ...) of the client's release. While
