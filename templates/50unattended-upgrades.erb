@@ -1,16 +1,26 @@
 // this file is managed by puppet !
 
 Unattended-Upgrade::Allowed-Origins {
+<% if scope.lookupvar('::operatingsystem') == 'Ubuntu' -%>
   "${distro_id}:${distro_codename}-security";
   "${distro_id}:${distro_codename}-updates";
   "${distro_id}:${distro_codename}-backports";
-  //"${distro_id}:${distro_codename}-proposed";
+<% else -%>
+<% if scope.lookupvar('::lsbdistcodename') == 'squeeze' -%>
+  "${distro-id} ${distro-codename}-security";
+  "${distro-id} ${distro-codename}-lts";
+<% else -%>
+  # See Debian bug #704087
+  "o=Debian,a=oldstable,l=Debian-Security";
+  "o=Debian,a=stable,l=Debian-Security";
+<% end -%>
 };
-
 
 APT::Periodic::Update-Package-Lists "1";
 APT::Periodic::Download-Upgradeable-Packages "1";
 APT::Periodic::Unattended-Upgrade "1";
 
 Unattended-Upgrade::Mail "root";
+<% if mailonlyonerror -%>
 Unattended-Upgrade::MailOnlyOnError "true";
+<% end -%>
