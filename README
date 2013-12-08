@@ -130,9 +130,8 @@ Class parameters:
 
 * use_volatile
 
-  If this variable is set to true the Debian Volatile sources (until
-  Lenny) or CODENAME-updates (such as squeeze-updates, supported since
-  Squeeze) are added.
+  If this variable is set to true the CODENAME-updates sources (such as
+  squeeze-updates) are added.
 
   By default this is false for backward compatibility with older
   versions of this module.
