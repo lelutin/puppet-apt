@@ -180,8 +180,8 @@ Class parameters:
 
 * custom_preferences
 
-  Since Debian Lenny's version of APT doesn't support the use of the
-  preferences.d directory for putting fragments of 'preferences', this
+  For historical reasons (Debian Lenny's version of APT did not support the use
+  of the preferences.d directory for putting fragments of 'preferences'), this
   module will manage a default generic apt/preferences file with more
   recent releases pinned to very low values so that any package
   installation will not accidentally pull in packages from those suites
