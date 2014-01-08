@@ -111,9 +111,8 @@ class apt(
   # backports uses the normal archive key now
   package { 'debian-backports-keyring': ensure => absent }
 
-  include common::moduledir
+  common::module_dir { 'apt': }
   $apt_base_dir = "${common::moduledir::module_dir_path}/apt"
-  modules_dir { 'apt': }
 
   if $custom_key_dir {
     file { "${apt_base_dir}/keys.d":
