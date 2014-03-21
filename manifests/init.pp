@@ -15,6 +15,7 @@ class apt(
   $ubuntu_url = $apt::params::ubuntu_url,
   $repos = $apt::params::repos,
   $custom_preferences = $apt::params::custom_preferences,
+  $custom_sources_list = '',
   $disable_update = $apt::params::disable_update,
   $custom_key_dir = $apt::params::custom_key_dir
 ) inherits apt::params {
@@ -53,9 +54,9 @@ class apt(
   $next_codename = debian_nextcodename($codename)
   $next_release = debian_nextrelease($release)
 
-  $sources_content = $::custom_sources_list ? {
+  $sources_content = $custom_sources_list ? {
     ''      => template( "apt/${::operatingsystem}/sources.list.erb"),
-    default => $::custom_sources_list
+    default => $custom_sources_list
   }
   file {
     # include main, security and backports
