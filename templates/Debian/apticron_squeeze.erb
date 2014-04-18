@@ -26,9 +26,9 @@ LISTCHANGES_PROFILE="<%= scope.lookupvar('apt::apticron::listchanges_profile') %
 # of "hostname -f" for the system name in the mails it generates
 #
 # SYSTEM="foobar.example.com"
-<%- unless scope.lookupvar('apt::apticron::system').to_s == "false" -%>
-<%= "SYSTEM=\"#{scope.lookupvar('apt::apticron::system')}\"" %>
-<%- end -%>
+<% unless (v=scope.lookupvar('apt::apticron::system')).to_s == "false" -%>
+SYSTEM="<%= v %>"
+<% end -%>
 
 
 #
@@ -37,9 +37,9 @@ LISTCHANGES_PROFILE="<%= scope.lookupvar('apt::apticron::listchanges_profile') %
 # family type (inet, inet6), if available.
 #
 # IPADDRESSNUM="1"
-<%- unless scope.lookupvar('apt::apticron::ipaddressnum').to_s == "false" -%>
-<%= "IPADDRESSNUM=\"#{scope.lookupvar('apt::apticron::ipaddressnum')}\"" %>
-<%- end -%>
+<% unless (v=scope.lookupvar('apt::apticron::ipaddressnum')).to_s == "false" -%>
+IPADDRESSNUM="<%= v %>"
+<% end -%>
 
 
 #
@@ -48,9 +48,9 @@ LISTCHANGES_PROFILE="<%= scope.lookupvar('apt::apticron::listchanges_profile') %
 # "ip" command
 #
 # IPADDRESSES="192.0.2.1 2001:db8:1:2:3::1"
-<%- unless scope.lookupvar('apt::apticron::ipaddresses').to_s == "false" -%>
-<%= "IPADDRESSES=\"#{scope.lookupvar('apt::apticron::ipaddresses')}\"" %>
-<%- end -%>
+<% unless (v=scope.lookupvar('apt::apticron::ipaddresses')).to_s == "false" -%>
+IPADDRESSES="<%= v %>"
+<% end -%>
 
 
 #
