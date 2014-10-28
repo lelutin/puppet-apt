@@ -1,11 +1,11 @@
 // this file is managed by puppet !
 
-Unattended-Upgrade::Allowed-Origins {
-        "${distro_id}:stable";
-        "${distro_id}:${distro_codename}-security";
-        "${distro_id}:${distro_codename}-updates";
-        "${distro_id} Backports:${distro_codename}-backports";
-};
+Unattended-Upgrade::Origins-Pattern {
+//      "o=Debian,n=${distro-codename}";
+//      "o=Debian,n=${distro-codename}-updates";
+//      "o=Debian,n=${distro_codename}-proposed-updates";
+        "o=Debian,n=${distro_codename},l=Debian-Security";
+}
 
 APT::Periodic::Update-Package-Lists "1";
 APT::Periodic::Download-Upgradeable-Packages "1";

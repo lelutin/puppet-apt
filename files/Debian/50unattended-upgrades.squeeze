@@ -1,9 +1,10 @@
 // this file is managed by puppet !
 
 Unattended-Upgrade::Allowed-Origins {
-	"Debian oldstable";
-	"Debian-Security oldstable";
-  "${distro_id} ${distro_codename}-backports";
+//  "${distro-id} oldstable";
+//  "${distro_id} ${distro_codename}-backports";
+    "${distro-id} ${distro-codename}-security";
+    "${distro-id} ${distro-codename}-lts";
 };
 
 APT::Periodic::Update-Package-Lists "1";
