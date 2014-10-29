@@ -1,6 +1,7 @@
 // this file is managed by puppet !
 
 Unattended-Upgrade::Origins-Pattern {
+        "o=Debian,a=oldstable,l=Debian-Security";
         "o=Debian,a=stable,l=Debian-Security";
 }
 
