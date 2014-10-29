@@ -1,10 +1,7 @@
 // this file is managed by puppet !
 
 Unattended-Upgrade::Origins-Pattern {
-//      "o=Debian,n=${distro-codename}";
-//      "o=Debian,n=${distro-codename}-updates";
-//      "o=Debian,n=${distro_codename}-proposed-updates";
-        "o=Debian,n=${distro_codename},l=Debian-Security";
+        "o=Debian,a=stable,l=Debian-Security";
 }
 
 APT::Periodic::Update-Package-Lists "1";
