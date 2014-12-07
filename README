@@ -441,8 +441,8 @@ Creates a file in the apt/sources.list.d directory to easily add additional apt
 sources. One can use either the 'source' meta-parameter to specify a list of
 static files to include from the puppet fileserver or the 'content'
 meta-parameter to define content inline or with the help of a template. Ending
-the resource name in '.list' is optional since this extension will
-automatically be added to the created file.
+the resource name in '.list' is optional: it will be automatically added to the
+file name if not present in the resource name.
 
 Example:
 
