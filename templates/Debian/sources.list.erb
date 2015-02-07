@@ -41,6 +41,18 @@ deb-src <%= debian_url %> <%= codename %>-updates <%= lrepos %>
 <% end -%>
 <% end -%>
 
+<% if use_lts=scope.lookupvar('apt::use_lts') -%>
+# LTS
+<% if release != "oldstable" -%>
+# There is no LTS archive for <%= release %>
+<% else -%>
+deb <%= debian_url %> <%= codename %>-lts <%= lrepos %>
+<% if include_src -%>
+deb-src <%= debian_url %> <%= codename %>-lts <%= lrepos %>
+<% end -%>
+<% end -%>
+<% end -%>
+
 <% if next_release=scope.lookupvar('apt::use_next_release') -%>
 ### Debian next: <%= next_release=scope.lookupvar('apt::next_release') ; next_codename=scope.lookupvar('apt::next_codename') %>
 
