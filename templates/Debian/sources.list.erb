@@ -10,13 +10,13 @@ deb-src <%= debian_url %> <%= codename %> <%= lrepos %>
 <% end -%>
 
 # security
-<% if ((release=scope.lookupvar('apt::release')) == "unstable" || release == "experimental") -%>
-# There is no security support for <%= release %>
-<% else -%>
+<% if ((release=scope.lookupvar('apt::release')) == "stable" || release == "oldstable") -%>
 deb <%= security_url=scope.lookupvar('apt::security_url') %> <%= codename %>/updates <%= lrepos %>
 <% if include_src -%>
 deb-src <%= security_url %> <%= codename %>/updates <%= lrepos %>
 <% end -%>
+<% else -%>
+# There is no security support for <%= release %>
 <% end -%>
 
 # backports
