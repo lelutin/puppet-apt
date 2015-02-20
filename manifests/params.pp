@@ -1,5 +1,6 @@
 class apt::params () {
   $codename = $::lsbdistcodename
+  $use_lts = false
   $use_volatile = false
   $include_src = false
   $use_next_release = false
@@ -9,6 +10,7 @@ class apt::params () {
     'wheezy' => $debian_url,
     default  => 'http://backports.debian.org/debian-backports/',
   }
+  $lts_url = $debian_url
   $volatile_url = 'http://volatile.debian.org/debian-volatile/'
   $ubuntu_url = 'http://archive.ubuntu.com/ubuntu'
   $repos = 'auto'

@@ -128,6 +128,14 @@ Example usage:
 
 Class parameters:
 
+* use_lts
+
+  If this variable is set to true the CODENAME-lts sources (such as
+  squeeze-lts) are added.
+
+  By default this is false for backward compatibility with older
+  versions of this module.
+
 * use_volatile
 
   If this variable is set to true the CODENAME-updates sources (such as
@@ -440,11 +448,13 @@ apt::sources_list
 Creates a file in the apt/sources.list.d directory to easily add additional apt
 sources. One can use either the 'source' meta-parameter to specify a list of
 static files to include from the puppet fileserver or the 'content'
-meta-parameter to define content inline or with the help of a template.
+meta-parameter to define content inline or with the help of a template. Ending
+the resource name in '.list' is optional: it will be automatically added to the
+file name if not present in the resource name.
 
 Example:
 
-  apt::sources_list { 'company_internals.list':
+  apt::sources_list { 'company_internals':
     source => [ "puppet:///modules/site_apt/${::fqdn}/company_internals.list",
                 'puppet:///modules/site_apt/company_internals.list' ],
   }

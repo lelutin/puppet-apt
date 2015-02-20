@@ -10,13 +10,13 @@ deb-src <%= debian_url %> <%= codename %> <%= lrepos %>
 <% end -%>
 
 # security
-<% if ((release=scope.lookupvar('apt::release')) == "unstable" || release == "experimental") -%>
-# There is no security support for <%= release %>
-<% else -%>
+<% if ((release=scope.lookupvar('apt::release')) == "stable" || release == "oldstable") -%>
 deb <%= security_url=scope.lookupvar('apt::security_url') %> <%= codename %>/updates <%= lrepos %>
 <% if include_src -%>
 deb-src <%= security_url %> <%= codename %>/updates <%= lrepos %>
 <% end -%>
+<% else -%>
+# There is no security support for <%= release %>
 <% end -%>
 
 # backports
@@ -37,6 +37,18 @@ deb-src <%= backports_url %> <%= codename %>-backports <%= lrepos %>
 deb <%= debian_url %> <%= codename %>-updates <%= lrepos %>
 <% if include_src -%>
 deb-src <%= debian_url %> <%= codename %>-updates <%= lrepos %>
+<% end -%>
+<% end -%>
+<% end -%>
+
+<% if use_lts=scope.lookupvar('apt::use_lts') -%>
+# LTS
+<% if release != "oldstable" -%>
+# There is no LTS archive for <%= release %>
+<% else -%>
+deb <%= debian_url %> <%= codename %>-lts <%= lrepos %>
+<% if include_src -%>
+deb-src <%= debian_url %> <%= codename %>-lts <%= lrepos %>
 <% end -%>
 <% end -%>
 <% end -%>

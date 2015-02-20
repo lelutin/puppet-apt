@@ -8,6 +8,11 @@ Package: *
 Pin: release o=Debian,n=<%= codename %>-updates
 Pin-Priority: 990
 
+Explanation: Debian <%= codename %>-lts
+Package: *
+Pin: release o=Debian,n=<%= codename %>-lts
+Pin-Priority: 990
+
 Explanation: Debian <%= next_codename=scope.lookupvar('apt::next_codename') %>
 Package: *
 Pin: release o=Debian,n=<%= next_codename %>
