@@ -3,8 +3,8 @@
 Unattended-Upgrade::Allowed-Origins {
 //  "${distro-id} oldstable";
 //  "${distro_id} ${distro_codename}-backports";
-    "${distro-id} ${distro-codename}-security";
-    "${distro-id} ${distro-codename}-lts";
+    "${distro_id} ${distro_codename}-security";
+    "${distro_id} ${distro_codename}-lts";
 };
 
 APT::Periodic::Update-Package-Lists "1";
