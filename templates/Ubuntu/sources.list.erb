@@ -20,7 +20,7 @@ deb-src <%= ubuntu_url %> <%= codename %>-security <%= lrepos %>
 <% end -%>
 
 # backports
-deb <%= ubuntu_url %> <%= codename %>-backports main <%= lrepos %>
+deb <%= ubuntu_url %> <%= codename %>-backports <%= lrepos %>
 <% if include_src -%>
 deb-src <%= ubuntu_url %> <%= codename %>-backports <%= lrepos %>
 <% end -%>
