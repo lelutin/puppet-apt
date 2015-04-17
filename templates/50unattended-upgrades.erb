@@ -20,7 +20,7 @@ APT::Periodic::Update-Package-Lists "1";
 APT::Periodic::Download-Upgradeable-Packages "1";
 APT::Periodic::Unattended-Upgrade "1";
 
-Unattended-Upgrade::Mail "<%= mail_recipient -%>";
-<% if mailonlyonerror -%>
+Unattended-Upgrade::Mail "<%= @mail_recipient -%>";
+<% if @mailonlyonerror -%>
 Unattended-Upgrade::MailOnlyOnError "true";
 <% end -%>
