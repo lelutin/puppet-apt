@@ -374,6 +374,17 @@ apt::unattended_upgrades
 If this class is included, it will install the package 'unattended-upgrades'
 and configure it to daily upgrade the system.
 
+The class has the following parameters that you can use to change the contents
+of the configuration file. The values shown here are the default values:
+
+ * $config_content = undef
+ * $mailonlyonerror = true
+ * $mail_recipient = 'root'
+ * $blacklisted_packages = []
+
+Note that using $config_content actually specifies all of the configuration
+contents and thus makes the other parameters useless.
+
 Defines
 =======
 
