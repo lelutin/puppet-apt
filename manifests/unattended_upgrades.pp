@@ -2,6 +2,7 @@ class apt::unattended_upgrades (
   $config_content = undef,
   $mailonlyonerror = true,
   $mail_recipient = 'root',
+  $blacklisted_packages = [],
 ) {
 
   package { 'unattended-upgrades':

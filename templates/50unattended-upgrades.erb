@@ -16,6 +16,14 @@ Unattended-Upgrade::Allowed-Origins {
 <% end -%>
 };
 
+<% if not @blacklisted_packages.empty?  -%>
+Unattended-Upgrade::Package-Blacklist {
+<% @blacklisted_packages.each do |pkg| -%>
+  "<%= pkg %>";
+<% end -%>
+}
+<% end -%>
+
 APT::Periodic::Update-Package-Lists "1";
 APT::Periodic::Download-Upgradeable-Packages "1";
 APT::Periodic::Unattended-Upgrade "1";

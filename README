@@ -17,6 +17,10 @@ Ubuntu support is lagging behind but not absent either.
 
 ! Upgrade Notice !
 
+ * If you were using custom 50unattended-upgrades.${::lsbdistcodename} in your
+   site_apt, these are no longer supported. You should migrate to passing
+   $blacklisted_packages to the apt::unattended_upgrades class.
+
  * the apt class has been moved to a paramterized class. if you were including
    this class before, after passing some variables, you will need to move to
    instantiating the class with those variables instead. For example, if you 
