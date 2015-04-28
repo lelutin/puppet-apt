@@ -7,8 +7,8 @@ class apt::params () {
   $debian_url = 'http://http.debian.net/debian/'
   $security_url = 'http://security.debian.org/'
   $backports_url = $::lsbdistcodename ? {
-    'wheezy' => $debian_url,
-    default  => 'http://backports.debian.org/debian-backports/',
+    'squeeze'  => 'http://backports.debian.org/debian-backports/',
+    default => $debian_url
   }
   $lts_url = $debian_url
   $volatile_url = 'http://volatile.debian.org/debian-volatile/'
