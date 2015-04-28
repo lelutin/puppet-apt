@@ -4,7 +4,7 @@ class apt::params () {
   $use_volatile = false
   $include_src = false
   $use_next_release = false
-  $debian_url = 'http://http.debian.net/debian/'
+  $debian_url = 'http://httpredir.debian.org/debian/'
   $security_url = 'http://security.debian.org/'
   $backports_url = $::lsbdistcodename ? {
     'squeeze'  => 'http://backports.debian.org/debian-backports/',
