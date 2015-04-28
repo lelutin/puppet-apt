@@ -4,11 +4,11 @@ class apt::params () {
   $use_volatile = false
   $include_src = false
   $use_next_release = false
-  $debian_url = 'http://http.debian.net/debian/'
+  $debian_url = 'http://httpredir.debian.org/debian/'
   $security_url = 'http://security.debian.org/'
   $backports_url = $::lsbdistcodename ? {
-    'wheezy' => $debian_url,
-    default  => 'http://backports.debian.org/debian-backports/',
+    'squeeze'  => 'http://backports.debian.org/debian-backports/',
+    default => $debian_url
   }
   $lts_url = $debian_url
   $volatile_url = 'http://volatile.debian.org/debian-volatile/'
