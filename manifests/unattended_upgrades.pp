@@ -3,10 +3,11 @@ class apt::unattended_upgrades (
   $mailonlyonerror = true,
   $mail_recipient = 'root',
   $blacklisted_packages = [],
+  $ensure_version = present
 ) {
 
   package { 'unattended-upgrades':
-    ensure  => present
+    ensure  => $ensure_version
   }
 
   $file_content = $config_content ? {
