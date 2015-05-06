@@ -16,7 +16,8 @@ class apt::unattended_upgrades (
   }
 
   apt_conf { '50unattended-upgrades':
-    content => $file_content,
-    require => Package['unattended-upgrades'],
+    content     => $file_content,
+    require     => Package['unattended-upgrades'],
+    refresh_apt => false
   }
 }
