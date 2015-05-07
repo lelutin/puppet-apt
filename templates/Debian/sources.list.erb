@@ -43,7 +43,7 @@ deb-src <%= debian_url %> <%= codename %>-updates <%= lrepos %>
 
 <% if use_lts=scope.lookupvar('apt::use_lts') -%>
 # LTS
-<% if release != "oldstable" -%>
+<% if release != "oldoldstable" -%>
 # There is no LTS archive for <%= release %>
 <% else -%>
 deb <%= debian_url %> <%= codename %>-lts <%= lrepos %>
