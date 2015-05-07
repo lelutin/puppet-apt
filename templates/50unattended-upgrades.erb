@@ -7,12 +7,12 @@ Unattended-Upgrade::Allowed-Origins {
   "${distro_id}:${distro_codename}-backports";
 <% elsif scope.lookupvar('::operatingsystem') == 'Debian' and scope.lookupvar('::operatingsystemmajrelease') == 6 -%>
 Unattended-Upgrade::Allowed-Origins {
-  "${distro-id}:oldoldstable";
-  "${distro-id}:squeeze-lts";
+  "${distro_id}:oldoldstable";
+  "${distro_id}:squeeze-lts";
 <% else -%>
 Unattended-Upgrade::Origins-Pattern {
   "o=Debian,l=Debian-Security";
-  "o=Debian,a=${distro-id}-lts";
+  "o=Debian,a=${distro_id}-lts";
 <% end -%>
 };
 
@@ -21,7 +21,7 @@ Unattended-Upgrade::Package-Blacklist {
 <% @blacklisted_packages.each do |pkg| -%>
   "<%= pkg %>";
 <% end -%>
-}
+};
 <% end -%>
 
 APT::Periodic::Update-Package-Lists "1";
