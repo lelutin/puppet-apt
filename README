@@ -17,6 +17,10 @@ Ubuntu support is lagging behind but not absent either.
 
 ! Upgrade Notice !
 
+ * Several parser functions have been updated: you need to restart your puppet
+   master, otherwise some nodes may keep on using an old, cached version!
+   (https://docs.puppetlabs.com/guides/custom_functions.html#gotchas)
+
  * If you were using custom 50unattended-upgrades.${::lsbdistcodename} in your
    site_apt, these are no longer supported. You should migrate to passing
    $blacklisted_packages to the apt::unattended_upgrades class.
