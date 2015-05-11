@@ -11,8 +11,8 @@ Unattended-Upgrade::Allowed-Origins {
   "${distro_id}:squeeze-lts";
 <% else -%>
 Unattended-Upgrade::Origins-Pattern {
-  "o=Debian,l=Debian-Security";
-  "o=Debian,a=${distro_id}-lts";
+  "origin=Debian,archive=<%= scope.lookupvar('::apt::release') %>,label=Debian-Security";
+  "origin=Debian,archive=${distro_codename}-lts";
 <% end -%>
 };
 
