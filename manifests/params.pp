@@ -1,12 +1,11 @@
 class apt::params () {
-  $codename = $::lsbdistcodename
   $use_lts = false
   $use_volatile = false
   $include_src = false
   $use_next_release = false
   $debian_url = 'http://httpredir.debian.org/debian/'
   $security_url = 'http://security.debian.org/'
-  $backports_url = $::lsbdistcodename ? {
+  $backports_url = $::debian_codename ? {
     'squeeze'  => 'http://backports.debian.org/debian-backports/',
     default => $debian_url
   }

@@ -17,9 +17,11 @@ Ubuntu support is lagging behind but not absent either.
 
 ! Upgrade Notice !
 
- * Several parser functions have been updated: you need to restart your puppet
-   master, otherwise some nodes may keep on using an old, cached version!
-   (https://docs.puppetlabs.com/guides/custom_functions.html#gotchas)
+ * The apt::codename parameter has been removed. In its place, the
+   debian_codename fact may be overridden via an environment variable. This
+   will affect all other debian_* facts, and achieve the same result.
+
+     FACTER_debian_codename=jessie puppet agent -t
 
  * If you were using custom 50unattended-upgrades.${::lsbdistcodename} in your
    site_apt, these are no longer supported. You should migrate to passing
@@ -97,8 +99,9 @@ Requirements
 
 This module needs:
 
-- the lsb module: git://labs.riseup.net/shared-lsb
-- the common module: git://labs.riseup.net/shared-common
+- the common module: https://gitlab.com/shared-puppet-modules-group/common
+- the lsb module: https://gitlab.com/shared-puppet-modules-group/lsb
+  (optional but recommended, required on Ubuntu)
 
 By default, on normal hosts, this module sets the configuration option
 DSelect::Clean to 'auto'. On virtual servers, the value is set by default to
@@ -224,15 +227,6 @@ Class parameters:
   templates/site_apt/sources.list file:
 
   class { 'apt': custom_sources_list => template('site_apt/sources.list') }
-
-* codename
-
-  Contains the codename ("squeeze", "wheezy", ...) of the client's release. While
-  these values come from lsb-release by default, this parameter can be set
-  manually, e.g. to enable forced upgrades. For example:
-
-     include apt::dist_upgrade
-     class { 'apt': codename => 'wheezy', notify => Exec['apt_dist-upgrade'] }
 
 * custom_key_dir
 
