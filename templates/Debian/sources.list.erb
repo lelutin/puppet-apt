@@ -19,7 +19,7 @@ deb-src <%= security_url %> <%= codename %>/updates <%= lrepos %>
 # There is no security support for <%= release %>
 <% end -%>
 
-<% if use_volatile=scope.lookupvar('apt::use_backports') -%>
+<% if use_backports=scope.lookupvar('apt::use_backports') -%>
 # backports
 <%   if (release == "testing" || release == "unstable" || release == "experimental") -%>
 # There is no backports archive for <%= release %>
