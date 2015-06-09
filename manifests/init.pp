@@ -7,6 +7,7 @@ class apt(
   $codename = $apt::params::codename,
   $use_lts = $apt::params::use_lts,
   $use_volatile = $apt::params::use_volatile,
+  $use_backports = $apt::params::use_backports,
   $include_src = $apt::params::include_src,
   $use_next_release = $apt::params::use_next_release,
   $debian_url = $apt::params::debian_url,

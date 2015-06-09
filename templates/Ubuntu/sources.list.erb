@@ -7,11 +7,13 @@ deb <%= ubuntu_url=scope.lookupvar('apt::ubuntu_url') %> <%= codename %> <%= lre
 deb-src <%= ubuntu_url %> <%= codename %> <%= lrepos %>
 <% end -%>
 
+<% if use_volatile=scope.lookupvar('apt::use_volatile') -%>
 # updates
 deb <%= ubuntu_url %> <%= codename %>-updates <%= lrepos %>
-<% if include_src -%>
+<%   if include_src -%>
 deb-src <%= ubuntu_url %> <%= codename %>-updates <%= lrepos %>
-<% end -%>
+<%   end
+   end -%>
 
 # security suppport
 deb <%= ubuntu_url %> <%= codename %>-security <%= lrepos %>
@@ -19,8 +21,10 @@ deb <%= ubuntu_url %> <%= codename %>-security <%= lrepos %>
 deb-src <%= ubuntu_url %> <%= codename %>-security <%= lrepos %>
 <% end -%>
 
+<% if use_backports=scope.lookupvar('apt::use_backports') -%>
 # backports
 deb <%= ubuntu_url %> <%= codename %>-backports <%= lrepos %>
-<% if include_src -%>
+<%   if include_src -%>
 deb-src <%= ubuntu_url %> <%= codename %>-backports <%= lrepos %>
-<% end -%>
+<%   end
+   end -%>

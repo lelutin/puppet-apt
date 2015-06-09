@@ -2,6 +2,7 @@ class apt::params () {
   $codename = $::lsbdistcodename
   $use_lts = false
   $use_volatile = false
+  $use_backports = true
   $include_src = false
   $use_next_release = false
   $debian_url = 'http://httpredir.debian.org/debian/'
