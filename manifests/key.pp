@@ -1,13 +1,8 @@
-define apt::key ($source) {
+define apt::key ($ensure => 'present', $source) {
   file {
-    "${apt::apt_base_dir}/${name}":
-      source  => $source;
-    "${apt::apt_base_dir}/keys":
-      ensure  => directory;
-  }
-  exec { "apt-key add ${apt::apt_base_dir}/${name}":
-    subscribe   => File["${apt::apt_base_dir}/${name}"],
-    refreshonly => true,
-    notify      => Exec['refresh_apt'],
+    "/etc/apt/trusted.gpg.d/$name":
+      source => $source,
+      ensure => $ensure,
+      notify => Exec['refresh_apt'],
   }
 }

@@ -485,8 +485,25 @@ Deploys a secure apt OpenPGP key. This usually accompanies the
 sources.list snippets above for third party repositories. For example,
 you would do:
 
-  apt::key { 'neurodebian.key':
-    source => 'puppet:///modules/site_apt/neurodebian.key',
+  apt::key { 'neurodebian.gpg':
+    ensure => present,
+    source => 'puppet:///modules/site_apt/neurodebian.gpg',
+  }
+
+This deploys the key in the `/etc/apt/trusted.gpg.d` directory, which
+is assumed by secure apt to be binary OpenPGP keys and *not*
+"ascii-armored" or "plain text" OpenPGP key material. For the latter,
+use `apt::key::plain`.
+
+apt::key::plain
+---------------
+
+Deploys a secure apt OpenPGP key. This usually accompanies the
+sources.list snippets above for third party repositories. For example,
+you would do:
+
+  apt::key::asc { 'neurodebian.asc':
+    source => 'puppet:///modules/site_apt/neurodebian.asc',
   }
 
 This deploys the key in the `${apt_base_dir}/keys` directory (as
@@ -494,6 +511,10 @@ opposed to `$custom_key_dir` which deploys it in `keys.d`). The reason
 this exists on top of `$custom_key_dir` is to allow a more
 decentralised distribution of those keys, without having all modules
 throw their keys in the same directory in the manifests.
+
+Note that this model does *not* currently allow keys to be removed!
+Use `apt::key` instead for a more practical, revokable approach, but
+that needs binary keys.
 
 apt::upgrade_package
 --------------------
