@@ -1,4 +1,4 @@
-define apt::key ($ensure => 'present', $source) {
+define apt::key ($ensure = 'present', $source) {
   file {
     "/etc/apt/trusted.gpg.d/$name":
       source => $source,
