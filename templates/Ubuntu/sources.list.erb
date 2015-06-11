@@ -20,11 +20,3 @@ deb <%= ubuntu_url %> <%= codename %>-security <%= lrepos %>
 <% if include_src -%>
 deb-src <%= ubuntu_url %> <%= codename %>-security <%= lrepos %>
 <% end -%>
-
-<% if use_backports=scope.lookupvar('apt::use_backports') -%>
-# backports
-deb <%= ubuntu_url %> <%= codename %>-backports <%= lrepos %>
-<%   if include_src -%>
-deb-src <%= ubuntu_url %> <%= codename %>-backports <%= lrepos %>
-<%   end
-   end -%>

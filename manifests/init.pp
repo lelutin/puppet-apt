@@ -46,7 +46,7 @@ class apt(
     default => $custom_sources_list
   }
   file {
-    # include main, security and backports
+    # include main and security
     # additional sources should be included via the apt::sources_list define
     '/etc/apt/sources.list':
       content => $sources_content,
@@ -97,6 +97,21 @@ class apt(
 
   # backports uses the normal archive key now
   package { 'debian-backports-keyring': ensure => absent }
+
+  if $use_backports {
+    if ($release != "testing" and $release != "unstable" and $release != "experimental") {
+      apt::sources_list {
+        "${codename}-backports":
+          content => "deb $backports_url ${codename}-backports ${apt::real_repos}",
+      }
+      if $include_src {
+        apt::sources_list {
+          "${codename}-backports-src":
+            content => "deb-src $backports_url ${codename}-backports ${apt::real_repos}",
+        }
+      }
+    }
+  }
 
   include common::moduledir
   common::module_dir { 'apt': }
