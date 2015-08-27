@@ -502,7 +502,7 @@ Deploys a secure apt OpenPGP key. This usually accompanies the
 sources.list snippets above for third party repositories. For example,
 you would do:
 
-  apt::key::asc { 'neurodebian.asc':
+  apt::key::plain { 'neurodebian.asc':
     source => 'puppet:///modules/site_apt/neurodebian.asc',
   }
 
