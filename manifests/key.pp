@@ -1,8 +1,8 @@
-define apt::key ($ensure = 'present', $source) {
+define apt::key ($source, $ensure = 'present') {
   file {
-    "/etc/apt/trusted.gpg.d/$name":
-      source => $source,
+    "/etc/apt/trusted.gpg.d/${name}":
       ensure => $ensure,
+      source => $source,
       notify => Exec['refresh_apt'],
   }
 }
