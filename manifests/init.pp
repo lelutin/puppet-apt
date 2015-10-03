@@ -20,20 +20,6 @@ class apt(
   $custom_sources_list = '',
   $custom_key_dir = $apt::params::custom_key_dir
 ) inherits apt::params {
-  case $::operatingsystem {
-    'debian': {
-      $real_repos = $repos ? {
-        'auto'  => 'main contrib non-free',
-        default => $repos,
-      }
-    }
-    'ubuntu': {
-      $real_repos = $repos ? {
-        'auto'  => 'main restricted universe multiverse',
-        default => $repos,
-      }
-    }
-  }
 
   $real_backports_url = $backports_url ? {
     false   => $debian_url,
