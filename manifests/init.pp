@@ -35,6 +35,11 @@ class apt(
     }
   }
 
+  $real_backports_url = $backports_url ? {
+    false   => $debian_url,
+    default => $backports_url,
+  }
+
   package { 'apt':
     ensure  => installed,
     require => undef,
@@ -99,12 +104,12 @@ class apt(
   if ($use_backports and !($::debian_release in ['testing', 'unstable', 'experimental'])) {
     apt::sources_list {
       'backports':
-        content => "deb $backports_url ${::debian_codename}-backports ${apt::real_repos}",
+        content => "deb ${real_backports_url} ${::debian_codename}-backports ${apt::repos}",
     }
     if $include_src {
       apt::sources_list {
         'backports-src':
-          content => "deb-src $backports_url ${::debian_codename}-backports ${apt::real_repos}",
+          content => "deb-src ${real_backports_url} ${::debian_codename}-backports ${apt::repos}",
       }
     }
   }
