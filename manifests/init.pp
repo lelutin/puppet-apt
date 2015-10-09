@@ -98,17 +98,15 @@ class apt(
   # backports uses the normal archive key now
   package { 'debian-backports-keyring': ensure => absent }
 
-  if $use_backports {
-    if (${::debian_release} != "testing" and ${::debian_release} != "unstable" and ${::debian_release} != "experimental") {
+  if ($use_backports and !($::debian_release in ['testing', 'unstable', 'experimental'])) {
+    apt::sources_list {
+      'backports':
+        content => "deb $backports_url ${::debian_codename}-backports ${apt::real_repos}",
+    }
+    if $include_src {
       apt::sources_list {
-        'backports':
-          content => "deb $backports_url ${::debian_codename}-backports ${apt::real_repos}",
-      }
-      if $include_src {
-        apt::sources_list {
-          'backports-src':
-            content => "deb-src $backports_url ${::debian_codename}-backports ${apt::real_repos}",
-        }
+        'backports-src':
+          content => "deb-src $backports_url ${::debian_codename}-backports ${apt::real_repos}",
       }
     }
   }
