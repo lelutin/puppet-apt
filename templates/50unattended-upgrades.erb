@@ -7,12 +7,16 @@ Unattended-Upgrade::Allowed-Origins {
   "${distro_id}:${distro_codename}-backports";
 <% elsif scope.lookupvar('::operatingsystem') == 'Debian' and scope.lookupvar('::debian_codename') == 'squeeze' -%>
 Unattended-Upgrade::Allowed-Origins {
-  "${distro_id}:oldoldstable";
+  "${distro_id}:<%= scope.lookupvar('::debian_release') %>";
   "${distro_id}:squeeze-lts";
-<% else -%>
+<% elsif scope.lookupvar('::operatingsystem') == 'Debian' and scope.lookupvar('::debian_codename') == 'wheezy' -%>
 Unattended-Upgrade::Origins-Pattern {
   "origin=Debian,archive=<%= scope.lookupvar('::debian_release') %>,label=Debian-Security";
   "origin=Debian,archive=${distro_codename}-lts";
+<% else -%>
+Unattended-Upgrade::Origins-Pattern {
+  "origin=Debian,codename=${distro_codename},label=Debian";
+  "origin=Debian,codename=${distro_codename},label=Debian-Security";
 <% end -%>
 };
 
