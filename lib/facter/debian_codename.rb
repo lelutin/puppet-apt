@@ -32,7 +32,7 @@ Facter.add(:debian_codename) do
   setcode do
     debian_version = File.open('/etc/debian_version', &:readline)
     if debian_version.match(/^\d+/)
-      version_to_codename(version_to_codename.scan(/^(\d+)/)[0][0])
+      version_to_codename(debian_version.scan(/^(\d+)/)[0][0])
     elsif debian_version.match(/^[a-z]+\/(sid|unstable)/)
       debian_version.scan(/^([a-z]+)\//)[0][0]
     end
