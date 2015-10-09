@@ -1,5 +1,6 @@
 class apt::unattended_upgrades (
   $config_content = undef,
+  $config_template = 'apt/50unattended-upgrades.erb',
   $mailonlyonerror = true,
   $mail_recipient = 'root',
   $blacklisted_packages = [],
@@ -11,7 +12,7 @@ class apt::unattended_upgrades (
   }
 
   $file_content = $config_content ? {
-    undef   => template('apt/50unattended-upgrades.erb'),
+    undef   => template($config_template),
     default => $config_content
   }
 
