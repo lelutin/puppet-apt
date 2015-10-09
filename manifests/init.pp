@@ -99,15 +99,15 @@ class apt(
   package { 'debian-backports-keyring': ensure => absent }
 
   if $use_backports {
-    if ($release != "testing" and $release != "unstable" and $release != "experimental") {
+    if (${::debian_release} != "testing" and ${::debian_release} != "unstable" and ${::debian_release} != "experimental") {
       apt::sources_list {
-        "${codename}-backports":
-          content => "deb $backports_url ${codename}-backports ${apt::real_repos}",
+        'backports':
+          content => "deb $backports_url ${::debian_codename}-backports ${apt::real_repos}",
       }
       if $include_src {
         apt::sources_list {
-          "${codename}-backports-src":
-            content => "deb-src $backports_url ${codename}-backports ${apt::real_repos}",
+          'backports-src':
+            content => "deb-src $backports_url ${::debian_codename}-backports ${apt::real_repos}",
         }
       }
     }
