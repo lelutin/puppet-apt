@@ -376,12 +376,23 @@ The class has the following parameters that you can use to change the contents
 of the configuration file. The values shown here are the default values:
 
  * $config_content = undef
+ * $config_template = 'apt/50unattended-upgrades.erb'
  * $mailonlyonerror = true
  * $mail_recipient = 'root'
  * $blacklisted_packages = []
 
 Note that using $config_content actually specifies all of the configuration
 contents and thus makes the other parameters useless.
+
+example:
+
+    class { 'apt::unattended_upgrades':
+      config_template      => 'site_apt/50unattended-upgrades.jessie',
+      blacklisted_packages => [
+       'libc6', 'libc6-dev', 'libc6-i686', 'mysql-server', 'redmine', 'nodejs',
+       'bird'
+      ],
+    }
 
 Defines
 =======
