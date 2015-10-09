@@ -1,6 +1,6 @@
-Explanation: Debian <%= codename=scope.lookupvar('apt::codename') %>
+Explanation: Debian <%= codename=scope.lookupvar('::debian_codename') %>
 Package: *
-Pin: release o=Debian,a=<%= scope.lookupvar('apt::release') %>,v=<%= scope.lookupvar('apt::release_version') %>*
+Pin: release o=Debian,a=<%= scope.lookupvar('::debian_release') %>,v=5*
 Pin-Priority: 990
 
 Explanation: Debian backports
@@ -8,7 +8,7 @@ Package: *
 Pin: origin backports.debian.org
 Pin-Priority: 200
 
-Explanation: Debian <%= next_release=scope.lookupvar('apt::next_release') %>
+Explanation: Debian <%= next_release=scope.lookupvar('::debian_nextrelease') %>
 Package: *
 Pin: release o=Debian,a=<%= next_release %>
 Pin-Priority: 2

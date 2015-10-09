@@ -4,7 +4,6 @@
 # See LICENSE for the full license granted to you.
 
 class apt(
-  $codename = $apt::params::codename,
   $use_lts = $apt::params::use_lts,
   $use_volatile = $apt::params::use_volatile,
   $use_backports = $apt::params::use_backports,
@@ -41,21 +40,6 @@ class apt(
     ensure  => installed,
     require => undef,
   }
-
-  include lsb
-
-  # init $release, $next_release, $next_codename, $release_version
-  case $codename {
-    'n/a': {
-      fail("Unknown lsbdistcodename reported by facter: '$::lsbdistcodename', please fix this by setting this variable in your manifest.")
-    }
-    default: {
-      $release = debian_release($codename)
-    }
-  }
-  $release_version = debian_release_version($codename)
-  $next_codename = debian_nextcodename($codename)
-  $next_release = debian_nextrelease($release)
 
   $sources_content = $custom_sources_list ? {
     ''      => template( "apt/${::operatingsystem}/sources.list.erb"),

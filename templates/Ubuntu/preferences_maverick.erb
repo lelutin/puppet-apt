@@ -1,4 +1,4 @@
-Explanation: Ubuntu <%= codename=scope.lookupvar('apt::codename') %> security
+Explanation: Ubuntu <%= codename=scope.lookupvar('::ubuntu_codename') %> security
 Package: *
 Pin: release o=Ubuntu,a=<%= codename %>-security
 Pin-Priority: 990
@@ -18,7 +18,7 @@ Package: *
 Pin: release a=<%= codename %>-backports
 Pin-Priority: 200
 
-Explanation: Ubuntu <%= next_release=scope.lookupvar('apt::next_release') %>
+Explanation: Ubuntu <%= next_release=scope.lookupvar('::ubuntu_nextcodename') %>
 Package: *
 Pin: release o=Ubuntu,a=<%= next_release %>
 Pin-Priority: 2
