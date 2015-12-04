@@ -50,7 +50,6 @@ class apt(
     # additional sources should be included via the apt::sources_list define
     '/etc/apt/sources.list':
       content => $sources_content,
-      require => Package['lsb'],
       notify  => Exec['refresh_apt'],
       owner   => root,
       group   => 0,

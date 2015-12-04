@@ -99,9 +99,9 @@ Requirements
 
 This module needs:
 
+- the lsb-release package should be installed on the server prior to running
+  puppet. otherwise, all of the $::lsb* facts will be empty during runs.
 - the common module: https://gitlab.com/shared-puppet-modules-group/common
-- the lsb module: https://gitlab.com/shared-puppet-modules-group/lsb
-  (optional but recommended, required on Ubuntu)
 
 By default, on normal hosts, this module sets the configuration option
 DSelect::Clean to 'auto'. On virtual servers, the value is set by default to
