@@ -568,6 +568,14 @@ make sure APT indexes are up-to-date before a package upgrade is
 attempted, but don't want "apt-get update" to happen on every Puppet
 run.
 
+Tests
+=====
+
+To run pupept rspec tests:
+
+    bundle install --path vendor/bundle
+    bundle exec rake spec
+
 
 Licensing
 =========
