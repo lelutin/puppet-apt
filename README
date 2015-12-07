@@ -576,6 +576,10 @@ To run pupept rspec tests:
     bundle install --path vendor/bundle
     bundle exec rake spec
 
+Using different facter/puppet versions:
+
+    FACTER_GEM_VERSION=1.6.10 PUPPET_GEM_VERSION=2.7.23 bundle install --path vendor/bundle
+    bundle exec rake spec
 
 Licensing
 =========
