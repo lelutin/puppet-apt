@@ -8,11 +8,10 @@ def debian_codename_to_next(codename)
   if codename == "sid"
     return "experimental"
   else
-    codenames = Facter::Util::Debian::CODENAMES.values
-    i = codenames.index(codename)
-    if i and i+1 < codenames.count
-      return codenames[i+1]
-    end
+    codenames = Facter::Util::Debian::CODENAMES
+    versions  = Facter::Util::Debian::CODENAMES.invert
+    current_version = versions[codename]
+    return codenames[(current_version.to_i + 1).to_s]
   end
 end
 

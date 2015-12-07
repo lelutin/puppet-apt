@@ -14,6 +14,7 @@ module Facter
         "utopic",
         "vivid",
         "wily",
+        "xenial"
       ]
     end
   end
