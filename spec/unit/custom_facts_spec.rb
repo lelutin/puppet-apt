@@ -21,6 +21,14 @@ describe "Facter::Util::Fact" do
       it "debian_codename = wheezy" do
         expect(Facter.fact(:debian_codename).value).to eq('wheezy')
       end
+
+      it "debian_nextcodename = jessie" do
+        expect(Facter.fact(:debian_nextcodename).value).to eq('jessie')
+      end
+
+      it "debian_nextrelease = stable" do
+        expect(Facter.fact(:debian_nextrelease).value).to eq('stable')
+      end
     end
 
     context 'Debian 8' do
@@ -37,20 +45,31 @@ describe "Facter::Util::Fact" do
       it "debian_codename = jessie" do
         expect(Facter.fact(:debian_codename).value).to eq('jessie')
       end
+
+      it "debian_nextcodename = stretch" do
+        expect(Facter.fact(:debian_nextcodename).value).to eq('stretch')
+      end
+
+      it "debian_nextrelease = testing" do
+        expect(Facter.fact(:debian_nextrelease).value).to eq('testing')
+      end
     end
 
     context 'Ubuntu 15.10' do
       before do
         Facter.fact(:operatingsystem).stubs(:value).returns("Ubuntu")
         Facter.fact(:operatingsystemrelease).stubs(:value).returns("15.10")
-        Facter.fact(:lsbdistcodename).stubs(:value).returns("Vivid")
+        Facter.fact(:lsbdistcodename).stubs(:value).returns("wily")
       end
 
-      it "ubuntu_codename = Vivid" do
-        expect(Facter.fact(:ubuntu_codename).value).to eq('Vivid')
+      it "ubuntu_codename = wily" do
+        expect(Facter.fact(:ubuntu_codename).value).to eq('wily')
+      end
+
+      it "ubuntu_nextcodename = xenial" do
+        expect(Facter.fact(:ubuntu_nextcodename).value).to eq('xenial')
       end
     end
-
   end
 
   describe "Test 'apt_running' fact" do
