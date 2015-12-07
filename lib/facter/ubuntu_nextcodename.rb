@@ -1,5 +1,7 @@
 begin
   require 'facter/util/ubuntu'
+rescue LoadError
+  require "#{File.dirname(__FILE__)}/util/debian"
 end
 
 def ubuntu_codename_to_next(codename)

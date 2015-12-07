@@ -1,5 +1,7 @@
 begin
   require 'facter/util/debian'
+rescue LoadError
+  require "#{File.dirname(__FILE__)}/util/debian"
 end
 
 def debian_codename_to_release(codename)

@@ -1,5 +1,7 @@
 begin
   require 'facter/util/debian'
+rescue LoadError
+  require "#{File.dirname(__FILE__)}/util/debian"
 end
 
 Facter.add(:debian_lts) do
