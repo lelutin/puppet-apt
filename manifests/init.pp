@@ -123,17 +123,14 @@ class apt(
       mode    => '0755',
     }
     exec { 'custom_keys':
-      command     => "find ${apt_base_dir}/keys.d -type f -exec apt-key add '{}' \\; && /usr/bin/apt-get update",
+      command     => "find ${apt_base_dir}/keys.d -type f -exec apt-key add '{}' \\;",
       subscribe   => File["${apt_base_dir}/keys.d"],
       refreshonly => true,
+      notify      => Exec[refresh_apt]
     }
     if $custom_preferences != false {
       Exec['custom_keys'] {
-        before => [ Exec[refresh_apt], File['apt_config'] ]
-      }
-    } else {
-      Exec['custom_keys'] {
-        before => Exec[refresh_apt]
+        before => File['apt_config']
       }
     }
   }
