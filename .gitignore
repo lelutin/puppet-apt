@@ -5,6 +5,7 @@
 /spec/fixtures/modules/*
 !/spec/fixtures/modules/apt
 !/spec/fixtures/modules/apt/*
+/log
 /.vagrant/
 /.bundle/
 /coverage/
