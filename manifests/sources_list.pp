@@ -23,7 +23,7 @@ define apt::sources_list (
   file { "/etc/apt/sources.list.d/${realname}.list":
     ensure => $ensure,
     owner  => root, group => 0, mode => '0644',
-    notify => Exec['refresh_apt'],
+    notify => Exec['apt_updated'],
   }
 
   if $source {

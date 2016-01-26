@@ -50,7 +50,7 @@ class apt(
     # additional sources should be included via the apt::sources_list define
     '/etc/apt/sources.list':
       content => $sources_content,
-      notify  => Exec['refresh_apt'],
+      notify  => Exec['apt_updated'],
       owner   => root,
       group   => 0,
       mode    => '0644';
@@ -137,4 +137,16 @@ class apt(
 
   # workaround for preseeded_package component
   file { [ '/var/cache', '/var/cache/local', '/var/cache/local/preseeding' ]: ensure => directory }
+
+  exec { 'update_apt':
+    command     => '/usr/bin/apt-get update && /usr/bin/apt-get autoclean',
+    require     => [
+      File['/etc/apt/apt.conf.d', '/etc/apt/preferences' ],
+      File['/etc/apt/sources.list'] ],
+    loglevel    => 'info',
+    refreshonly => true,
+    # Another Semaphor for all packages to reference
+    alias       => [ 'apt_updated', 'refresh_apt']
+  }
+
 }

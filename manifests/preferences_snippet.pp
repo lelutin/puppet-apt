@@ -32,7 +32,7 @@ define apt::preferences_snippet (
   file { "/etc/apt/preferences.d/${name}":
     ensure => $ensure,
     owner  => root, group => 0, mode => '0644',
-    before => Exec['refresh_apt'];
+    before => Exec['apt_updated'];
   }
 
   case $source {

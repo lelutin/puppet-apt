@@ -38,7 +38,7 @@ define apt::apt_conf(
 
   if $refresh_apt {
     File["/etc/apt/apt.conf.d/${name}"] {
-      notify => Exec['refresh_apt'],
+      notify => Exec['apt_updated'],
     }
   }
 

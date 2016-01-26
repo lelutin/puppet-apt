@@ -17,6 +17,14 @@ Ubuntu support is lagging behind but not absent either.
 
 ! Upgrade Notice !
 
+ * The `disable_update` parameter has been removed. The main apt class
+   defaults to *not* run an `apt-get update` on every run anyway so this
+   parameter seems useless.
+   You can include the `apt::update` class if you want it to be run every time.
+
+ * The `apt::upgrade_package` now doesn't automatically call an Exec['apt_updated']
+   anymore, so you would need to include `apt::update` now by hand.
+
  * The apt::codename parameter has been removed. In its place, the
    debian_codename fact may be overridden via an environment variable. This
    will affect all other debian_* facts, and achieve the same result.
@@ -188,15 +196,6 @@ Class parameters:
   If this variable is set the default repositories list ("main contrib non-free")
   is overriden.
 
-* disable_update
-
-  Disable "apt-get update" which is normally triggered by apt::upgrade_package 
-  and apt::dist_upgrade. 
-
-  Note that nodes can be updated once a day by using 
-    APT::Periodic::Update-Package-Lists "1";
-  in i.e. /etc/apt/apt.conf.d/80_apt_update_daily.
-
 * custom_preferences
 
   For historical reasons (Debian Lenny's version of APT did not support the use
@@ -295,9 +294,6 @@ trigger any action per-se: other resources may notify it, other
 classes may inherit from this one and add to its subscription list
 using the plusignment ('+>') operator. A real-world example can be
 seen in the apt::dist_upgrade::initiator source.
-
-When this class is included the APT indexes are updated on every
-Puppet run due to the author's lack of Puppet wizardry.
 
 apt::dist_upgrade::initiator
 ----------------------------
@@ -555,18 +551,22 @@ Exec['apt_updated']
 -------------------
 
 After this point the APT indexes are up-to-date.
+This resource is set to `refreshonly => true` so it is not run on
+every puppetrun. To run this every time, you can include the `apt::update`
+class.
 
 This resource is usually used like this to ensure current packages are
 installed by Package resources:
 
-  include apt::update
-  Package { require => Exec['apt_updated'] }
+    include apt::update
+    Package { require => Exec['apt_updated'] }
 
-Please note that the apt::upgrade_package define automatically uses
-this resource so you don't have to manage this yourself if you need to
-make sure APT indexes are up-to-date before a package upgrade is
-attempted, but don't want "apt-get update" to happen on every Puppet
-run.
+Note that nodes can be updated once a day by using
+
+    APT::Periodic::Update-Package-Lists "1";
+
+in i.e. /etc/apt/apt.conf.d/80_apt_update_daily.
+
 
 Tests
 =====
