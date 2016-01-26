@@ -18,7 +18,6 @@ class apt(
   $repos = $apt::params::repos,
   $custom_preferences = $apt::params::custom_preferences,
   $custom_sources_list = '',
-  $disable_update = $apt::params::disable_update,
   $custom_key_dir = $apt::params::custom_key_dir
 ) inherits apt::params {
   case $::operatingsystem {

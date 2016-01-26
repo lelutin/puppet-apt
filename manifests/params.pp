@@ -18,6 +18,5 @@ class apt::params () {
   $volatile_url = 'http://volatile.debian.org/debian-volatile/'
   $repos = 'auto'
   $custom_preferences = ''
-  $disable_update = false
   $custom_key_dir = false
 }
