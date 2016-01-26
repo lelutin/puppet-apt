@@ -139,7 +139,7 @@ class apt(
   file { [ '/var/cache', '/var/cache/local', '/var/cache/local/preseeding' ]: ensure => directory }
 
   exec { 'update_apt':
-    command     => '/usr/bin/apt-get update && /usr/bin/apt-get autoclean',
+    command     => '/usr/bin/apt-get update',
     require     => [
       File['/etc/apt/apt.conf.d', '/etc/apt/preferences' ],
       File['/etc/apt/sources.list'] ],
