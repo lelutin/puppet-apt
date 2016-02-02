@@ -11,6 +11,16 @@ class apt::unattended_upgrades (
     ensure  => $ensure_version
   }
 
+  # For some reason, this directory is sometimes absent, which causes
+  # unattended-upgrades to crash.
+  file { '/var/log/unattended-upgrades':
+    ensure  => directory,
+    owner   => 'root',
+    group   => 0,
+    mode    => '0755',
+    require => Package['unattended-upgrades'],
+  }
+
   $file_content = $config_content ? {
     undef   => template($config_template),
     default => $config_content
