@@ -142,7 +142,6 @@ class apt(
     require     => [
       File['/etc/apt/apt.conf.d', '/etc/apt/preferences' ],
       File['/etc/apt/sources.list'] ],
-    loglevel    => 'info',
     refreshonly => true,
     # Another Semaphor for all packages to reference
     alias       => [ 'apt_updated', 'refresh_apt']
