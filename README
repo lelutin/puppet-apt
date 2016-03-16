@@ -17,9 +17,19 @@ Ubuntu support is lagging behind but not absent either.
 
 ! Upgrade Notice !
 
- * Several parser functions have been updated: you need to restart your puppet
-   master, otherwise some nodes may keep on using an old, cached version!
-   (https://docs.puppetlabs.com/guides/custom_functions.html#gotchas)
+ * The `disable_update` parameter has been removed. The main apt class
+   defaults to *not* run an `apt-get update` on every run anyway so this
+   parameter seems useless.
+   You can include the `apt::update` class if you want it to be run every time.
+
+ * The `apt::upgrade_package` now doesn't automatically call an Exec['apt_updated']
+   anymore, so you would need to include `apt::update` now by hand.
+
+ * The apt::codename parameter has been removed. In its place, the
+   debian_codename fact may be overridden via an environment variable. This
+   will affect all other debian_* facts, and achieve the same result.
+
+     FACTER_debian_codename=jessie puppet agent -t
 
  * If you were using custom 50unattended-upgrades.${::lsbdistcodename} in your
    site_apt, these are no longer supported. You should migrate to passing
@@ -97,8 +107,9 @@ Requirements
 
 This module needs:
 
-- the lsb module: git://labs.riseup.net/shared-lsb
-- the common module: git://labs.riseup.net/shared-common
+- the lsb-release package should be installed on the server prior to running
+  puppet. otherwise, all of the $::lsb* facts will be empty during runs.
+- the common module: https://gitlab.com/shared-puppet-modules-group/common
 
 By default, on normal hosts, this module sets the configuration option
 DSelect::Clean to 'auto'. On virtual servers, the value is set by default to
@@ -185,15 +196,6 @@ Class parameters:
   If this variable is set the default repositories list ("main contrib non-free")
   is overriden.
 
-* disable_update
-
-  Disable "apt-get update" which is normally triggered by apt::upgrade_package 
-  and apt::dist_upgrade. 
-
-  Note that nodes can be updated once a day by using 
-    APT::Periodic::Update-Package-Lists "1";
-  in i.e. /etc/apt/apt.conf.d/80_apt_update_daily.
-
 * custom_preferences
 
   For historical reasons (Debian Lenny's version of APT did not support the use
@@ -224,15 +226,6 @@ Class parameters:
   templates/site_apt/sources.list file:
 
   class { 'apt': custom_sources_list => template('site_apt/sources.list') }
-
-* codename
-
-  Contains the codename ("squeeze", "wheezy", ...) of the client's release. While
-  these values come from lsb-release by default, this parameter can be set
-  manually, e.g. to enable forced upgrades. For example:
-
-     include apt::dist_upgrade
-     class { 'apt': codename => 'wheezy', notify => Exec['apt_dist-upgrade'] }
 
 * custom_key_dir
 
@@ -301,9 +294,6 @@ trigger any action per-se: other resources may notify it, other
 classes may inherit from this one and add to its subscription list
 using the plusignment ('+>') operator. A real-world example can be
 seen in the apt::dist_upgrade::initiator source.
-
-When this class is included the APT indexes are updated on every
-Puppet run due to the author's lack of Puppet wizardry.
 
 apt::dist_upgrade::initiator
 ----------------------------
@@ -382,12 +372,23 @@ The class has the following parameters that you can use to change the contents
 of the configuration file. The values shown here are the default values:
 
  * $config_content = undef
+ * $config_template = 'apt/50unattended-upgrades.erb'
  * $mailonlyonerror = true
  * $mail_recipient = 'root'
  * $blacklisted_packages = []
 
 Note that using $config_content actually specifies all of the configuration
 contents and thus makes the other parameters useless.
+
+example:
+
+    class { 'apt::unattended_upgrades':
+      config_template      => 'site_apt/50unattended-upgrades.jessie',
+      blacklisted_packages => [
+       'libc6', 'libc6-dev', 'libc6-i686', 'mysql-server', 'redmine', 'nodejs',
+       'bird'
+      ],
+    }
 
 Defines
 =======
@@ -478,6 +479,46 @@ Example:
                 'puppet:///modules/site_apt/company_internals.list' ],
   }
 
+apt::key
+--------
+
+Deploys a secure apt OpenPGP key. This usually accompanies the
+sources.list snippets above for third party repositories. For example,
+you would do:
+
+  apt::key { 'neurodebian.gpg':
+    ensure => present,
+    source => 'puppet:///modules/site_apt/neurodebian.gpg',
+  }
+
+This deploys the key in the `/etc/apt/trusted.gpg.d` directory, which
+is assumed by secure apt to be binary OpenPGP keys and *not*
+"ascii-armored" or "plain text" OpenPGP key material. For the latter,
+use `apt::key::plain`.
+
+The `.gpg` extension is compulsory for `apt` to pickup the key properly.
+
+apt::key::plain
+---------------
+
+Deploys a secure apt OpenPGP key. This usually accompanies the
+sources.list snippets above for third party repositories. For example,
+you would do:
+
+  apt::key::plain { 'neurodebian.asc':
+    source => 'puppet:///modules/site_apt/neurodebian.asc',
+  }
+
+This deploys the key in the `${apt_base_dir}/keys` directory (as
+opposed to `$custom_key_dir` which deploys it in `keys.d`). The reason
+this exists on top of `$custom_key_dir` is to allow a more
+decentralised distribution of those keys, without having all modules
+throw their keys in the same directory in the manifests.
+
+Note that this model does *not* currently allow keys to be removed!
+Use `apt::key` instead for a more practical, revokable approach, but
+that needs binary keys.
+
 apt::upgrade_package
 --------------------
 
@@ -510,19 +551,35 @@ Exec['apt_updated']
 -------------------
 
 After this point the APT indexes are up-to-date.
+This resource is set to `refreshonly => true` so it is not run on
+every puppetrun. To run this every time, you can include the `apt::update`
+class.
 
 This resource is usually used like this to ensure current packages are
 installed by Package resources:
 
-  include apt::update
-  Package { require => Exec['apt_updated'] }
+    include apt::update
+    Package { require => Exec['apt_updated'] }
 
-Please note that the apt::upgrade_package define automatically uses
-this resource so you don't have to manage this yourself if you need to
-make sure APT indexes are up-to-date before a package upgrade is
-attempted, but don't want "apt-get update" to happen on every Puppet
-run.
+Note that nodes can be updated once a day by using
 
+    APT::Periodic::Update-Package-Lists "1";
+
+in i.e. /etc/apt/apt.conf.d/80_apt_update_daily.
+
+
+Tests
+=====
+
+To run pupept rspec tests:
+
+    bundle install --path vendor/bundle
+    bundle exec rake spec
+
+Using different facter/puppet versions:
+
+    FACTER_GEM_VERSION=1.6.10 PUPPET_GEM_VERSION=2.7.23 bundle install --path vendor/bundle
+    bundle exec rake spec
 
 Licensing
 =========

@@ -5,18 +5,11 @@ class apt::dot_d_directories {
     '/etc/apt/apt.conf.d':
       ensure   => directory,
       checksum => mtime,
-      notify   => Exec['refresh_apt'];
+      notify   => Exec['apt_updated'];
     '/etc/apt/sources.list.d':
       ensure   => directory,
       checksum => mtime,
-      notify   => Exec['refresh_apt'];
-  }
-
-  exec {
-    # "&& sleep 1" is workaround for older(?) clients
-    'refresh_apt':
-      command     => '/usr/bin/apt-get update && sleep 1',
-      refreshonly => true,
+      notify   => Exec['apt_updated'];
   }
 
 }

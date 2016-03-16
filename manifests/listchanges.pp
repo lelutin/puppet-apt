@@ -1,6 +1,6 @@
 class apt::listchanges(
   $ensure_version = 'installed',
-  $config = "apt/${::operatingsystem}/listchanges_${::lsbdistcodename}.erb",
+  $config = "apt/${::operatingsystem}/listchanges_${::debian_codename}.erb",
   $frontend = 'mail',
   $email = 'root',
   $confirm = '0',
