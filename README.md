@@ -79,7 +79,11 @@ Ubuntu support is lagging behind but not absent either.
    you will need to remove the variables, and the include and instead do
    the following:
 
-    class { 'apt': debian_url => 'http://localhost:9999/debian/', use_next_release => true }
+    class {
+      'apt':
+        debian_url       => 'http://localhost:9999/debian/',
+        use_next_release => true;
+    }
 
    previously, you could manually set `$lsbdistcodename` which would enable forced
    upgrades, but because this is a top-level facter variable, and newer puppet
@@ -90,7 +94,11 @@ Ubuntu support is lagging behind but not absent either.
    you to trigger upgrades:
 
     include apt::dist_upgrade
-    class { 'apt': codename => 'wheezy', notify => Exec['apt_dist-upgrade'] }
+    class {
+      'apt':
+        codename => 'wheezy',
+        notify   => Exec['apt_dist-upgrade'];
+    }
 
  * the `apticron` class has been moved to a parameterized class.  if you were
    including this class before, you will need to move to instantiating the
@@ -104,7 +112,11 @@ Ubuntu support is lagging behind but not absent either.
    you will need to remove the variables, and the include and instead do the
    following:
 
-    class { 'apt::apticron': email => 'foo@example.com', notifynew => '1' }
+    class {
+    'apt::apticron':
+      email     => 'foo@example.com',
+      notifynew => '1';
+    }
 
  * the `apt::listchanges` class has been moved to a paramterized class. if you
    were including this class before, after passing some variables, you will need
@@ -118,7 +130,10 @@ Ubuntu support is lagging behind but not absent either.
    you will need to remove the variables, and the include and instead do the
    following:
  
-    class { 'apt::listchanges': email => 'foo@example.com' }
+    class {
+      'apt::listchanges':
+        email => 'foo@example.com';
+    }
    
  * the `apt::proxy_client` class has been moved to a paramterized class. if you
    were including this class before, after passing some variables, you will need
@@ -132,7 +147,11 @@ Ubuntu support is lagging behind but not absent either.
    you will need to remove the variables, and the include and instead do the
    following:
 
-    class { 'apt::proxy_client': proxy => 'http://proxy.domain', port => '666' }
+    class {
+      'apt::proxy_client':
+        proxy => 'http://proxy.domain',
+        port  => '666';
+    }
 
 
 # Requirements<a name="requirements"></a>
@@ -175,9 +194,13 @@ that is not enabled by default, you must set one of the following parameters.
 
 Example usage:
 
-    class { 'apt': use_next_release => true, debian_url => 'http://localhost:9999/debian/' }
+    class {
+      'apt':
+        use_next_release => true,
+        debian_url       => 'http://localhost:9999/debian/';
+    }
 
-Class parameters:
+**Class parameters:**
 
 ### use_lts
 
@@ -245,7 +268,10 @@ Class parameters:
   Setting this variable to false before including this class will force the
   `apt/preferences` file to be absent:
 
-    class { 'apt': custom_preferences => false }
+    class {
+      'apt':
+        custom_preferences => false;
+    }
   
 ### custom_sources_list
 
@@ -257,7 +283,10 @@ Class parameters:
   For example, setting this variable will pull in the
   `templates/site_apt/sources.list` file:
 
-    class { 'apt': custom_sources_list => template('site_apt/sources.list') }
+    class {
+      'apt':
+        custom_sources_list => template('site_apt/sources.list');
+    }
 
 ### custom_key_dir
 
@@ -289,7 +318,11 @@ defaults, which you are free to change:
 
 Example usage:
 
-    class { 'apt::apticron': email => 'foo@example.com', notifynew => '1' }
+    class {
+      'apt::apticron':
+        email     => 'foo@example.com',
+        notifynew => '1';
+    }
 
 
 ## apt::cron::download<a name="apt-cron-download"></a>
@@ -374,7 +407,10 @@ the following parameterized variables, which can be changed:
 
 Example usage:
 
-    class { 'apt::listchanges': email => 'foo@example.com' }
+    class {
+      'apt::listchanges':
+        email => 'foo@example.com';
+    }
  
 
 ## apt::proxy_client<a name="apt-proxy_client"></a>
@@ -388,7 +424,11 @@ change the port number by setting the `port` class parameter.
 
 Example usage:
 
-    class { 'apt::proxy_client': proxy => 'http://proxy.domain', port => '666' }
+    class {
+      'apt::proxy_client':
+        proxy => 'http://proxy.domain',
+        port  => '666';
+    }
 
 
 ## apt::reboot_required_notify<a name="apt-reboot_required_notify"></a>
@@ -417,12 +457,11 @@ contents and thus makes the other parameters useless.
 
 Example usage:
 
-    class { 'apt::unattended_upgrades':
-      config_template      => 'site_apt/50unattended-upgrades.jessie',
-      blacklisted_packages => [
-       'libc6', 'libc6-dev', 'libc6-i686', 'mysql-server', 'redmine', 'nodejs',
-       'bird'
-      ],
+    class {
+      'apt::unattended_upgrades':
+        config_template      => 'site_apt/50unattended-upgrades.jessie',
+        blacklisted_packages => [ 'libc6', 'libc6-dev', 'libc6-i686',
+                                  'mysql-server', 'redmine', 'nodejs', 'bird' ];
     }
 
 
@@ -437,8 +476,9 @@ meta-parameter to define content inline or with the help of a template.
 
 Example usage:
 
-    apt::apt_conf { '80download-only':
-      source => 'puppet:///modules/site_apt/80download-only',
+    apt::apt_conf {
+      '80download-only':
+        source => 'puppet:///modules/site_apt/80download-only';
     }
 
 
@@ -450,20 +490,20 @@ Example:
 
     apt::preferences_snippet {
       'irssi-plugin-otr':
-        release => 'squeeze-backports',
+        release  => 'squeeze-backports',
         priority => 999;
     }
 
     apt::preferences_snippet {
       'unstable_fallback':
-        package => '*',
-        release => 'unstable',
+        package  => '*',
+        release  => 'unstable',
         priority => 1;
     }
 
     apt::preferences_snippet {
       'ttdnsd':
-        pin => 'origin deb.torproject.org',
+        pin      => 'origin deb.torproject.org',
         priority => 999;
     }
 
@@ -492,8 +532,9 @@ following in your manifest:
 You can also specify the content of the seed via the content parameter, 
 for example:
 
-    apt::preseeded_package { 'apticron':
-      content => 'apticron   apticron/notification   string  root@example.com',
+    apt::preseeded_package {
+      'apticron':
+        content => 'apticron apticron/notification string root@example.com';
     }
 
 
@@ -508,9 +549,10 @@ file name if not present in the resource name.
 
 Example usage:
 
-    apt::sources_list { 'company_internals':
-      source => [ "puppet:///modules/site_apt/${::fqdn}/company_internals.list",
-                  'puppet:///modules/site_apt/company_internals.list' ],
+    apt::sources_list {
+      'company_internals':
+        source => [ "puppet:///modules/site_apt/${::fqdn}/company_internals.list",
+                    'puppet:///modules/site_apt/company_internals.list' ];
     }
 
 
@@ -520,9 +562,10 @@ Deploys a secure apt OpenPGP key. This usually accompanies the
 sources.list snippets above for third party repositories. For example,
 you would do:
 
-    apt::key { 'neurodebian.gpg':
-      ensure => present,
-      source => 'puppet:///modules/site_apt/neurodebian.gpg',
+    apt::key {
+      'neurodebian.gpg':
+        ensure => present,
+        source => 'puppet:///modules/site_apt/neurodebian.gpg';
     }
 
 This deploys the key in the `/etc/apt/trusted.gpg.d` directory, which
@@ -539,8 +582,9 @@ Deploys a secure apt OpenPGP key. This usually accompanies the
 sources.list snippets above for third party repositories. For example,
 you would do:
 
-    apt::key::plain { 'neurodebian.asc':
-      source => 'puppet:///modules/site_apt/neurodebian.asc',
+    apt::key::plain {
+      'neurodebian.asc':
+        source => 'puppet:///modules/site_apt/neurodebian.asc';
     }
 
 This deploys the key in the `${apt_base_dir}/keys` directory (as
@@ -566,11 +610,14 @@ For example, the following upgrades the perl package to version 5.8.8-7etch1
 (if it is installed), it also upgrades the syslog-ng and perl-modules packages
 to their latest (also, only if they are installed):
 
-    upgrade_package { 'perl':
-    			version => '5.8.8-7etch1';
-    		  'syslog-ng':
-    			version => latest;
-    		  'perl-modules':
+    upgrade_package {
+      'perl':
+    		version => '5.8.8-7etch1';
+
+    	'syslog-ng':
+    		version => latest;
+
+    	'perl-modules':
     }
 
 
@@ -591,7 +638,9 @@ This resource is usually used like this to ensure current packages are
 installed by Package resources:
 
     include apt::update
-    Package { require => Exec['apt_updated'] }
+    Package {
+      require => Exec['apt_updated']
+    }
 
 Note that nodes can be updated once a day by using
 
