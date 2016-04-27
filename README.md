@@ -356,7 +356,7 @@ This class, when included, installs dselect and switches it to expert mode to
 suppress superfluous help screens.
 
 
-## apt::listchanges<a name="apt-listchange"></a>
+## apt::listchanges<a name="apt-listchanges"></a>
 
 This class, when instantiated, installs apt-listchanges and configures it using
 the following parameterized variables, which can be changed:
