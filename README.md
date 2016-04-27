@@ -41,7 +41,7 @@ package download current.
 
 backports.debian.org is added.
 
-/etc/apt/sources.list and /etc/apt/preferences are managed. More
+`/etc/apt/sources.list` and `/etc/apt/preferences` are managed. More
 recent Debian releases are pinned to very low values by default to
 prevent accidental upgrades.
 
@@ -54,18 +54,18 @@ Ubuntu support is lagging behind but not absent either.
    parameter seems useless.
    You can include the `apt::update` class if you want it to be run every time.
 
- * The `apt::upgrade_package` now doesn't automatically call an Exec['apt_updated']
+ * The `apt::upgrade_package` now doesn't automatically call an `Exec['apt_updated']`
    anymore, so you would need to include `apt::update` now by hand.
 
- * The apt::codename parameter has been removed. In its place, the
-   debian_codename fact may be overridden via an environment variable. This
-   will affect all other debian_* facts, and achieve the same result.
+ * The `apt::codename` parameter has been removed. In its place, the
+   `debian_codename` fact may be overridden via an environment variable. This
+   will affect all other `debian_*` facts, and achieve the same result.
 
-     FACTER_debian_codename=jessie puppet agent -t
+    FACTER_debian_codename=jessie puppet agent -t
 
- * If you were using custom 50unattended-upgrades.${::lsbdistcodename} in your
-   site_apt, these are no longer supported. You should migrate to passing
-   $blacklisted_packages to the apt::unattended_upgrades class.
+ * If you were using custom `50unattended-upgrades.${::lsbdistcodename}` in your
+   `site_apt`, these are no longer supported. You should migrate to passing
+   `$blacklisted_packages` to the `apt::unattended_upgrades` class.
 
  * the apt class has been moved to a paramterized class. if you were including
    this class before, after passing some variables, you will need to move to
@@ -81,18 +81,18 @@ Ubuntu support is lagging behind but not absent either.
 
     class { 'apt': debian_url => 'http://localhost:9999/debian/', use_next_release => true }
 
-   previously, you could manually set $lsbdistcodename which would enable forced
+   previously, you could manually set `$lsbdistcodename` which would enable forced
    upgrades, but because this is a top-level facter variable, and newer puppet
    versions do not let you assign variables to other namespaces, this is no
    longer possible. However, there is a way to obtain this functionality, and
    that is to pass the 'codename' parameter to the apt class, which will change
-   the sources.list and preferences files to be the codename you set, allowing
+   the `sources.list` and `preferences` files to be the codename you set, allowing
    you to trigger upgrades:
 
-   include apt::dist_upgrade
-   class { 'apt': codename => 'wheezy', notify => Exec['apt_dist-upgrade'] }
+    include apt::dist_upgrade
+    class { 'apt': codename => 'wheezy', notify => Exec['apt_dist-upgrade'] }
 
- * the apticron class has been moved to a parameterized class.  if you were
+ * the `apticron` class has been moved to a parameterized class.  if you were
    including this class before, you will need to move to instantiating the
    class instead. For example, if you had the following in your manifests:
 
@@ -106,7 +106,7 @@ Ubuntu support is lagging behind but not absent either.
 
     class { 'apt::apticron': email => 'foo@example.com', notifynew => '1' }
 
- * the apt::listchanges class has been moved to a paramterized class. if you
+ * the `apt::listchanges` class has been moved to a paramterized class. if you
    were including this class before, after passing some variables, you will need
    to move to instantiating the class with those variables instead. For example,
    if you had the following in your manifests:
@@ -120,7 +120,7 @@ Ubuntu support is lagging behind but not absent either.
  
     class { 'apt::listchanges': email => 'foo@example.com' }
    
- * the apt::proxy_client class has been moved to a paramterized class. if you
+ * the `apt::proxy_client` class has been moved to a paramterized class. if you
    were including this class before, after passing some variables, you will need
    to move to instantiating the class with those variables instead. For example,
    if you had the following in your manifests:
@@ -139,12 +139,13 @@ Ubuntu support is lagging behind but not absent either.
 
 This module needs:
 
-- the lsb-release package should be installed on the server prior to running
-  puppet. otherwise, all of the $::lsb* facts will be empty during runs.
-- the common module: https://gitlab.com/shared-puppet-modules-group/common
+ * the `lsb-release` package should be installed on the server prior to running
+  puppet. otherwise, all of the `$::lsb*` facts will be empty during runs.
+
+ * the [common module](https://gitlab.com/shared-puppet-modules-group/common)
 
 By default, on normal hosts, this module sets the configuration option
-DSelect::Clean to 'auto'. On virtual servers, the value is set by default to
+`DSelect::Clean` to 'auto'. On virtual servers, the value is set by default to
 'pre-auto', because virtual servers are usually more space-bound and have better
 recovery mechanisms via the host:
 
@@ -157,10 +158,10 @@ From apt.conf(5), 0.7.2:
      instance). pre-auto performs this action before downloading new
      packages."
 
-To change the default setting for DSelect::Clean, you can create a file named
-"03clean" or "03clean_vserver" in your site_apt module's files directory. You
+To change the default setting for `DSelect::Clean`, you can create a file named
+"03clean" or "03clean_vserver" in your `site_apt` module's files directory. You
 can also define this for a specific host by creating a file in a subdirectory of
-the site_apt modules' files directory that is named the same as the
+the `site_apt` modules' files directory that is named the same as the
 host. (example: site_apt/files/some.host.com/03clean, or
 site_apt/files/some.host.com/03clean_vserver)
 
@@ -174,7 +175,7 @@ that is not enabled by default, you must set one of the following parameters.
 
 Example usage:
 
- class { 'apt': use_next_release => true, debian_url => 'http://localhost:9999/debian/' }
+    class { 'apt': use_next_release => true, debian_url => 'http://localhost:9999/debian/' }
 
 Class parameters:
 
@@ -230,7 +231,7 @@ Class parameters:
 ### custom_preferences
 
   For historical reasons (Debian Lenny's version of APT did not support the use
-  of the preferences.d directory for putting fragments of 'preferences'), this
+  of the `preferences.d` directory for putting fragments of 'preferences'), this
   module will manage a default generic apt/preferences file with more
   recent releases pinned to very low values so that any package
   installation will not accidentally pull in packages from those suites
@@ -238,32 +239,32 @@ Class parameters:
   complemented with all of the preferences_snippet calls (see below).
 
   If the default preferences template doesn't suit your needs, you can create a
-  template located in your site_apt module, and set custom_preferences with the
+  template located in your `site_apt` module, and set custom_preferences with the
   content (eg. custom_preferences => template('site_apt/preferences') )
 
   Setting this variable to false before including this class will force the
-  apt/preferences file to be absent:
+  `apt/preferences` file to be absent:
 
     class { 'apt': custom_preferences => false }
   
 ### custom_sources_list
 
-  By default this module will use a basic apt/sources.list template with
+  By default this module will use a basic `apt/sources.list` template with
   a generic Debian mirror. If you need to set more specific sources,
   e.g. changing the sections included in the source, etc. you can set
   this variable to the content that you desire to use instead.
 
   For example, setting this variable will pull in the
-  templates/site_apt/sources.list file:
+  `templates/site_apt/sources.list` file:
 
-  class { 'apt': custom_sources_list => template('site_apt/sources.list') }
+    class { 'apt': custom_sources_list => template('site_apt/sources.list') }
 
 ### custom_key_dir
 
   If you have different apt-key files that you want to get added to your
   apt keyring, you can set this variable to a path in your fileserver
   where individual key files can be placed. If this is set and keys
-  exist there, this module will 'apt-key add' each key.
+  exist there, this module will `apt-key add` each key.
 
   The debian-archive-keyring package is installed and kept current up to the
   latest revision (this includes the backports archive keyring).
@@ -274,34 +275,34 @@ Class parameters:
 When you instantiate this class, apticron will be installed, with the following
 defaults, which you are free to change:
 
-  $ensure_version = 'installed',
-  $config = "apt/${::operatingsystem}/apticron_${::lsbdistcodename}.erb",
-  $email = 'root',
-  $diff_only = '1',
-  $listchanges_profile = 'apticron',
-  $system = false,
-  $ipaddressnum = false,
-  $ipaddresses = false,
-  $notifyholds = '0',
-  $notifynew = '0',
-  $customsubject = ''
+    $ensure_version = 'installed',
+    $config = "apt/${::operatingsystem}/apticron_${::lsbdistcodename}.erb",
+    $email = 'root',
+    $diff_only = '1',
+    $listchanges_profile = 'apticron',
+    $system = false,
+    $ipaddressnum = false,
+    $ipaddresses = false,
+    $notifyholds = '0',
+    $notifynew = '0',
+    $customsubject = ''
 
 Example usage:
 
- class { 'apt::apticron': email => 'foo@example.com', notifynew => '1' }
+    class { 'apt::apticron': email => 'foo@example.com', notifynew => '1' }
 
 
 ## apt::cron::download<a name="apt-cron-download"></a>
 
-This class sets up cron-apt so that it downloads upgradable packages, does not
+This class sets up `cron-apt` so that it downloads upgradable packages, does not
 actually do any upgrade and emails when the output changes.
 
-cron-apt defaults to run at 4 AM. You may want to set the
-$apt_cron_hours variable before you include the class: its value will
+`cron-apt` defaults to run at 4 AM. You may want to set the
+`$apt_cron_hours` variable before you include the class: its value will
 be passed as the "hours" parameter of a cronjob. Example:
 
- # Run cron-apt every three hours
- $apt_cron_hours = '*/3'
+    # Run cron-apt every three hours
+    $apt_cron_hours = '*/3'
 
 Note that the default 4 AM cronjob won't be disabled.
 
@@ -311,20 +312,20 @@ Note that the default 4 AM cronjob won't be disabled.
 This class sets up cron-apt so that it dist-upgrades the system and
 emails when upgrades are performed.
 
-See apt::cron::download above if you need to run cron-apt more often
+See [apt::cron::download](#apt-cron-download) above if you need to run `cron-apt` more often
 than once a day.
 
 
 ## apt::dist_upgrade<a name="apt-dist_upgrade"></a>
 
-This class provides the Exec['apt_dist-upgrade'] resource that
+This class provides the `Exec['apt_dist-upgrade']` resource that
 dist-upgrade's the system.
 
 This exec is set as refreshonly so including this class does not
 trigger any action per-se: other resources may notify it, other
 classes may inherit from this one and add to its subscription list
-using the plusignment ('+>') operator. A real-world example can be
-seen in the apt::dist_upgrade::initiator source.
+using the plusignment (`+>`) operator. A real-world example can be
+seen in the `apt::dist_upgrade::initiator` source.
 
 
 ## apt::dist_upgrade::initiator<a name="apt-dist_upgrade-initiator"></a>
@@ -334,15 +335,17 @@ file's content changes. The initiator file is copied from the first
 available source amongst the following ones, in decreasing priority
 order:
 
-- puppet:///modules/site_apt/${::fqdn}/upgrade_initiator
-- puppet:///modules/site_apt/upgrade_initiator
-- puppet:///modules/apt/upgrade_initiator
+ * `puppet:///modules/site_apt/${::fqdn}/upgrade_initiator`
+
+ * `puppet:///modules/site_apt/upgrade_initiator`
+
+ * `puppet:///modules/apt/upgrade_initiator`
 
 This is useful when one does not want to setup a fully automated
 upgrade process but still needs a way to manually trigger full
 upgrades of any number of systems at scheduled times.
 
-Beware: a dist-upgrade is triggered the first time Puppet runs after
+**Beware:** a `dist-upgrade` is triggered the first time Puppet runs after
 this class has been included. This is actually the single reason why
 this class is not enabled by default.
 
@@ -358,33 +361,34 @@ suppress superfluous help screens.
 
 ## apt::listchanges<a name="apt-listchanges"></a>
 
-This class, when instantiated, installs apt-listchanges and configures it using
+This class, when instantiated, installs `apt-listchanges` and configures it using
 the following parameterized variables, which can be changed:
 
- version = 'present'
- config = "apt/${::operatingsystem}/listchanges_${::lsbrelease}.erb"
- frontend = 'pager'
- email = 'root'
- confirm = 0
- saveseen = '/var/lib/apt/listchanges.db'
- which = 'both'
+    version = 'present'
+    config = "apt/${::operatingsystem}/listchanges_${::lsbrelease}.erb"
+    frontend = 'pager'
+    email = 'root'
+    confirm = 0
+    saveseen = '/var/lib/apt/listchanges.db'
+    which = 'both'
 
- Example usage:
-  class { 'apt::listchanges': email => 'foo@example.com' }
+Example usage:
+
+    class { 'apt::listchanges': email => 'foo@example.com' }
  
 
 ## apt::proxy_client<a name="apt-proxy_client"></a>
 
 This class adds the right configuration to apt to make it fetch packages via a
-proxy. The class parameters apt_proxy and apt_proxy_port need to be set:
+proxy. The class parameters `apt_proxy` and `apt_proxy_port` need to be set:
 
-You can set the 'proxy' class parameter variable to the URL of the proxy that
+You can set the `proxy` class parameter variable to the URL of the proxy that
 will be used.  By default, the proxy will be queried on port 3142, but you can
-change the port number by setting the 'port' class parameter.
+change the port number by setting the `port` class parameter.
 
-Example:
+Example usage:
 
- class { 'apt::proxy_client': proxy => 'http://proxy.domain', port => '666' }
+    class { 'apt::proxy_client': proxy => 'http://proxy.domain', port => '666' }
 
 
 ## apt::reboot_required_notify<a name="apt-reboot_required_notify"></a>
@@ -396,22 +400,22 @@ email to root.
 
 ## apt::unattended_upgrades<a name="apt-unattended_upgrades"></a>
 
-If this class is included, it will install the package 'unattended-upgrades'
+If this class is included, it will install the package `unattended-upgrades`
 and configure it to daily upgrade the system.
 
 The class has the following parameters that you can use to change the contents
 of the configuration file. The values shown here are the default values:
 
- * $config_content = undef
- * $config_template = 'apt/50unattended-upgrades.erb'
- * $mailonlyonerror = true
- * $mail_recipient = 'root'
- * $blacklisted_packages = []
+    $config_content = undef
+    $config_template = 'apt/50unattended-upgrades.erb'
+    $mailonlyonerror = true
+    $mail_recipient = 'root'
+    $blacklisted_packages = []
 
-Note that using $config_content actually specifies all of the configuration
+Note that using `$config_content` actually specifies all of the configuration
 contents and thus makes the other parameters useless.
 
-example:
+Example usage:
 
     class { 'apt::unattended_upgrades':
       config_template      => 'site_apt/50unattended-upgrades.jessie',
@@ -426,42 +430,42 @@ example:
 
 ## apt::apt_conf<a name="apt-apt_conf"></a>
 
-Creates a file in the apt/apt.conf.d directory to easily add configuration
-components. One can use either the 'source' meta-parameter to specify a list of
-static files to include from the puppet fileserver or the 'content'
+Creates a file in the `apt/apt.conf.d` directory to easily add configuration
+components. One can use either the `source` meta-parameter to specify a list of
+static files to include from the puppet fileserver or the `content`
 meta-parameter to define content inline or with the help of a template.
 
-Example:
+Example usage:
 
-  apt::apt_conf { '80download-only':
-    source => 'puppet:///modules/site_apt/80download-only',
-  }
+    apt::apt_conf { '80download-only':
+      source => 'puppet:///modules/site_apt/80download-only',
+    }
 
 
 ## apt::preferences_snippet<a name="apt-preferences_snippet"></a>
 
-A way to add pinning information to files in /etc/apt/preferences.d/
+A way to add pinning information to files in `/etc/apt/preferences.d/`
 
 Example:
 
-  apt::preferences_snippet {
-    'irssi-plugin-otr':
-      release => 'squeeze-backports',
-      priority => 999;
-  }
+    apt::preferences_snippet {
+      'irssi-plugin-otr':
+        release => 'squeeze-backports',
+        priority => 999;
+    }
 
-  apt::preferences_snippet {
-    'unstable_fallback':
-      package => '*',
-      release => 'unstable',
-      priority => 1;
-  }
+    apt::preferences_snippet {
+      'unstable_fallback':
+        package => '*',
+        release => 'unstable',
+        priority => 1;
+    }
 
-  apt::preferences_snippet {
-    'ttdnsd':
-      pin => 'origin deb.torproject.org',
-      priority => 999;
-  }
+    apt::preferences_snippet {
+      'ttdnsd':
+        pin => 'origin deb.torproject.org',
+        priority => 999;
+    }
 
 The names of the resources will be used as the names of the files in the
 preferences.d directory, so you should ensure that resource names follow the
@@ -479,35 +483,35 @@ From apt_preferences(5):
 
 This simplifies installation of packages for which you wish to preseed the
 answers to debconf. For example, if you wish to provide a preseed file for the
-locales package, you would place the locales.seed file in
-'site_apt/templates/${::lsbdistcodename}/locales.seeds' and then include the
+locales package, you would place the `locales.seed` file in
+`site_apt/templates/${::lsbdistcodename}/locales.seeds` and then include the
 following in your manifest:
 
-  apt::preseeded_package { locales: }
+    apt::preseeded_package { locales: }
 
 You can also specify the content of the seed via the content parameter, 
 for example:
 
-  apt::preseeded_package { 'apticron':
-    content => 'apticron   apticron/notification   string  root@example.com',
-  }
+    apt::preseeded_package { 'apticron':
+      content => 'apticron   apticron/notification   string  root@example.com',
+    }
 
 
 ## apt::sources_list<a name="apt-sources_list"></a>
 
-Creates a file in the apt/sources.list.d directory to easily add additional apt
-sources. One can use either the 'source' meta-parameter to specify a list of
-static files to include from the puppet fileserver or the 'content'
+Creates a file in the `apt/sources.list.d` directory to easily add additional apt
+sources. One can use either the `source` meta-parameter to specify a list of
+static files to include from the puppet fileserver or the `content`
 meta-parameter to define content inline or with the help of a template. Ending
-the resource name in '.list' is optional: it will be automatically added to the
+the resource name in `.list` is optional: it will be automatically added to the
 file name if not present in the resource name.
 
-Example:
+Example usage:
 
-  apt::sources_list { 'company_internals':
-    source => [ "puppet:///modules/site_apt/${::fqdn}/company_internals.list",
-                'puppet:///modules/site_apt/company_internals.list' ],
-  }
+    apt::sources_list { 'company_internals':
+      source => [ "puppet:///modules/site_apt/${::fqdn}/company_internals.list",
+                  'puppet:///modules/site_apt/company_internals.list' ],
+    }
 
 
 ## apt::key<a name="apt-key"></a>
@@ -516,10 +520,10 @@ Deploys a secure apt OpenPGP key. This usually accompanies the
 sources.list snippets above for third party repositories. For example,
 you would do:
 
-  apt::key { 'neurodebian.gpg':
-    ensure => present,
-    source => 'puppet:///modules/site_apt/neurodebian.gpg',
-  }
+    apt::key { 'neurodebian.gpg':
+      ensure => present,
+      source => 'puppet:///modules/site_apt/neurodebian.gpg',
+    }
 
 This deploys the key in the `/etc/apt/trusted.gpg.d` directory, which
 is assumed by secure apt to be binary OpenPGP keys and *not*
@@ -529,15 +533,15 @@ use `apt::key::plain`.
 The `.gpg` extension is compulsory for `apt` to pickup the key properly.
 
 
-## apt ::key::plain<a name="apt-key-plain"></a>
+## apt:: key::plain<a name="apt-key-plain"></a>
 
 Deploys a secure apt OpenPGP key. This usually accompanies the
 sources.list snippets above for third party repositories. For example,
 you would do:
 
-  apt::key::plain { 'neurodebian.asc':
-    source => 'puppet:///modules/site_apt/neurodebian.asc',
-  }
+    apt::key::plain { 'neurodebian.asc':
+      source => 'puppet:///modules/site_apt/neurodebian.asc',
+    }
 
 This deploys the key in the `${apt_base_dir}/keys` directory (as
 opposed to `$custom_key_dir` which deploys it in `keys.d`). The reason
@@ -562,12 +566,12 @@ For example, the following upgrades the perl package to version 5.8.8-7etch1
 (if it is installed), it also upgrades the syslog-ng and perl-modules packages
 to their latest (also, only if they are installed):
 
-upgrade_package { 'perl':
-			version => '5.8.8-7etch1';
-		  'syslog-ng':
-			version => latest;
-		  'perl-modules':
-}
+    upgrade_package { 'perl':
+    			version => '5.8.8-7etch1';
+    		  'syslog-ng':
+    			version => latest;
+    		  'perl-modules':
+    }
 
 
 # Resources<a name="ressources"></a>
@@ -593,7 +597,7 @@ Note that nodes can be updated once a day by using
 
     APT::Periodic::Update-Package-Lists "1";
 
-in i.e. /etc/apt/apt.conf.d/80_apt_update_daily.
+in i.e. `/etc/apt/apt.conf.d/80_apt_update_daily`.
 
 
 # Tests<a name="test"></a>
