@@ -26,8 +26,8 @@
   * [apt::key::plain](#apt-key-plain)
   * [apt::upgrade_package](#apt-upgrade_package)
 * [Resources](#ressources)
-  * [File\['apt_config'\]](#file-apt_config)
-  * [Exec\['apt_updated'\]](#exec-apt_updated)
+  * [File\['apt_config'\]](#fileapt_config)
+  * [Exec\['apt_updated'\]](#execapt_updated)
 * [Tests](#tests)
 * [Licensing](#licensing)
 
@@ -529,7 +529,7 @@ use `apt::key::plain`.
 The `.gpg` extension is compulsory for `apt` to pickup the key properly.
 
 
-## apt::key::plain<a name="apt-key-plain"></a>
+## apt ::key::plain<a name="apt-key-plain"></a>
 
 Deploys a secure apt OpenPGP key. This usually accompanies the
 sources.list snippets above for third party repositories. For example,
