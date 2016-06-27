@@ -194,10 +194,9 @@ that is not enabled by default, you must set one of the following parameters.
 
 Example usage:
 
-    class {
-      'apt':
-        use_next_release => true,
-        debian_url       => 'http://localhost:9999/debian/';
+    class { 'apt':
+      use_next_release => true,
+      debian_url       => 'http://localhost:9999/debian/',
     }
 
 **Class parameters:**
@@ -268,9 +267,8 @@ Example usage:
   Setting this variable to false before including this class will force the
   `apt/preferences` file to be absent:
 
-    class {
-      'apt':
-        custom_preferences => false;
+    class { 'apt':
+      custom_preferences => false,
     }
   
 ### custom_sources_list
@@ -283,9 +281,8 @@ Example usage:
   For example, setting this variable will pull in the
   `templates/site_apt/sources.list` file:
 
-    class {
-      'apt':
-        custom_sources_list => template('site_apt/sources.list');
+    class { 'apt':
+      custom_sources_list => template('site_apt/sources.list'),
     }
 
 ### custom_key_dir
@@ -318,10 +315,9 @@ defaults, which you are free to change:
 
 Example usage:
 
-    class {
-      'apt::apticron':
-        email     => 'foo@example.com',
-        notifynew => '1';
+    class { 'apt::apticron':
+      email     => 'foo@example.com',
+      notifynew => '1',
     }
 
 
@@ -407,9 +403,8 @@ the following parameterized variables, which can be changed:
 
 Example usage:
 
-    class {
-      'apt::listchanges':
-        email => 'foo@example.com';
+    class { 'apt::listchanges':
+      email => 'foo@example.com',
     }
  
 
@@ -424,10 +419,9 @@ change the port number by setting the `port` class parameter.
 
 Example usage:
 
-    class {
-      'apt::proxy_client':
-        proxy => 'http://proxy.domain',
-        port  => '666';
+    class { 'apt::proxy_client':
+      proxy => 'http://proxy.domain',
+      port  => '666',
     }
 
 
@@ -457,11 +451,10 @@ contents and thus makes the other parameters useless.
 
 Example usage:
 
-    class {
-      'apt::unattended_upgrades':
-        config_template      => 'site_apt/50unattended-upgrades.jessie',
-        blacklisted_packages => [ 'libc6', 'libc6-dev', 'libc6-i686',
-                                  'mysql-server', 'redmine', 'nodejs', 'bird' ];
+    class { 'apt::unattended_upgrades':
+      config_template      => 'site_apt/50unattended-upgrades.jessie',
+      blacklisted_packages => [ 'libc6', 'libc6-dev', 'libc6-i686',
+                                'mysql-server', 'redmine', 'nodejs', 'bird' ],
     }
 
 
@@ -476,9 +469,8 @@ meta-parameter to define content inline or with the help of a template.
 
 Example usage:
 
-    apt::apt_conf {
-      '80download-only':
-        source => 'puppet:///modules/site_apt/80download-only';
+    apt::apt_conf { '80download-only':
+      source => 'puppet:///modules/site_apt/80download-only',
     }
 
 
@@ -486,25 +478,22 @@ Example usage:
 
 A way to add pinning information to files in `/etc/apt/preferences.d/`
 
-Example:
+Examples:
 
-    apt::preferences_snippet {
-      'irssi-plugin-otr':
-        release  => 'squeeze-backports',
-        priority => 999;
+    apt::preferences_snippet { 'irssi-plugin-otr':
+      release  => 'squeeze-backports',
+      priority => 999,
     }
 
-    apt::preferences_snippet {
-      'unstable_fallback':
-        package  => '*',
-        release  => 'unstable',
-        priority => 1;
+    apt::preferences_snippet { 'unstable_fallback':
+      package  => '*',
+      release  => 'unstable',
+      priority => 1,
     }
 
-    apt::preferences_snippet {
-      'ttdnsd':
-        pin      => 'origin deb.torproject.org',
-        priority => 999;
+    apt::preferences_snippet { 'ttdnsd':
+      pin      => 'origin deb.torproject.org',
+      priority => 999,
     }
 
 The names of the resources will be used as the names of the files in the
@@ -532,9 +521,8 @@ following in your manifest:
 You can also specify the content of the seed via the content parameter, 
 for example:
 
-    apt::preseeded_package {
-      'apticron':
-        content => 'apticron apticron/notification string root@example.com';
+    apt::preseeded_package { 'apticron':
+      content => 'apticron apticron/notification string root@example.com',
     }
 
 
@@ -549,10 +537,9 @@ file name if not present in the resource name.
 
 Example usage:
 
-    apt::sources_list {
-      'company_internals':
-        source => [ "puppet:///modules/site_apt/${::fqdn}/company_internals.list",
-                    'puppet:///modules/site_apt/company_internals.list' ];
+    apt::sources_list { 'company_internals':
+      source => [ "puppet:///modules/site_apt/${::fqdn}/company_internals.list",
+                  'puppet:///modules/site_apt/company_internals.list' ];
     }
 
 
@@ -582,9 +569,8 @@ Deploys a secure apt OpenPGP key. This usually accompanies the
 sources.list snippets above for third party repositories. For example,
 you would do:
 
-    apt::key::plain {
-      'neurodebian.asc':
-        source => 'puppet:///modules/site_apt/neurodebian.asc';
+    apt::key::plain { 'neurodebian.asc':
+      source => 'puppet:///modules/site_apt/neurodebian.asc';
     }
 
 This deploys the key in the `${apt_base_dir}/keys` directory (as
@@ -612,12 +598,10 @@ to their latest (also, only if they are installed):
 
     upgrade_package {
       'perl':
-    		version => '5.8.8-7etch1';
-
-    	'syslog-ng':
-    		version => latest;
-
-    	'perl-modules':
+        version => '5.8.8-7etch1';
+      'syslog-ng':
+        version => latest;
+      'perl-modules':
     }
 
 
