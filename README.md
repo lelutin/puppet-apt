@@ -576,7 +576,7 @@ use `apt::key::plain`.
 The `.gpg` extension is compulsory for `apt` to pickup the key properly.
 
 
-## apt:: key::plain<a name="apt-key-plain"></a>
+## apt::key::plain<a name="apt-key-plain"></a>
 
 Deploys a secure apt OpenPGP key. This usually accompanies the
 sources.list snippets above for third party repositories. For example,
