@@ -348,6 +348,11 @@ classes may inherit from this one and add to its subscription list
 using the plusignment (`+>`) operator. A real-world example can be
 seen in the `apt::dist_upgrade::initiator` source.
 
+Parameters:
+
+ * timeout: specified in seconds; the maximum time the `dist-upgrade`
+   command should take. If the command takes longer than the timeout,
+   the command is considered to have failed and will be stopped.
 
 ## apt::dist_upgrade::initiator<a name="apt-dist_upgrade-initiator"></a>
 
