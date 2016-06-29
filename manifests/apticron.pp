@@ -1,6 +1,6 @@
 class apt::apticron(
   $ensure_version = 'installed',
-  $config = "apt/${::operatingsystem}/apticron_${::debian_codename}.erb",
+  $config = "apt/${::operatingsystem}/apticron.erb",
   $email = 'root',
   $diff_only = '1',
   $listchanges_profile = 'apticron',
