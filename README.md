@@ -51,8 +51,8 @@ Ubuntu support is lagging behind but not absent either.
 ## Upgrade Notice<a name="upgrade-notice"></a>
 
  * The default value of the `$repos` parameter was removed since the logic is
-    now in the `apt::params` class. If you have explicitly set `$repos` to
-    'auto' in your manifests, you should remove this.
+   now in the `apt::params` class. If you have explicitly set `$repos` to
+   'auto' in your manifests, you should remove this.
  
  * The `disable_update` parameter has been removed. The main apt class
    defaults to *not* run an `apt-get update` on every run anyway so this
@@ -77,8 +77,8 @@ Ubuntu support is lagging behind but not absent either.
    instantiating the class with those variables instead. For example, if you 
    had the following in your manifests:
 
-    $ apt_debian_url = 'http://localhost:9999/debian/'
-    $ apt_use_next_release = true
+    $apt_debian_url = 'http://localhost:9999/debian/'
+    $apt_use_next_release = true
     include apt
  
    you will need to remove the variables, and the include and instead do
