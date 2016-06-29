@@ -1,5 +1,3 @@
-# Parameters:
-# - timeout: specified in seconds
 class apt::dist_upgrade (
   $timeout = 300,
 ) {
