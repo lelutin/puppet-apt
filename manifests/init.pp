@@ -11,7 +11,6 @@ class apt(
   $use_next_release = $apt::params::use_next_release,
   $debian_url = $apt::params::debian_url,
   $security_url = $apt::params::security_url,
-  $backports_url = $apt::params::backports_url,
   $lts_url = $apt::params::lts_url,
   $volatile_url = $apt::params::volatile_url,
   $ubuntu_url = $apt::params::ubuntu_url,
@@ -20,11 +19,6 @@ class apt(
   $custom_sources_list = '',
   $custom_key_dir = $apt::params::custom_key_dir
 ) inherits apt::params {
-
-  $real_backports_url = $backports_url ? {
-    false   => $debian_url,
-    default => $backports_url,
-  }
 
   package { 'apt':
     ensure  => installed,
@@ -84,18 +78,15 @@ class apt(
   ## This package should really always be current
   package { 'debian-archive-keyring': ensure => latest }
 
-  # backports uses the normal archive key now
-  package { 'debian-backports-keyring': ensure => absent }
-
   if ($use_backports and !($::debian_release in ['testing', 'unstable', 'experimental'])) {
     apt::sources_list {
       'backports':
-        content => "deb ${real_backports_url} ${::debian_codename}-backports ${apt::repos}",
+        content => "deb ${debian_url} ${::debian_codename}-backports ${apt::repos}",
     }
     if $include_src {
       apt::sources_list {
         'backports-src':
-          content => "deb-src ${real_backports_url} ${::debian_codename}-backports ${apt::repos}",
+          content => "deb-src ${debian_url} ${::debian_codename}-backports ${apt::repos}",
       }
     }
   }

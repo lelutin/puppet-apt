@@ -2,10 +2,7 @@ class apt::preferences {
 
   $pref_contents = $apt::custom_preferences ? {
     ''      => $::operatingsystem ? {
-      'debian' => $::debian_codename ? {
-        'lenny' => template("apt/${::operatingsystem}/preferences_lenny.erb"),
-        default => template("apt/${::operatingsystem}/preferences.erb"),
-      },
+      'debian' => template("apt/${::operatingsystem}/preferences.erb"),
       'ubuntu' => template("apt/${::operatingsystem}/preferences_${apt::codename}.erb"),
     },
     default => $apt::custom_preferences
