@@ -1,3 +1,4 @@
+# Configure an apt source
 define apt::sources_list (
   $ensure = 'present',
   $source = '',
@@ -22,7 +23,9 @@ define apt::sources_list (
   # apparently doesn't.
   file { "/etc/apt/sources.list.d/${realname}.list":
     ensure => $ensure,
-    owner  => root, group => 0, mode => '0644',
+    mode   => '0644',
+    owner  => 'root',
+    group  => 0,
     notify => Exec['apt_updated'],
   }
 
