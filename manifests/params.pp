@@ -9,14 +9,21 @@ class apt::params () {
   $ubuntu_url = 'http://archive.ubuntu.com/ubuntu'
   $backports_url = $::debian_codename ? {
     'squeeze'  => 'http://backports.debian.org/debian-backports/',
-    default => $::operatingsystem ? {
-      'Ubuntu' => $ubuntu_url,
-      default  => $debian_url,
-    }
+    default => false,
   }
   $lts_url = $debian_url
   $volatile_url = 'http://volatile.debian.org/debian-volatile/'
-  $repos = 'auto'
+  case $::operatingsystem {
+    'debian': {
+      $repos = 'main contrib non-free'
+    }
+    'ubuntu': {
+      $repos = 'main restricted universe multiverse'
+    }
+    default: {
+      fail("Unsupported system '${::operatingsystem}'.")
+    }
+  }
   $custom_preferences = ''
   $custom_key_dir = false
 }
