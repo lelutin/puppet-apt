@@ -49,6 +49,9 @@ Ubuntu support is lagging behind but not absent either.
 
 ## Upgrade Notice<a name="upgrade-notice"></a>
 
+ * The `$apt_cron_hours` global variable is deprecated.
+   Use `apt::cron::dist_upgrade`'s `cron_hours` parameter instead.
+
  * The default value of the `$repos` parameter was removed since the logic is
    now in the `apt::params` class. If you have explicitly set `$repos` to
    'auto' in your manifests, you should remove this.
