@@ -1,5 +1,9 @@
 class apt::reboot_required_notify::jessie ($ensure = present) {
 
+  if $::operatingsystemmajrelease == 8 and ! $::apt::use_backports {
+    fail('apt::reboot_required_notify requires $apt::use_backports on Jessie')
+  }
+
   $pinning_ensure = $::operatingsystemmajrelease ? {
     8       => present,
     default => absent,
