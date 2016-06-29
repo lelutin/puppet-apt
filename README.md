@@ -644,10 +644,32 @@ To run pupept rspec tests:
     bundle install --path vendor/bundle
     bundle exec rake spec
 
+Verbose Output:
+
+    bundle exec rake spec SPEC_OPTS='--format documentation'
+
 Using different facter/puppet versions:
 
     FACTER_GEM_VERSION=1.6.10 PUPPET_GEM_VERSION=2.7.23 bundle install --path vendor/bundle
     bundle exec rake spec
+
+## Acceptance Tests<a name="acceptance-tests"></a>
+
+At the moment, we use [beaker together with docker](https://github.com/puppetlabs/beaker/blob/master/docs/Docker-Support.md)
+to do acceptance testing.
+Be sure to have a recent docker version installed.
+
+List configured nodesets:
+
+    bundle exec rake beaker_nodes
+
+Run tests on default node (Debian Jessie):
+
+    bundle exec rake beaker
+
+Run different nodeset:
+
+    BEAKER_set="debian-8-x86_64-docker" bundle exec rspec spec/acceptance/*_spec.rb
 
 
 # Licensing<a name="licensing"></a>
