@@ -29,6 +29,7 @@
   * [File\['apt_config'\]](#fileapt_config)
   * [Exec\['apt_updated'\]](#execapt_updated)
 * [Tests](#tests)
+  * [Acceptance Tests](#acceptance-tests)
 * [Licensing](#licensing)
 
 
@@ -49,6 +50,10 @@ Ubuntu support is lagging behind but not absent either.
 
 ## Upgrade Notice<a name="upgrade-notice"></a>
 
+  * The default value of the `$repos` parameter was removed since the logic is
+    now in the `apt::params` class. If you have explicitly set `$repos` to
+    'auto' in your manifests, you should remove this.
+ 
  * The `disable_update` parameter has been removed. The main apt class
    defaults to *not* run an `apt-get update` on every run anyway so this
    parameter seems useless.
@@ -635,11 +640,33 @@ To run pupept rspec tests:
     bundle install --path vendor/bundle
     bundle exec rake spec
 
+Verbose Output:
+ 
+      bundle exec rake spec SPEC_OPTS='--format documentation'
+
 Using different facter/puppet versions:
 
     FACTER_GEM_VERSION=1.6.10 PUPPET_GEM_VERSION=2.7.23 bundle install --path vendor/bundle
     bundle exec rake spec
 
+## Acceptance Tests<a name="acceptance-tests"></a>
+
+At the moment, we use [beaker together with docker](https://github.com/puppetlabs/beaker/blob/master/docs/Docker-Support.md)
+to do acceptance testing.
+Be sure to have a recent docker version installed.
+
+List configured nodesets:
+
+   bundle exec rake beaker_nodes
+
+Run tests on default node (Debian Jessie):
+
+   bundle exec rake beaker
+
+Run different nodeset:
+
+   BEAKER_set="debian-8-x86_64-docker" bundle exec rspec spec/acceptance/*_spec.rb
+ 
 
 # Licensing<a name="licensing"></a>
 
