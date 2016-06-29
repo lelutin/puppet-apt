@@ -4,7 +4,7 @@
 ### Debian current: <%= codename=scope.lookupvar('::debian_codename') %>
 
 # basic
-deb <%= debian_url=scope.lookupvar('apt::debian_url') %> <%= codename %> <%= lrepos=scope.lookupvar('apt::real_repos') %>
+deb <%= debian_url=scope.lookupvar('apt::debian_url') %> <%= codename %> <%= lrepos=scope.lookupvar('apt::repos') %>
 <% if include_src=scope.lookupvar('apt::include_src')  -%>
 deb-src <%= debian_url %> <%= codename %> <%= lrepos %>
 <% end -%>

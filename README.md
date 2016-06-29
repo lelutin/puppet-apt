@@ -49,6 +49,10 @@ Ubuntu support is lagging behind but not absent either.
 
 ## Upgrade Notice<a name="upgrade-notice"></a>
 
+ * The default value of the `$repos` parameter was removed since the logic is
+   now in the `apt::params` class. If you have explicitly set `$repos` to
+   'auto' in your manifests, you should remove this.
+
  * The `disable_update` parameter has been removed. The main apt class
    defaults to *not* run an `apt-get update` on every run anyway so this
    parameter seems useless.
