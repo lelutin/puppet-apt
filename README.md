@@ -642,7 +642,7 @@ To run pupept rspec tests:
 
 Verbose Output:
  
-      bundle exec rake spec SPEC_OPTS='--format documentation'
+    bundle exec rake spec SPEC_OPTS='--format documentation'
 
 Using different facter/puppet versions:
 
@@ -657,15 +657,15 @@ Be sure to have a recent docker version installed.
 
 List configured nodesets:
 
-   bundle exec rake beaker_nodes
+    bundle exec rake beaker_nodes
 
 Run tests on default node (Debian Jessie):
 
-   bundle exec rake beaker
+    bundle exec rake beaker
 
 Run different nodeset:
 
-   BEAKER_set="debian-8-x86_64-docker" bundle exec rspec spec/acceptance/*_spec.rb
+    BEAKER_set="debian-8-x86_64-docker" bundle exec rspec spec/acceptance/*_spec.rb
  
 
 # Licensing<a name="licensing"></a>
@@ -677,4 +677,3 @@ The GPL version 3 license text can be found in the "LICENSE" file accompanying
 this puppet module, or at the following URL:
 
 http://www.gnu.org/licenses/gpl-3.0.html
-
