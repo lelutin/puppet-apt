@@ -23,12 +23,13 @@
   * [apt::preseeded_package](#apt-preseeded_package)
   * [apt::sources_list](#apt-sources_list)
   * [apt::key](#apt-key)
-  * [apt::key::plain](#apt-key-plain)
+  * [`apt::key::plain`](#apt-key-plain)
   * [apt::upgrade_package](#apt-upgrade_package)
 * [Resources](#ressources)
   * [File\['apt_config'\]](#fileapt_config)
   * [Exec\['apt_updated'\]](#execapt_updated)
 * [Tests](#tests)
+  * [Acceptance Tests](#acceptance-tests)
 * [Licensing](#licensing)
 
 
@@ -55,7 +56,7 @@ Ubuntu support is lagging behind but not absent either.
  * The default value of the `$repos` parameter was removed since the logic is
    now in the `apt::params` class. If you have explicitly set `$repos` to
    'auto' in your manifests, you should remove this.
-
+ 
  * The `disable_update` parameter has been removed. The main apt class
    defaults to *not* run an `apt-get update` on every run anyway so this
    parameter seems useless.
@@ -79,17 +80,16 @@ Ubuntu support is lagging behind but not absent either.
    instantiating the class with those variables instead. For example, if you 
    had the following in your manifests:
 
-    $apt_debian_url = 'http://localhost:9999/debian/'
-    $apt_use_next_release = true
-    include apt
+       $apt_debian_url = 'http://localhost:9999/debian/'
+       $apt_use_next_release = true
+       include apt
  
    you will need to remove the variables, and the include and instead do
    the following:
 
-    class {
-      'apt':
-        debian_url       => 'http://localhost:9999/debian/',
-        use_next_release => true;
+    class { 'apt':
+      debian_url       => 'http://localhost:9999/debian/',
+      use_next_release => true;
     }
 
    previously, you could manually set `$lsbdistcodename` which would enable forced
@@ -101,26 +101,24 @@ Ubuntu support is lagging behind but not absent either.
    you to trigger upgrades:
 
     include apt::dist_upgrade
-    class {
-      'apt':
-        codename => 'wheezy',
-        notify   => Exec['apt_dist-upgrade'];
+    class { 'apt':
+      codename => 'wheezy',
+      notify   => Exec['apt_dist-upgrade'];
     }
 
  * the `apticron` class has been moved to a parameterized class.  if you were
    including this class before, you will need to move to instantiating the
    class instead. For example, if you had the following in your manifests:
 
-    $apticron_email = 'foo@example.com'
-    $apticron_notifynew = '1'
-    ... any $apticron_* variables
-    include apticron
+       $apticron_email = 'foo@example.com'
+       $apticron_notifynew = '1'
+       ... any $apticron_* variables
+       include apticron
 
    you will need to remove the variables, and the include and instead do the
    following:
 
-    class {
-    'apt::apticron':
+    class { 'apt::apticron':
       email     => 'foo@example.com',
       notifynew => '1';
     }
@@ -130,16 +128,15 @@ Ubuntu support is lagging behind but not absent either.
    to move to instantiating the class with those variables instead. For example,
    if you had the following in your manifests:
 
-    $apt_listchanges_email = 'foo@example.com'
-    ... any $apt_listchanges_* variables
-    include apt::listchanges
+       $apt_listchanges_email = 'foo@example.com'
+       ... any $apt_listchanges_* variables
+       include apt::listchanges
 
    you will need to remove the variables, and the include and instead do the
    following:
  
-    class {
-      'apt::listchanges':
-        email => 'foo@example.com';
+    class { 'apt::listchanges':
+      email => 'foo@example.com';
     }
    
  * the `apt::proxy_client` class has been moved to a paramterized class. if you
@@ -147,18 +144,17 @@ Ubuntu support is lagging behind but not absent either.
    to move to instantiating the class with those variables instead. For example,
    if you had the following in your manifests:
 
-    $apt_proxy = 'http://proxy.domain'
-    $apt_proxy_port = 666
-    include apt::proxy_client
+       $apt_proxy = 'http://proxy.domain'
+       $apt_proxy_port = 666
+       include apt::proxy_client
 
    you will need to remove the variables, and the include and instead do the
    following:
 
-    class {
-      'apt::proxy_client':
-        proxy => 'http://proxy.domain',
-        port  => '666';
-    }
+       class { 'apt::proxy_client':
+         proxy => 'http://proxy.domain',
+         port  => '666';
+       }
 
 
 # Requirements<a name="requirements"></a>
@@ -570,7 +566,7 @@ use `apt::key::plain`.
 The `.gpg` extension is compulsory for `apt` to pickup the key properly.
 
 
-## apt::key::plain<a name="apt-key-plain"></a>
+## `apt::key::plain`<a name="apt-key-plain"></a>
 
 Deploys a secure apt OpenPGP key. This usually accompanies the
 sources.list snippets above for third party repositories. For example,
@@ -647,11 +643,33 @@ To run pupept rspec tests:
     bundle install --path vendor/bundle
     bundle exec rake spec
 
+Verbose Output:
+ 
+    bundle exec rake spec SPEC_OPTS='--format documentation'
+
 Using different facter/puppet versions:
 
     FACTER_GEM_VERSION=1.6.10 PUPPET_GEM_VERSION=2.7.23 bundle install --path vendor/bundle
     bundle exec rake spec
 
+## Acceptance Tests<a name="acceptance-tests"></a>
+
+At the moment, we use [beaker together with docker](https://github.com/puppetlabs/beaker/blob/master/docs/Docker-Support.md)
+to do acceptance testing.
+Be sure to have a recent docker version installed.
+
+List configured nodesets:
+
+    bundle exec rake beaker_nodes
+
+Run tests on default node (Debian Jessie):
+
+    bundle exec rake beaker
+
+Run different nodeset:
+
+    BEAKER_set="debian-8-x86_64-docker" bundle exec rspec spec/acceptance/*_spec.rb
+ 
 
 # Licensing<a name="licensing"></a>
 

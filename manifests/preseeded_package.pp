@@ -1,3 +1,4 @@
+# Install a package with a preseed file to automatically answer some questions.
 define apt::preseeded_package (
   $ensure = 'installed',
   $content = ''
@@ -10,7 +11,9 @@ define apt::preseeded_package (
 
   file { $seedfile:
     content => $real_content,
-    mode    => '0600', owner => root, group => root,
+    mode    => '0600',
+    owner   => 'root',
+    group   => 0,
   }
 
   package { $name:

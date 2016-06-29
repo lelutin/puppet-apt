@@ -1,3 +1,5 @@
+# Install a package either to a certain version, or while making sure that it's
+# always the latest version that's installed.
 define apt::upgrade_package (
   $version = ''
 ) {
@@ -23,7 +25,7 @@ define apt::upgrade_package (
   }
 
   exec { "apt-get -q -y -o 'DPkg::Options::=--force-confold' install ${name}${version_suffix}":
-    onlyif  => [ "grep-status -F Status installed -a -P $name -q", "apt-show-versions -u $name | grep -q upgradeable" ],
+    onlyif  => [ "grep-status -F Status installed -a -P ${name} -q", "apt-show-versions -u ${name} | grep -q upgradeable" ],
     require => Package['apt-show-versions', 'dctrl-tools'],
     before  => Exec['apt_updated']
   }
