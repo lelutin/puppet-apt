@@ -1,30 +1,33 @@
+# This file is managed by puppet
+# all local modifications will be overwritten
+
 Explanation: Debian <%= codename=scope.lookupvar('::debian_codename') %>
 Package: *
 Pin: release o=Debian,n=<%= codename %>
 Pin-Priority: 990
 
+<% if use_volatile=scope.lookupvar('apt::use_volatile') -%>
 Explanation: Debian <%= codename %>-updates
 Package: *
 Pin: release o=Debian,n=<%= codename %>-updates
 Pin-Priority: 990
+<%- end -%>
 
+<% if (use_lts=scope.lookupvar('apt::use_lts')) && (scope.lookupvar('::debian_lts') == "true") -%>
 Explanation: Debian <%= codename %>-lts
 Package: *
 Pin: release o=Debian,n=<%= codename %>-lts
 Pin-Priority: 990
+<%- end -%>
 
-Explanation: Debian <%= next_codename=scope.lookupvar('::debian_nextcodename') %>
+<% if (next_codename=scope.lookupvar('::debian_nextcodename')) && (next_codename != "experimental") -%>
+Explanation: Debian <%= next_codename %>
 Package: *
 Pin: release o=Debian,n=<%= next_codename %>
 Pin-Priority: 2
-
-Explanation: Debian sid
-Package: *
-Pin: release o=Debian,n=sid
-Pin-Priority: 1
+<%- end -%>
 
 Explanation: Debian fallback
 Package: *
 Pin: release o=Debian
 Pin-Priority: -10
-
