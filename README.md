@@ -77,9 +77,9 @@ Ubuntu support is lagging behind but not absent either.
    instantiating the class with those variables instead. For example, if you 
    had the following in your manifests:
 
-    $apt_debian_url = 'http://localhost:9999/debian/'
-    $apt_use_next_release = true
-    include apt
+       $apt_debian_url = 'http://localhost:9999/debian/'
+       $apt_use_next_release = true
+       include apt
  
    you will need to remove the variables, and the include and instead do
    the following:
@@ -107,10 +107,10 @@ Ubuntu support is lagging behind but not absent either.
    including this class before, you will need to move to instantiating the
    class instead. For example, if you had the following in your manifests:
 
-    $apticron_email = 'foo@example.com'
-    $apticron_notifynew = '1'
-    ... any $apticron_* variables
-    include apticron
+       $apticron_email = 'foo@example.com'
+       $apticron_notifynew = '1'
+       ... any $apticron_* variables
+       include apticron
 
    you will need to remove the variables, and the include and instead do the
    following:
@@ -125,9 +125,9 @@ Ubuntu support is lagging behind but not absent either.
    to move to instantiating the class with those variables instead. For example,
    if you had the following in your manifests:
 
-    $apt_listchanges_email = 'foo@example.com'
-    ... any $apt_listchanges_* variables
-    include apt::listchanges
+       $apt_listchanges_email = 'foo@example.com'
+       ... any $apt_listchanges_* variables
+       include apt::listchanges
 
    you will need to remove the variables, and the include and instead do the
    following:
@@ -141,17 +141,17 @@ Ubuntu support is lagging behind but not absent either.
    to move to instantiating the class with those variables instead. For example,
    if you had the following in your manifests:
 
-    $apt_proxy = 'http://proxy.domain'
-    $apt_proxy_port = 666
-    include apt::proxy_client
+       $apt_proxy = 'http://proxy.domain'
+       $apt_proxy_port = 666
+       include apt::proxy_client
 
    you will need to remove the variables, and the include and instead do the
    following:
 
-    class { 'apt::proxy_client':
-      proxy => 'http://proxy.domain',
-      port  => '666';
-    }
+       class { 'apt::proxy_client':
+         proxy => 'http://proxy.domain',
+         port  => '666';
+       }
 
 
 # Requirements<a name="requirements"></a>
