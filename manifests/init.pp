@@ -67,8 +67,6 @@ class apt(
       include apt::preferences::absent
     }
     default: {
-      # When squeeze becomes the stable branch, transform this file's header
-      # into a preferences.d file
       include apt::preferences
     }
   }
