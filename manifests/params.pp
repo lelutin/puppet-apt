@@ -7,10 +7,6 @@ class apt::params () {
   $debian_url = 'http://httpredir.debian.org/debian/'
   $security_url = 'http://security.debian.org/'
   $ubuntu_url = 'http://archive.ubuntu.com/ubuntu'
-  $backports_url = $::debian_codename ? {
-    'squeeze'  => 'http://backports.debian.org/debian-backports/',
-    default => false,
-  }
   $lts_url = $debian_url
   $volatile_url = 'http://volatile.debian.org/debian-volatile/'
   case $::operatingsystem {
