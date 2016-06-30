@@ -204,7 +204,7 @@ Example usage:
 ### use_lts
 
   If this variable is set to true the CODENAME-lts sources (such as
-  squeeze-lts) are added.
+  wheezy-lts) are added.
 
   By default this is false for backward compatibility with older
   versions of this module.
@@ -212,7 +212,7 @@ Example usage:
 ### use_volatile
 
   If this variable is set to true the CODENAME-updates sources (such as
-  squeeze-updates) are added.
+  wheezy-updates) are added.
 
   By default this is false for backward compatibility with older
   versions of this module.
@@ -234,11 +234,11 @@ Example usage:
   By default this is false for backward compatibility with older
   versions of this module.
 
-### debian_url, security_url, backports_url, volatile_url
+### debian_url, security_url, volatile_url
 
   These variables allow to override the default APT mirrors respectively
   used for the standard Debian archives, the Debian security archive,
-  the Debian official backports and the Debian Volatile archive.
+  and the Debian Volatile archive.
 
 ### ubuntu_url
 
@@ -481,7 +481,7 @@ A way to add pinning information to files in `/etc/apt/preferences.d/`
 Examples:
 
     apt::preferences_snippet { 'irssi-plugin-otr':
-      release  => 'squeeze-backports',
+      release  => 'jessie-backports',
       priority => 999,
     }
 
