@@ -8,7 +8,6 @@
 * [Classes](#classes)
   * [apt](#apt)
   * [apt::apticron](#apt-apticron)
-  * [apt::cron::download](#apt-cron-download)
   * [apt::cron::dist_upgrade](#apt-cron-dist_upgrade)
   * [apt::dist_upgrade](#apt-dist_upgrade)
   * [apt::dist_upgrade::initiator](#apt-dist_upgrade-initiator)
@@ -49,6 +48,9 @@ prevent accidental upgrades.
 Ubuntu support is lagging behind but not absent either.
 
 ## Upgrade Notice<a name="upgrade-notice"></a>
+
+ * The `$apt_cron_hours` global variable is deprecated.
+   Use `apt::cron::dist_upgrade`'s `cron_hours` parameter instead.
 
  * The default value of the `$repos` parameter was removed since the logic is
    now in the `apt::params` class. If you have explicitly set `$repos` to
@@ -321,29 +323,19 @@ Example usage:
     }
 
 
-## apt::cron::download<a name="apt-cron-download"></a>
-
-This class sets up `cron-apt` so that it downloads upgradable packages, does not
-actually do any upgrade and emails when the output changes.
-
-`cron-apt` defaults to run at 4 AM. You may want to set the
-`$apt_cron_hours` variable before you include the class: its value will
-be passed as the "hours" parameter of a cronjob. Example:
-
-    # Run cron-apt every three hours
-    $apt_cron_hours = '*/3'
-
-Note that the default 4 AM cronjob won't be disabled.
-
-
 ## apt::cron::dist_upgrade<a name="apt-cron-dist_upgrade"></a>
 
 This class sets up cron-apt so that it dist-upgrades the system and
 emails when upgrades are performed.
 
-See [apt::cron::download](#apt-cron-download) above if you need to run `cron-apt` more often
-than once a day.
+`cron-apt` defaults to run at 4 AM. You may want to set the
+`$cron_hours` class parameter before you include the class: its value will
+be passed as the "hours" parameter of a cronjob. Example:
 
+    # Run cron-apt every three hours
+    class { 'apt::cron::dist_upgrade': cron_hours => '*/3' }
+
+Note that the default 4 AM cronjob won't be disabled.
 
 ## apt::dist_upgrade<a name="apt-dist_upgrade"></a>
 
@@ -356,6 +348,11 @@ classes may inherit from this one and add to its subscription list
 using the plusignment (`+>`) operator. A real-world example can be
 seen in the `apt::dist_upgrade::initiator` source.
 
+Parameters:
+
+ * timeout: specified in seconds; the maximum time the `dist-upgrade`
+   command should take. If the command takes longer than the timeout,
+   the command is considered to have failed and will be stopped.
 
 ## apt::dist_upgrade::initiator<a name="apt-dist_upgrade-initiator"></a>
 
