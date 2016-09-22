@@ -1,4 +1,4 @@
-class apt::reboot_required_notify::jessie ($ensure = present) inherits apt{
+class apt::reboot_required_notify::jessie ($ensure = present) inherits apt {
 
   if $::operatingsystemmajrelease == 8 and ! $::apt::use_backports {
     fail('apt::reboot_required_notify requires $apt::use_backports on Jessie')
