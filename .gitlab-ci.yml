@@ -1,7 +1,8 @@
+image: leapcode/ruby
 before_script:
   - ruby -v
-  - gem install bundler --no-ri --no-rdoc
-  - bundle install --jobs $(nproc)  "${FLAGS[@]}"
+  - sudo gem install bundler --no-ri --no-rdoc
+  - sudo bundle install --jobs $(nproc) --without system_tests --path=/var/cache/gitlab-runner/ "${FLAGS[@]}"
 
 # don't fail on lint warnings
 rspec:
