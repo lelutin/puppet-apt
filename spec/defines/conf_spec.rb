@@ -8,7 +8,9 @@ describe 'apt::apt_conf', :type => :define do
     :osfamily => 'Debian',
     :operatingsystem => 'Debian',
     :debian_release  => 'jessie',
+    :debian_codename => 'jessie',
     :lsbdistcodename => 'jessie',
+    :virtual         => 'physical',
     :puppetversion   => Puppet.version, } }
   let :title do
     'norecommends'
