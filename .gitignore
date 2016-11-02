@@ -1,10 +1,7 @@
 /pkg/
 /Gemfile.lock
 /vendor/
-/spec/fixtures/manifests/*
-/spec/fixtures/modules/*
-!/spec/fixtures/modules/apt
-!/spec/fixtures/modules/apt/*
+/spec/fixtures
 /log
 /.vagrant/
 /.bundle/
