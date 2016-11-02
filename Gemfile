@@ -1,10 +1,8 @@
 source "https://rubygems.org"
 
-group :test do
+group :development, :unit_tests do
   gem "rake"
   gem "rspec", '< 3.2.0'
-  gem "puppet", ENV['PUPPET_VERSION'] || ENV['GEM_PUPPET_VERSION'] || ENV['PUPPET_GEM_VERSION'] || '~> 3.7.0'
-  gem "facter", ENV['FACTER_VERSION'] || ENV['GEM_FACTER_VERSION'] || ENV['FACTER_GEM_VERSION'] || '~> 2.2.0'
   gem "rspec-puppet"
   gem "puppetlabs_spec_helper"
   gem "metadata-json-lint"
@@ -13,8 +11,12 @@ group :test do
 end
 
 group :system_tests do
-  gem 'beaker',              :require => false
-  gem 'beaker-rspec',        :require => false
-  gem 'beaker_spec_helper',  :require => false
-  gem 'serverspec',          :require => false
+  gem 'beaker'
+  gem 'beaker-rspec'
+  gem 'beaker_spec_helper'
+  gem 'serverspec'
 end
+
+gem "puppet", ENV['PUPPET_VERSION'] || ENV['GEM_PUPPET_VERSION'] || ENV['PUPPET_GEM_VERSION'] || '~> 3.7.0'
+gem "facter", ENV['FACTER_VERSION'] || ENV['GEM_FACTER_VERSION'] || ENV['FACTER_GEM_VERSION'] || '~> 2.2.0'
+

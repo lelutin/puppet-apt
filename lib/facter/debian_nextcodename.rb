@@ -4,8 +4,10 @@ rescue LoadError
   require "#{File.dirname(__FILE__)}/util/debian"
 end
 
-def debian_codename_to_next(codename)
-  if codename == "sid"
+def debian_codename_to_next(codename, release)
+  if release == "testing"
+    return "sid"
+  elsif release == "unstable"
     return "experimental"
   else
     codenames = Facter::Util::Debian::CODENAMES
@@ -18,6 +20,6 @@ end
 Facter.add(:debian_nextcodename) do
   confine :operatingsystem => 'Debian'
   setcode do
-    debian_codename_to_next(Facter.value('debian_codename'))
+    debian_codename_to_next(Facter.value('debian_codename'), Facter.value('debian_release'))
   end
 end
