@@ -1,15 +1,15 @@
 define apt::apt_conf(
   $ensure = 'present',
-  $source = '',
+  $source = undef,
   $content = undef,
   $refresh_apt = true )
 {
 
-  if $source == '' and $content == undef {
+  if $source == undef and $content == undef {
     fail("One of \$source or \$content must be specified for apt_conf ${name}")
   }
 
-  if $source != '' and $content != undef {
+  if $source != undef and $content != undef {
     fail("Only one of \$source or \$content must specified for apt_conf ${name}")
   }
 
