@@ -1,0 +1,6 @@
+fixtures:
+  repositories:
+    "common":
+      "repo": "https://gitlab.com/shared-puppet-modules-group/common.git"
+  symlinks:
+    "apt": "#{source_dir}"
