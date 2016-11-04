@@ -2,9 +2,9 @@ define apt::preferences_snippet (
   $priority = undef,
   $package = false,
   $ensure = 'present',
-  $source = '',
-  $release = '',
-  $pin = ''
+  $source = undef,
+  $release = undef,
+  $pin = undef
 ) {
 
   $real_package = $package ? {
@@ -36,9 +36,9 @@ define apt::preferences_snippet (
   }
 
   case $source {
-    '': {
+    undef: {
       case $release {
-        '': {
+        undef: {
           File["/etc/apt/preferences.d/${name}"]{
             content => template('apt/preferences_snippet.erb')
           }

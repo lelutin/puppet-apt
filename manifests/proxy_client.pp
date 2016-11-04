@@ -3,7 +3,7 @@ class apt::proxy_client(
   $port = '3142',
 ){
 
-  apt_conf { '20proxy':
+  ::apt::apt_conf { '20proxy':
     content => template('apt/20proxy.erb'),
   }
 }
