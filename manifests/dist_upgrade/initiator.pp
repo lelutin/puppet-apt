@@ -9,11 +9,9 @@ class apt::dist_upgrade::initiator inherits apt::dist_upgrade {
     group    => 0,
     path     => $initiator_abs,
     checksum => md5,
-    source   => [
-                  "puppet:///modules/site_apt/${::fqdn}/${initiator}",
+    source   => [ "puppet:///modules/site_apt/${::fqdn}/${initiator}",
                   "puppet:///modules/site_apt/${initiator}",
-                  "puppet:///modules/apt/${initiator}",
-                ],
+                  "puppet:///modules/apt/${initiator}" ],
   }
 
   Exec['apt_dist-upgrade'] {

@@ -117,13 +117,18 @@ class apt (
   }
 
   # workaround for preseeded_package component
-  file { [ '/var/cache', '/var/cache/local', '/var/cache/local/preseeding' ]: ensure => directory }
+  file {
+    [ '/var/cache',
+      '/var/cache/local',
+      '/var/cache/local/preseeding' ]:
+        ensure => directory;
+  }
 
   exec { 'update_apt':
     command     => '/usr/bin/apt-get update',
-    require     => [
-      File['/etc/apt/apt.conf.d', '/etc/apt/preferences' ],
-      File['/etc/apt/sources.list'] ],
+    require     => [ File['/etc/apt/apt.conf.d',
+                          '/etc/apt/preferences',
+                          '/etc/apt/sources.list'] ],
     refreshonly => true,
     # Another Semaphor for all packages to reference
     alias       => [ 'apt_updated', 'refresh_apt']
