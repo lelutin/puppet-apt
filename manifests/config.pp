@@ -1,0 +1,91 @@
+class apt::config inherits apt {
+
+  $sources_content = $custom_sources_list ? {
+    ''      => template( "apt/${::operatingsystem}/sources.list.erb"),
+    default => $custom_sources_list
+  }
+  file {
+    # include main and security
+    # additional sources should be included via the apt::sources_list define
+    '/etc/apt/sources.list':
+      content => $sources_content,
+      notify  => Exec['apt_updated'],
+      owner   => root,
+      group   => 0,
+      mode    => '0644';
+  }
+
+  # workaround for preseeded_package component
+  file {
+    [ '/var/cache',
+      '/var/cache/local',
+      '/var/cache/local/preseeding' ]:
+        ensure => directory;
+  }
+
+  ::apt::apt_conf { '02show_upgraded':
+    source => [ "puppet:///modules/site_apt/${::fqdn}/02show_upgraded",
+                'puppet:///modules/site_apt/02show_upgraded',
+                'puppet:///modules/apt/02show_upgraded' ]
+  }
+
+  if ( $::virtual == 'vserver' ) {
+    ::apt::apt_conf { '03clean_vserver':
+      source => [ "puppet:///modules/site_apt/${::fqdn}/03clean_vserver",
+                  'puppet:///modules/site_apt/03clean_vserver',
+                  'puppet:///modules/apt/03clean_vserver' ],
+      alias => '03clean';
+    }
+  }
+  else {
+    ::apt::apt_conf { '03clean':
+      source => [ "puppet:///modules/site_apt/${::fqdn}/03clean",
+                  'puppet:///modules/site_apt/03clean',
+                  'puppet:///modules/apt/03clean' ]
+    }
+  }
+
+  if ($use_backports and !($::debian_release in ['testing', 'unstable', 'experimental'])) {
+    apt::sources_list {
+      'backports':
+        content => "deb ${debian_url} ${::debian_codename}-backports ${apt::repos}",
+    }
+    if $include_src {
+      apt::sources_list {
+        'backports-src':
+          content => "deb-src ${debian_url} ${::debian_codename}-backports ${apt::repos}",
+      }
+    }
+  }
+
+  if $custom_key_dir {
+    file { "${apt_base_dir}/keys.d":
+      source  => $custom_key_dir,
+      recurse => true,
+      owner   => root,
+      group   => root,
+      mode    => '0755',
+    }
+    exec { 'custom_keys':
+      command     => "find ${apt_base_dir}/keys.d -type f -exec apt-key add '{}' \\;",
+      subscribe   => File["${apt_base_dir}/keys.d"],
+      refreshonly => true,
+      notify      => Exec[refresh_apt]
+    }
+    if $custom_preferences != false {
+      Exec['custom_keys'] {
+        before => File['apt_config']
+      }
+    }
+  }
+
+  exec { 'update_apt':
+    command     => '/usr/bin/apt-get update',
+    require     => [ File['/etc/apt/apt.conf.d',
+                          '/etc/apt/preferences',
+                          '/etc/apt/sources.list'] ],
+    refreshonly => true,
+    # Another Semaphor for all packages to reference
+    alias       => [ 'apt_updated', 'refresh_apt']
+  }
+}
