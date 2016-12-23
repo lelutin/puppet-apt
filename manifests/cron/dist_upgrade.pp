@@ -38,7 +38,7 @@ dist-upgrade -y -o APT::Get::Show-Upgraded=true -o 'DPkg::Options::=--force-conf
     owner   => root,
     group   => 0,
     mode    => '0644',
-    require => Package[cron-apt];
+    require => Package['cron-apt'];
   }
 
   file { '/etc/cron-apt/config.d/MAILON':
@@ -46,6 +46,6 @@ dist-upgrade -y -o APT::Get::Show-Upgraded=true -o 'DPkg::Options::=--force-conf
     owner   => root,
     group   => 0,
     mode    => '0644',
-    require => Package[cron-apt];
+    require => Package['cron-apt'];
   }
 }
