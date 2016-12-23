@@ -2,7 +2,9 @@ class apt::cron::dist_upgrade (
   $cron_hours = '',
 ) {
 
-  package { 'cron-apt': ensure => installed }
+  package { 'cron-apt':
+    ensure => installed
+  }
 
   case $cron_hours {
     '': {}
@@ -27,7 +29,9 @@ dist-upgrade -y -o APT::Get::Show-Upgraded=true -o 'DPkg::Options::=--force-conf
     ensure => absent,
   }
 
-  package { 'apt-listbugs': ensure => absent }
+  package { 'apt-listbugs':
+    ensure => absent
+  }
 
   file { '/etc/cron-apt/action.d/4-dist-upgrade':
     content => $action,

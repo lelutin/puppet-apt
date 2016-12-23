@@ -8,7 +8,7 @@ class apt::unattended_upgrades (
 ) {
 
   package { 'unattended-upgrades':
-    ensure  => $ensure_version
+    ensure  => $ensure_version,
   }
 
   # For some reason, this directory is sometimes absent, which causes

@@ -7,7 +7,9 @@ class apt::listchanges(
   $saveseen = '/var/lib/apt/listchanges.db',
   $which = 'both'
 ){
-  package { 'apt-listchanges': ensure => $ensure_version }
+  package { 'apt-listchanges':
+    ensure => $ensure_version
+  }
 
   file { '/etc/apt/listchanges.conf':
     content => template($apt::listchanges::config),

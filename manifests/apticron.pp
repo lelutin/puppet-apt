@@ -12,7 +12,9 @@ class apt::apticron(
   $customsubject = ''
 ) {
 
-  package { 'apticron': ensure => $ensure_version }
+  package { 'apticron':
+    ensure => $ensure_version
+  }
 
   file { '/etc/apticron/apticron.conf':
     content => template($apt::apticron::config),

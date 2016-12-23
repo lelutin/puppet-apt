@@ -74,7 +74,9 @@ class apt(
   include apt::dot_d_directories
 
   ## This package should really always be current
-  package { 'debian-archive-keyring': ensure => latest }
+  package { 'debian-archive-keyring':
+    ensure => latest
+  }
 
   if ($use_backports and !($::debian_release in ['testing', 'unstable', 'experimental'])) {
     apt::sources_list {

@@ -7,5 +7,7 @@ class apt::dselect {
     line => 'expert',
   }
 
-  package { 'dselect': ensure => installed }
+  package { 'dselect':
+    ensure => installed
+  }
 }
