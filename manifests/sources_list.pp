@@ -2,7 +2,7 @@
 define apt::sources_list (
   $ensure  = 'present',
   $source  = undef,
-  $content = undef
+  $content = undef,
 ) {
 
   if $ensure == 'present' {

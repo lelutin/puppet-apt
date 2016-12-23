@@ -1,10 +1,10 @@
 define apt::preferences_snippet (
   $priority = undef,
-  $package = false,
-  $ensure = 'present',
-  $source = undef,
-  $release = undef,
-  $pin = undef
+  $package  = false,
+  $ensure   = 'present',
+  $source   = undef,
+  $release  = undef,
+  $pin      = undef,
 ) {
 
   $real_package = $package ? {

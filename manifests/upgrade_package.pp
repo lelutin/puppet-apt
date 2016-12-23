@@ -1,7 +1,7 @@
 # Install a package either to a certain version, or while making sure that it's
 # always the latest version that's installed.
 define apt::upgrade_package (
-  $version = ''
+  $version = '',
 ) {
 
   $version_suffix = $version ? {

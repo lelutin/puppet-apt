@@ -1,9 +1,9 @@
-define apt::apt_conf(
-  $ensure = 'present',
-  $source = undef,
-  $content = undef,
-  $refresh_apt = true )
-{
+define apt::apt_conf (
+  $ensure      = 'present',
+  $source      = undef,
+  $content     = undef,
+  $refresh_apt = true,
+) {
 
   if $source == undef and $content == undef {
     fail("One of \$source or \$content must be specified for apt_conf ${name}")

@@ -1,10 +1,10 @@
 class apt::unattended_upgrades (
-  $config_content = undef,
-  $config_template = 'apt/50unattended-upgrades.erb',
-  $mailonlyonerror = true,
-  $mail_recipient = 'root',
+  $config_content       = undef,
+  $config_template      = 'apt/50unattended-upgrades.erb',
+  $mailonlyonerror      = true,
+  $mail_recipient       = 'root',
   $blacklisted_packages = [],
-  $ensure_version = present
+  $ensure_version       = 'present',
 ) {
 
   package { 'unattended-upgrades':

@@ -1,8 +1,10 @@
 # Install a package with a preseed file to automatically answer some questions.
+
 define apt::preseeded_package (
-  $ensure = 'installed',
-  $content = ''
+  $ensure  = 'installed',
+  $content = '',
 ) {
+
   $seedfile = "/var/cache/local/preseeding/${name}.seeds"
   $real_content = $content ? {
     ''      => template ( "site_apt/${::debian_codename}/${name}.seeds" ),

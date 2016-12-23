@@ -1,6 +1,6 @@
 class apt::dist_upgrade::initiator inherits apt::dist_upgrade {
 
-  $initiator = 'upgrade_initiator'
+  $initiator     = 'upgrade_initiator'
   $initiator_abs = "${apt::apt_base_dir}/${initiator}"
 
   file { 'apt_upgrade_initiator':
