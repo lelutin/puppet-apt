@@ -18,14 +18,14 @@ define apt::preferences_snippet (
     }
 
     if $priority == undef {
-      fail('apt::preferences_snippet requires the \'priority\' argument to be set')
+      fail("apt::preferences_snippet requires the 'priority' argument to be set")
     }
 
     if !$pin and !$release {
-      fail('apt::preferences_snippet requires one of the \'pin\' or \'release\' argument to be set')
+      fail("apt::preferences_snippet requires one of the 'pin' or 'release' argument to be set")
     }
     if $pin and $release {
-      fail('apt::preferences_snippet requires either a \'pin\' or \'release\' argument, not both')
+      fail("apt::preferences_snippet requires either a 'pin' or 'release' argument, not both")
     }
   }
 
