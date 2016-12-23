@@ -1,5 +1,6 @@
 # Install a package either to a certain version, or while making sure that it's
 # always the latest version that's installed.
+
 define apt::upgrade_package (
   $version = '',
 ) {
@@ -27,5 +28,4 @@ define apt::upgrade_package (
     require => Package['apt-show-versions', 'dctrl-tools'],
     before  => Exec['apt_updated']
   }
-
 }

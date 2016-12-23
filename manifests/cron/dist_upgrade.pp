@@ -48,5 +48,4 @@ dist-upgrade -y -o APT::Get::Show-Upgraded=true -o 'DPkg::Options::=--force-conf
     mode    => '0644',
     require => Package[cron-apt];
   }
-
 }

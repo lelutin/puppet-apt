@@ -19,5 +19,4 @@ class apt::dist_upgrade::initiator inherits apt::dist_upgrade {
   Exec['apt_dist-upgrade'] {
     subscribe +> File['apt_upgrade_initiator'],
   }
-
 }

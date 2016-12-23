@@ -1,4 +1,5 @@
 # Configure an apt source
+
 define apt::sources_list (
   $ensure  = 'present',
   $source  = undef,

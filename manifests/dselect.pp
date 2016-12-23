@@ -1,5 +1,6 @@
 # manage dselect, like
 # suppressing the annoying help texts
+
 class apt::dselect {
 
   file_line { 'dselect_expert':

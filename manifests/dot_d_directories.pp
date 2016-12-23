@@ -1,6 +1,7 @@
+# watch .d directories and ensure they are present
+
 class apt::dot_d_directories {
 
-  # watch .d directories and ensure they are present
   file {
     '/etc/apt/apt.conf.d':
       ensure   => directory,
@@ -11,5 +12,4 @@ class apt::dot_d_directories {
       checksum => mtime,
       notify   => Exec['apt_updated'];
   }
-
 }

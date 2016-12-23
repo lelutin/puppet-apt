@@ -8,5 +8,4 @@ class apt::dist_upgrade (
     timeout     => $timeout,
     before      => Exec['apt_updated']
   }
-
 }

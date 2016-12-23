@@ -128,5 +128,4 @@ class apt (
     # Another Semaphor for all packages to reference
     alias       => [ 'apt_updated', 'refresh_apt']
   }
-
 }

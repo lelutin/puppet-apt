@@ -41,5 +41,4 @@ define apt::apt_conf (
       notify => Exec['apt_updated'],
     }
   }
-
 }

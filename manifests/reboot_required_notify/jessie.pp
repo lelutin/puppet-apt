@@ -24,5 +24,4 @@ class apt::reboot_required_notify::jessie ($ensure = present) {
     ensure  => $ensure,
     require => Apt::Preferences_snippet['reboot-notifier'],
   }
-
 }
