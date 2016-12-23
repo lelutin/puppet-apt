@@ -27,7 +27,7 @@ define apt::sources_list (
     mode   => '0644',
     owner  => 'root',
     group  => 0,
-    notify => Exec['apt_updated'],
+    notify => Exec['update_apt'],
   }
 
   if $source {

@@ -26,6 +26,6 @@ define apt::upgrade_package (
   exec { "apt-get -q -y -o 'DPkg::Options::=--force-confold' install ${name}${version_suffix}":
     onlyif  => [ "grep-status -F Status installed -a -P ${name} -q", "apt-show-versions -u ${name} | grep -q upgradeable" ],
     require => Package['apt-show-versions', 'dctrl-tools'],
-    before  => Exec['apt_updated']
+    before  => Exec['update_apt']
   }
 }

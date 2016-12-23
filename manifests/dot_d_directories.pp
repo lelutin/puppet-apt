@@ -6,10 +6,11 @@ class apt::dot_d_directories {
     '/etc/apt/apt.conf.d':
       ensure   => directory,
       checksum => mtime,
-      notify   => Exec['apt_updated'];
+      notify   => Exec['update_apt'];
+
     '/etc/apt/sources.list.d':
       ensure   => directory,
       checksum => mtime,
-      notify   => Exec['apt_updated'];
+      notify   => Exec['update_apt'];
   }
 }

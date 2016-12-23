@@ -1,5 +1,13 @@
 class apt::config inherits apt {
 
+  exec { 'update_apt':
+    command     => '/usr/bin/apt-get update',
+    require     => [ File['/etc/apt/apt.conf.d',
+                          '/etc/apt/preferences',
+                          '/etc/apt/sources.list'] ],
+    refreshonly => true;
+  }
+
   $sources_content = $custom_sources_list ? {
     ''      => template( "apt/${::operatingsystem}/sources.list.erb"),
     default => $custom_sources_list
@@ -9,7 +17,7 @@ class apt::config inherits apt {
     # additional sources should be included via the apt::sources_list define
     '/etc/apt/sources.list':
       content => $sources_content,
-      notify  => Exec['apt_updated'],
+      notify  => Exec['update_apt'],
       owner   => root,
       group   => 0,
       mode    => '0644';
@@ -70,22 +78,12 @@ class apt::config inherits apt {
       command     => "find ${apt_base_dir}/keys.d -type f -exec apt-key add '{}' \\;",
       subscribe   => File["${apt_base_dir}/keys.d"],
       refreshonly => true,
-      notify      => Exec[refresh_apt]
+      notify      => Exec['update_apt'];
     }
     if $custom_preferences != false {
       Exec['custom_keys'] {
         before => File['apt_config']
       }
     }
-  }
-
-  exec { 'update_apt':
-    command     => '/usr/bin/apt-get update',
-    require     => [ File['/etc/apt/apt.conf.d',
-                          '/etc/apt/preferences',
-                          '/etc/apt/sources.list'] ],
-    refreshonly => true,
-    # Another Semaphor for all packages to reference
-    alias       => [ 'apt_updated', 'refresh_apt']
   }
 }
