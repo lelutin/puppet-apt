@@ -1,7 +1,7 @@
 # Install a package with a preseed file to automatically answer some questions.
 
 define apt::preseeded_package (
-  $ensure  = 'installed',
+  $ensure  = 'present',
   $content = '',
 ) {
 

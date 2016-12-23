@@ -3,7 +3,7 @@ class apt::cron::dist_upgrade (
 ) {
 
   package { 'cron-apt':
-    ensure => installed;
+    ensure => present;
   }
 
   case $cron_hours {

@@ -9,6 +9,6 @@ class apt::dselect {
   }
 
   package { 'dselect':
-    ensure => installed;
+    ensure => present;
   }
 }

@@ -13,13 +13,13 @@ define apt::upgrade_package (
 
   if !defined(Package['apt-show-versions']) {
     package { 'apt-show-versions':
-      ensure  => installed,
+      ensure  => present,
     }
   }
 
   if !defined(Package['dctrl-tools']) {
     package { 'dctrl-tools':
-      ensure  => installed,
+      ensure  => present,
     }
   }
 

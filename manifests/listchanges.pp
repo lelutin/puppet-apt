@@ -1,5 +1,5 @@
 class apt::listchanges (
-  $ensure_version = 'installed',
+  $ensure_version = 'present',
   $config         = "apt/${::operatingsystem}/listchanges.erb",
   $frontend       = 'mail',
   $email          = 'root',

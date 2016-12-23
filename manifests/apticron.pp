@@ -1,5 +1,5 @@
 class apt::apticron (
-  $ensure_version      = 'installed',
+  $ensure_version      = 'present',
   $config              = "apt/${::operatingsystem}/apticron.erb",
   $email               = 'root',
   $diff_only           = '1',
