@@ -23,7 +23,7 @@ class apt::unattended_upgrades (
 
   $file_content = $config_content ? {
     undef   => template($config_template),
-    default => $config_content;
+    default => $config_content,
   }
 
   ::apt::apt_conf { '50unattended-upgrades':

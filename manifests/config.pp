@@ -10,7 +10,7 @@ class apt::config inherits apt {
 
   $sources_content = $custom_sources_list ? {
     ''      => template( "apt/${::operatingsystem}/sources.list.erb"),
-    default => $custom_sources_list;
+    default => $custom_sources_list,
   }
   file {
     # include main and security
@@ -82,7 +82,7 @@ class apt::config inherits apt {
     }
     if $custom_preferences != false {
       Exec['custom_keys'] {
-        before => File['apt_config'];
+        before => File['apt_config'],
       }
     }
   }
