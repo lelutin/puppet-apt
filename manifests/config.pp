@@ -10,7 +10,7 @@ class apt::config inherits apt {
 
   $sources_content = $custom_sources_list ? {
     ''      => template( "apt/${::operatingsystem}/sources.list.erb"),
-    default => $custom_sources_list
+    default => $custom_sources_list;
   }
   file {
     # include main and security
@@ -34,7 +34,7 @@ class apt::config inherits apt {
   ::apt::apt_conf { '02show_upgraded':
     source => [ "puppet:///modules/site_apt/${::fqdn}/02show_upgraded",
                 'puppet:///modules/site_apt/02show_upgraded',
-                'puppet:///modules/apt/02show_upgraded' ]
+                'puppet:///modules/apt/02show_upgraded' ];
   }
 
   if ( $::virtual == 'vserver' ) {
@@ -49,7 +49,7 @@ class apt::config inherits apt {
     ::apt::apt_conf { '03clean':
       source => [ "puppet:///modules/site_apt/${::fqdn}/03clean",
                   'puppet:///modules/site_apt/03clean',
-                  'puppet:///modules/apt/03clean' ]
+                  'puppet:///modules/apt/03clean' ];
     }
   }
 
@@ -82,7 +82,7 @@ class apt::config inherits apt {
     }
     if $custom_preferences != false {
       Exec['custom_keys'] {
-        before => File['apt_config']
+        before => File['apt_config'];
       }
     }
   }

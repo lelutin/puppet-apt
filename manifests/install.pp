@@ -1,7 +1,7 @@
 class apt::install {
 
   package { 'apt':
-    ensure => present,
+    ensure => present;
   }
 
   # This package should really always be current

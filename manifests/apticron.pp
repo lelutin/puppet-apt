@@ -13,7 +13,7 @@ class apt::apticron (
 ) {
 
   package { 'apticron':
-    ensure => $ensure_version
+    ensure => $ensure_version;
   }
 
   file { '/etc/apticron/apticron.conf':

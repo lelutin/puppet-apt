@@ -9,7 +9,7 @@ class apt::listchanges (
 ){
 
   package { 'apt-listchanges':
-    ensure => $ensure_version
+    ensure => $ensure_version;
   }
 
   file { '/etc/apt/listchanges.conf':

@@ -40,19 +40,19 @@ define apt::preferences_snippet (
       case $release {
         undef: {
           File["/etc/apt/preferences.d/${name}"]{
-            content => template('apt/preferences_snippet.erb')
+            content => template('apt/preferences_snippet.erb');
           }
         }
         default: {
           File["/etc/apt/preferences.d/${name}"]{
-            content => template('apt/preferences_snippet_release.erb')
+            content => template('apt/preferences_snippet_release.erb');
           }
         }
       }
     }
     default: {
       File["/etc/apt/preferences.d/${name}"]{
-        source => $source
+        source => $source;
       }
     }
   }
