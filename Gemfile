@@ -3,7 +3,7 @@ source "https://rubygems.org"
 group :development, :unit_tests do
   gem "rake"
   gem "rspec-puppet", "~> 2.1", :require => false
-  gem "rspec-core", "3.1.7",    :require => false
+  gem "rspec-core"
   gem "puppetlabs_spec_helper"
   gem "metadata-json-lint"
   gem "rspec-puppet-facts"
