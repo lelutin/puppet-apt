@@ -8,7 +8,7 @@ define apt::preseeded_package (
   $seedfile = "/var/cache/local/preseeding/${name}.seeds"
   $real_content = $content ? {
     ''      => template ( "site_apt/${::debian_codename}/${name}.seeds" ),
-    default => $content;
+    default => $content,
   }
 
   file { $seedfile:
