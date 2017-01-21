@@ -1,4 +1,4 @@
-class apt::config inherits apt {
+class apt::config {
 
   exec { 'update_apt':
     command     => '/usr/bin/apt-get update',
@@ -10,7 +10,7 @@ class apt::config inherits apt {
 
   $sources_content = $custom_sources_list ? {
     ''      => template( "apt/${::operatingsystem}/sources.list.erb"),
-    default => $custom_sources_list,
+    default => $apt::custom_sources_list,
   }
   file {
     # include main and security
@@ -53,34 +53,34 @@ class apt::config inherits apt {
     }
   }
 
-  if ($use_backports and !($::debian_release in ['testing', 'unstable', 'experimental'])) {
+  if ($apt::use_backports and !($::debian_release in ['testing', 'unstable', 'experimental'])) {
     apt::sources_list {
       'backports':
-        content => "deb ${debian_url} ${::debian_codename}-backports ${apt::repos}",
+        content => "deb ${apt::debian_url} ${::debian_codename}-backports ${apt::repos}",
     }
     if $include_src {
       apt::sources_list {
         'backports-src':
-          content => "deb-src ${debian_url} ${::debian_codename}-backports ${apt::repos}",
+          content => "deb-src ${apt::debian_url} ${::debian_codename}-backports ${apt::repos}",
       }
     }
   }
 
-  if $custom_key_dir {
-    file { "${apt_base_dir}/keys.d":
-      source  => $custom_key_dir,
+  if $apt::custom_key_dir {
+    file { "${apt::apt_base_dir}/keys.d":
+      source  => $apt::custom_key_dir,
       recurse => true,
       owner   => root,
       group   => root,
       mode    => '0755',
     }
     exec { 'custom_keys':
-      command     => "find ${apt_base_dir}/keys.d -type f -exec apt-key add '{}' \\;",
-      subscribe   => File["${apt_base_dir}/keys.d"],
+      command     => "find ${apt::apt_base_dir}/keys.d -type f -exec apt-key add '{}' \\;",
+      subscribe   => File["${apt::apt_base_dir}/keys.d"],
       refreshonly => true,
       notify      => Exec['update_apt'];
     }
-    if $custom_preferences != false {
+    if $apt::custom_preferences != false {
       Exec['custom_keys'] {
         before => File['apt_config'],
       }
