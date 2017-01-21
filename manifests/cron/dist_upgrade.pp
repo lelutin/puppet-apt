@@ -14,7 +14,7 @@ class apt::cron::dist_upgrade (
       cron { 'apt_cron_every_N_hours':
         command => 'test -x /usr/sbin/cron-apt && /usr/sbin/cron-apt',
         user    => root,
-        hour    => "${cron_hours}",
+        hour    => $cron_hours,
         minute  => 10,
         require => Package['cron-apt'],
       }
