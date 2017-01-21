@@ -8,7 +8,7 @@ class apt::config {
     refreshonly => true;
   }
 
-  $sources_content = $custom_sources_list ? {
+  $sources_content = $apt::custom_sources_list ? {
     ''      => template( "apt/${::operatingsystem}/sources.list.erb"),
     default => $apt::custom_sources_list,
   }
@@ -58,7 +58,7 @@ class apt::config {
       'backports':
         content => "deb ${apt::debian_url} ${::debian_codename}-backports ${apt::repos}",
     }
-    if $include_src {
+    if $apt::include_src {
       apt::sources_list {
         'backports-src':
           content => "deb-src ${apt::debian_url} ${::debian_codename}-backports ${apt::repos}",
