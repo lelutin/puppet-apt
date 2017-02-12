@@ -19,5 +19,4 @@ class apt::reboot_required_notify::wheezy ($ensure = present) {
     minute  => 20,
     require => Package['update-notifier-common'],
   }
-
 }

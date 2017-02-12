@@ -1,7 +1,8 @@
 # Install a package either to a certain version, or while making sure that it's
 # always the latest version that's installed.
+
 define apt::upgrade_package (
-  $version = ''
+  $version = '',
 ) {
 
   $version_suffix = $version ? {
@@ -12,22 +13,19 @@ define apt::upgrade_package (
 
   if !defined(Package['apt-show-versions']) {
     package { 'apt-show-versions':
-      ensure  => installed,
-      require => undef,
+      ensure  => present,
     }
   }
 
   if !defined(Package['dctrl-tools']) {
     package { 'dctrl-tools':
-      ensure  => installed,
-      require => undef,
+      ensure  => present,
     }
   }
 
   exec { "apt-get -q -y -o 'DPkg::Options::=--force-confold' install ${name}${version_suffix}":
     onlyif  => [ "grep-status -F Status installed -a -P ${name} -q", "apt-show-versions -u ${name} | grep -q upgradeable" ],
     require => Package['apt-show-versions', 'dctrl-tools'],
-    before  => Exec['apt_updated']
+    before  => Exec['update_apt'];
   }
-
 }

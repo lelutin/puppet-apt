@@ -1,18 +1,20 @@
-class apt::apticron(
-  $ensure_version = 'installed',
-  $config = "apt/${::operatingsystem}/apticron.erb",
-  $email = 'root',
-  $diff_only = '1',
+class apt::apticron (
+  $ensure_version      = 'present',
+  $config              = "apt/${::operatingsystem}/apticron.erb",
+  $email               = 'root',
+  $diff_only           = '1',
   $listchanges_profile = 'apticron',
-  $system = false,
-  $ipaddressnum = false,
-  $ipaddresses = false,
-  $notifyholds = '0',
-  $notifynew = '0',
-  $customsubject = ''
+  $system              = false,
+  $ipaddressnum        = false,
+  $ipaddresses         = false,
+  $notifyholds         = '0',
+  $notifynew           = '0',
+  $customsubject       = '',
 ) {
 
-  package { 'apticron': ensure => $ensure_version }
+  package { 'apticron':
+    ensure => $ensure_version;
+  }
 
   file { '/etc/apticron/apticron.conf':
     content => template($apt::apticron::config),

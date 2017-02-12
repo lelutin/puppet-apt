@@ -1,14 +1,14 @@
 class apt::unattended_upgrades (
-  $config_content = undef,
-  $config_template = 'apt/50unattended-upgrades.erb',
-  $mailonlyonerror = true,
-  $mail_recipient = 'root',
+  $config_content       = undef,
+  $config_template      = 'apt/50unattended-upgrades.erb',
+  $mailonlyonerror      = true,
+  $mail_recipient       = 'root',
   $blacklisted_packages = [],
-  $ensure_version = present
+  $ensure_version       = 'present',
 ) {
 
   package { 'unattended-upgrades':
-    ensure  => $ensure_version
+    ensure  => $ensure_version,
   }
 
   # For some reason, this directory is sometimes absent, which causes
@@ -23,12 +23,12 @@ class apt::unattended_upgrades (
 
   $file_content = $config_content ? {
     undef   => template($config_template),
-    default => $config_content
+    default => $config_content,
   }
 
   ::apt::apt_conf { '50unattended-upgrades':
     content     => $file_content,
     require     => Package['unattended-upgrades'],
-    refresh_apt => false
+    refresh_apt => false;
   }
 }

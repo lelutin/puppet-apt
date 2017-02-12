@@ -7,5 +7,4 @@ class apt::reboot_required_notify {
   } else {
     class { 'apt::reboot_required_notify::wheezy': }
   }
-
 }

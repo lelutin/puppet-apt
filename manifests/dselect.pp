@@ -1,5 +1,6 @@
 # manage dselect, like
 # suppressing the annoying help texts
+
 class apt::dselect {
 
   file_line { 'dselect_expert':
@@ -7,5 +8,7 @@ class apt::dselect {
     line => 'expert',
   }
 
-  package { 'dselect': ensure => installed }
+  package { 'dselect':
+    ensure => present;
+  }
 }

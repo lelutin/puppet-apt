@@ -16,5 +16,4 @@ class apt::preferences {
     require => File['/etc/apt/sources.list'],
     owner   => root, group => 0, mode => '0644';
   }
-
 }

@@ -1,8 +1,9 @@
 # Configure an apt source
+
 define apt::sources_list (
   $ensure  = 'present',
   $source  = undef,
-  $content = undef
+  $content = undef,
 ) {
 
   if $ensure == 'present' {
@@ -26,7 +27,7 @@ define apt::sources_list (
     mode   => '0644',
     owner  => 'root',
     group  => 0,
-    notify => Exec['apt_updated'],
+    notify => Exec['update_apt'],
   }
 
   if $source {

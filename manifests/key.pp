@@ -8,6 +8,6 @@ define apt::key ($source, $ensure = 'present') {
     "/etc/apt/trusted.gpg.d/${name}":
       ensure => $ensure,
       source => $source,
-      notify => Exec['apt_updated'],
+      notify => Exec['update_apt'],
   }
 }

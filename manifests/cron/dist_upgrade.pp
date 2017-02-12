@@ -2,7 +2,9 @@ class apt::cron::dist_upgrade (
   $cron_hours = '',
 ) {
 
-  package { 'cron-apt': ensure => installed }
+  package { 'cron-apt':
+    ensure => present;
+  }
 
   case $cron_hours {
     '': {}
@@ -12,7 +14,7 @@ class apt::cron::dist_upgrade (
       cron { 'apt_cron_every_N_hours':
         command => 'test -x /usr/sbin/cron-apt && /usr/sbin/cron-apt',
         user    => root,
-        hour    => "${cron_hours}",
+        hour    => $cron_hours,
         minute  => 10,
         require => Package['cron-apt'],
       }
@@ -27,14 +29,16 @@ dist-upgrade -y -o APT::Get::Show-Upgraded=true -o 'DPkg::Options::=--force-conf
     ensure => absent,
   }
 
-  package { 'apt-listbugs': ensure => absent }
+  package { 'apt-listbugs':
+    ensure => absent;
+  }
 
   file { '/etc/cron-apt/action.d/4-dist-upgrade':
     content => $action,
     owner   => root,
     group   => 0,
     mode    => '0644',
-    require => Package[cron-apt];
+    require => Package['cron-apt'];
   }
 
   file { '/etc/cron-apt/config.d/MAILON':
@@ -42,7 +46,6 @@ dist-upgrade -y -o APT::Get::Show-Upgraded=true -o 'DPkg::Options::=--force-conf
     owner   => root,
     group   => 0,
     mode    => '0644',
-    require => Package[cron-apt];
+    require => Package['cron-apt'];
   }
-
 }
