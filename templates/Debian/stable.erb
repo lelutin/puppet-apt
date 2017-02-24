@@ -1,0 +1,7 @@
+# This file is managed by puppet
+# all local modifications will be overwritten
+
+Explanation: Debian <%= codename=scope.lookupvar('::debian_codename') %>
+Package: *
+Pin: release o=Debian,n=<%= codename %>
+Pin-Priority: 990
