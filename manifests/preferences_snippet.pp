@@ -13,9 +13,6 @@ define apt::preferences_snippet (
   }
 
   if $ensure == 'present' {
-    if $apt::custom_preferences == false {
-      fail('Trying to define a preferences_snippet with $custom_preferences set to false.')
-    }
 
     if $priority == undef {
       fail("apt::preferences_snippet requires the 'priority' argument to be set")

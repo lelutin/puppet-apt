@@ -23,17 +23,10 @@ class apt (
   include apt::dot_d_directories
   include apt::config
   include apt::install
+  include apt::preferences
 
   include common::moduledir
   common::module_dir { 'apt': }
   $apt_base_dir = "${common::moduledir::module_dir_path}/apt"
 
-  case $custom_preferences {
-    false: {
-      include apt::preferences::absent
-    }
-    default: {
-      include apt::preferences
-    }
-  }
 }
