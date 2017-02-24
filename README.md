@@ -511,9 +511,11 @@ From apt_preferences(5):
 ## apt::package<a name="apt-package"></a>
 
 This simplifies installation of packages for which you wish to preseed the
-answers to debconf. To use preseeding you need to set the `use_seed` parameter
-to true. For example, if you wish to provide a preseed file for the locales
-package, you would place the `locales.seed` file in
+answers to debconf or pin to a certain version.
+
+To use preseeding you need to set the `use_seed` parameter to true. For
+example, if you wish to provide a preseed file for the locales package, you
+would place the `locales.seed` file in
 `site_apt/templates/${::lsbdistcodename}/locales.seeds` and then include the
 following in your manifest:
 
@@ -532,6 +534,18 @@ of using a template, for example:
       content  => 'apticron apticron/notification string root@example.com',
     }
 
+To pin a package to a certain release or version, you need to set the `pin`
+parameter to the restriction that you want (this value corresponds to the
+'Pin:' line in preferences files). For example this would pin the package
+ganeti to the jessie release:
+
+    apt::package { 'ganeti':
+      pin => 'release o=Debian Backports,a=jessie',
+    }
+
+Also, if you want to set a priority number to a package pin, you can set
+`pin_priority` to an integer value. The default value of this parameter is
+1000, which will install but not downgrade a package.
 
 ## apt::sources_list<a name="apt-sources_list"></a>
 
