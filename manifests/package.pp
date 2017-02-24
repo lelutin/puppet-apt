@@ -2,6 +2,8 @@
 define apt::package (
   $ensure  = 'present',
   $seedfile_content = '',
+  $pin = '',
+  $pin_priority = 1000
 ) {
 
   $seedfile = "/var/cache/local/preseeding/${name}.seeds"
@@ -17,9 +19,17 @@ define apt::package (
     group   => 0,
   }
 
+  if $pin {
+    apt::preferences_snippet { $name:
+      ensure   => $ensure,
+      priority => $pin_priority,
+      pin      => $pin,
+    }
+  }
+
   package { $name:
     ensure       => $ensure,
     responsefile => $seedfile,
-    require      => File[$seedfile],
+    require      => [File[$seedfile], Apt::Preferences_snippet[$name]],
   }
 }
