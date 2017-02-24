@@ -3,9 +3,10 @@ define apt::preseeded_package (
   $ensure  = 'present',
   $content = '',
 ) {
-  warning('apt::preseeded_package is deprecated! you should now use apt::package instead.')
+  warning('apt::preseeded_package is deprecated! you should now use apt::package with parameter use_seed set to true instead.')
   apt::package { $name:
-    ensure  => $ensure,
-    content => $content,
+    ensure   => $ensure,
+    use_seed => true,
+    content  => $content,
   }
 }
