@@ -3,7 +3,6 @@ class apt::config {
   exec { 'update_apt':
     command     => '/usr/bin/apt-get update',
     require     => [ File['/etc/apt/apt.conf.d',
-                          '/etc/apt/preferences.d/stable',
                           '/etc/apt/sources.list'] ],
     refreshonly => true;
   }

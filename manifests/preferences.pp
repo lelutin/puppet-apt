@@ -2,13 +2,19 @@ class apt::preferences {
 
   if ($apt::manage_preferences == true) and ($apt::custom_preferences != undef) {
 
-    file { '/etc/apt/preferences.d/custom':
-      ensure  => present,
-      alias   => 'apt_config',
-      # only update together
-      content => $custom_preferences,
-      require => File['/etc/apt/sources.list'],
-      owner   => root, group => 0, mode => '0644';
+    file {
+      '/etc/apt/preferences.d/custom':
+        ensure  => present,
+        alias   => 'apt_config',
+        content => template(${apt::custom_preferences}),
+        require => File['/etc/apt/sources.list'],
+        owner   => root, group => 0, mode => '0644';
+
+      [ '/etc/apt/preferences.d/stable',
+        '/etc/apt/preferences.d/volatile',
+        '/etc/apt/preferences.d/lts',
+        '/etc/apt/preferences.d/nextcodename' ]:
+          ensure => absent;
     }
   }
 
@@ -16,13 +22,16 @@ class apt::preferences {
 
     if $::operatingsystem == "Debian" {
 
-      file { '/etc/apt/preferences.d/stable':
-        ensure  => present,
-        alias   => 'apt_config',
-        # only update together
-        content => template('apt/Debian/stable.erb'),
-        require => File['/etc/apt/sources.list'],
-        owner   => root, group => 0, mode => '0644';
+      file {
+        '/etc/apt/preferences.d/stable':
+          ensure  => present,
+          alias   => 'apt_config',
+          content => template('apt/Debian/stable.erb'),
+          require => File['/etc/apt/sources.list'],
+          owner   => root, group => 0, mode => '0644';
+
+        '/etc/apt/preferences.d/custom':
+          ensure => absent;
       }
 
       if $apt::use_volatile {
