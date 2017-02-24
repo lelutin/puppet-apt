@@ -24,7 +24,8 @@
   * [apt::key](#apt-key)
   * [`apt::key::plain`](#apt-key-plain)
   * [apt::upgrade_package](#apt-upgrade_package)
-* [Resources](#ressources)
+  * [apt::dpkg_statoverride](#apt-dpkg_statoverride)
+* [Resources](#resources)
   * [File\['apt_config'\]](#fileapt_config)
   * [Exec\['apt_updated'\]](#execapt_updated)
 * [Tests](#tests)
@@ -602,7 +603,36 @@ to their latest (also, only if they are installed):
     }
 
 
-# Resources<a name="ressources"></a>
+## apt::dpkg_statoverride<a name="apt-dpkg_statoverride"></a>
+
+Override ownership and mode of files. This define takes the following parameters:
+
+[*name*]
+  Implicit parameter.
+  File path.
+
+[*user*]
+  User name (or user id if prepended with '#').
+
+[*group*]
+  Group name (or group id if prepended with '#').
+
+[*mode*]
+  File mode, in octal
+
+[*ensure*]
+  Whether to add or delete this configuration
+
+
+Example usage:
+
+    apt::dpkg_statoverride { '/var/log/puppet':
+       user  => 'puppet',
+       group => 'puppet',
+       mode  => '750',
+    }
+
+# Resources<a name="resources"></a>
 
 ## File['apt_config']<a name="file-apt-config"></a>
 
