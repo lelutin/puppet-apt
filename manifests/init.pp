@@ -15,6 +15,7 @@ class apt (
   $volatile_url        = $apt::params::volatile_url,
   $ubuntu_url          = $apt::params::ubuntu_url,
   $repos               = $apt::params::repos,
+  $manage_preferences  = $apt::params::manage_preferences,
   $custom_preferences  = $apt::params::custom_preferences,
   $custom_sources_list = '',
   $custom_key_dir      = $apt::params::custom_key_dir,
