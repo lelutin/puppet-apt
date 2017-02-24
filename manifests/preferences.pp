@@ -1,5 +1,9 @@
 class apt::preferences {
 
+  file { '/etc/apt/preferences':
+      ensure => absent;
+  }
+
   if ($apt::manage_preferences == true) and ($apt::custom_preferences != undef) {
 
     file {
