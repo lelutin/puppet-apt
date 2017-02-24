@@ -6,15 +6,21 @@ class apt::preferences {
       '/etc/apt/preferences.d/custom':
         ensure  => present,
         alias   => 'apt_config',
-        content => template(${apt::custom_preferences}),
+        content => template($apt::custom_preferences),
         require => File['/etc/apt/sources.list'],
         owner   => root, group => 0, mode => '0644';
 
-      [ '/etc/apt/preferences.d/stable',
-        '/etc/apt/preferences.d/volatile',
-        '/etc/apt/preferences.d/lts',
-        '/etc/apt/preferences.d/nextcodename' ]:
-          ensure => absent;
+      '/etc/apt/preferences.d/stable':
+        ensure => absent;
+
+      '/etc/apt/preferences.d/volatile':
+        ensure => absent;
+
+      '/etc/apt/preferences.d/lts':
+        ensure => absent;
+
+      '/etc/apt/preferences.d/nextcodename':
+        ensure => absent;
     }
   }
 
@@ -81,12 +87,20 @@ class apt::preferences {
   elsif $apt::manage_preferences == false {
 
     file {
-      [ '/etc/apt/preferences.d/custom',
-        '/etc/apt/preferences.d/stable',
-        '/etc/apt/preferences.d/volatile',
-        '/etc/apt/preferences.d/lts',
-        '/etc/apt/preferences.d/nextcodename']:
-          ensure => absent;
+      '/etc/apt/preferences.d/custom':
+        ensure => absent;
+
+      '/etc/apt/preferences.d/stable':
+        ensure => absent;
+
+      '/etc/apt/preferences.d/volatile':
+        ensure => absent;
+
+      '/etc/apt/preferences.d/lts':
+        ensure => absent;
+
+      '/etc/apt/preferences.d/nextcodename':
+        ensure => absent;
     }
   }
 }
