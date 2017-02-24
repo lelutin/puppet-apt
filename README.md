@@ -19,7 +19,7 @@
 * [Defines](#defines)
   * [apt::apt_conf](#apt-apt_conf)
   * [apt::preferences_snippet](#apt-preferences_snippet)
-  * [apt::preseeded_package](#apt-preseeded_package)
+  * [apt::package](#apt-package)
   * [apt::sources_list](#apt-sources_list)
   * [apt::key](#apt-key)
   * [`apt::key::plain`](#apt-key-plain)
@@ -154,6 +154,9 @@ Ubuntu support is lagging behind but not absent either.
          proxy => 'http://proxy.domain',
          port  => '666';
        }
+
+ * <a name="apt-preseeded_package"></a>the `apt::preseeded_package` defined type was renamed `apt::package` the
+   previous name is now deprecated and will be removed in the future.
 
 
 # Requirements<a name="requirements"></a>
@@ -505,7 +508,7 @@ From apt_preferences(5):
      characters - otherwise they will be silently ignored.
 
 
-## apt::preseeded_package<a name="apt-preseeded_package"></a>
+## apt::package<a name="apt-package"></a>
 
 This simplifies installation of packages for which you wish to preseed the
 answers to debconf. For example, if you wish to provide a preseed file for the
@@ -513,12 +516,12 @@ locales package, you would place the `locales.seed` file in
 `site_apt/templates/${::lsbdistcodename}/locales.seeds` and then include the
 following in your manifest:
 
-    apt::preseeded_package { locales: }
+    apt::package { locales: }
 
 You can also specify the content of the seed via the content parameter, 
 for example:
 
-    apt::preseeded_package { 'apticron':
+    apt::package { 'apticron':
       content => 'apticron apticron/notification string root@example.com',
     }
 

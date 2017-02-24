@@ -1,26 +1,11 @@
-# Install a package with a preseed file to automatically answer some questions.
-
+# This is a wrapper that will be removed after a while
 define apt::preseeded_package (
   $ensure  = 'present',
   $content = '',
 ) {
-
-  $seedfile = "/var/cache/local/preseeding/${name}.seeds"
-  $real_content = $content ? {
-    ''      => template ( "site_apt/${::debian_codename}/${name}.seeds" ),
-    default => $content,
-  }
-
-  file { $seedfile:
-    content => $real_content,
-    mode    => '0600',
-    owner   => 'root',
-    group   => 0,
-  }
-
-  package { $name:
-    ensure       => $ensure,
-    responsefile => $seedfile,
-    require      => File[$seedfile],
+  warning('apt::preseeded_package is deprecated! you should now use apt::package instead.')
+  apt::package { $name:
+    ensure  => $ensure,
+    content => $content,
   }
 }
