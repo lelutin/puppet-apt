@@ -15,6 +15,7 @@ class apt (
   $volatile_url        = $apt::params::volatile_url,
   $ubuntu_url          = $apt::params::ubuntu_url,
   $repos               = $apt::params::repos,
+  $manage_preferences  = $apt::params::manage_preferences,
   $custom_preferences  = $apt::params::custom_preferences,
   $custom_sources_list = '',
   $custom_key_dir      = $apt::params::custom_key_dir,
@@ -23,17 +24,10 @@ class apt (
   include apt::dot_d_directories
   include apt::config
   include apt::install
+  include apt::preferences
 
   include common::moduledir
   common::module_dir { 'apt': }
   $apt_base_dir = "${common::moduledir::module_dir_path}/apt"
 
-  case $custom_preferences {
-    false: {
-      include apt::preferences::absent
-    }
-    default: {
-      include apt::preferences
-    }
-  }
 }

@@ -1,0 +1,7 @@
+# This file is managed by puppet
+# all local modifications will be overwritten
+
+Explanation: Debian <%= @debian_nextcodename %>
+Package: *
+Pin: release o=Debian,n=<%= @debian_nextcodename %>
+Pin-Priority: 2

@@ -253,25 +253,19 @@ Example usage:
   If this variable is set the default repositories list ("main contrib non-free")
   is overriden.
 
+### manage_preferences
+
+  Setting this variable to `false` will delete all the files in `preferences.d`
+  managed by Puppet. By default, this parameter is set to `true`.
+
 ### custom_preferences
 
-  For historical reasons (Debian Lenny's version of APT did not support the use
-  of the `preferences.d` directory for putting fragments of 'preferences'), this
-  module will manage a default generic apt/preferences file with more
-  recent releases pinned to very low values so that any package
-  installation will not accidentally pull in packages from those suites
-  unless you explicitly specify the version number. This file will be
-  complemented with all of the preferences_snippet calls (see below).
-
   If the default preferences template doesn't suit your needs, you can create a
-  template located in your `site_apt` module, and set custom_preferences with the
-  content (eg. custom_preferences => template('site_apt/preferences') )
-
-  Setting this variable to false before including this class will force the
-  `apt/preferences` file to be absent:
+  template located in your `apt` module, and set `custom_preferences` to your
+  preferred template:
 
     class { 'apt':
-      custom_preferences => false,
+      custom_preferences => 'apt/my_super_template.erb',
     }
   
 ### custom_sources_list
