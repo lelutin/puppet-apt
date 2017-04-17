@@ -527,12 +527,12 @@ following in your manifest:
 You can change what template is used by setting `seedfile_template` to a
 template path (same as you would pass to the template() function).
 
-You can also specify the content of the seed via the content parameter instead
-of using a template, for example:
+You can also specify the content of the seed via the `seedfile_content`
+parameter instead of using a template, for example:
 
     apt::package { 'apticron':
       use_seed => true,
-      content  => 'apticron apticron/notification string root@example.com',
+      seedfile_content  => 'apticron apticron/notification string root@example.com',
     }
 
 To pin a package to a certain release or version, you need to set the `pin`
