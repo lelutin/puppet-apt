@@ -515,7 +515,7 @@ This simplifies installation of packages for which you wish to preseed the
 answers to debconf or pin to a certain version.
 
 To use preseeding you need to set the `use_seed` parameter to true. For
-example, if you wish to provide a preseed file for the locales package, you
+example, if you wish to provide a preseed template for the locales package, you
 would place the `locales.seed` file in
 `site_apt/templates/${::lsbdistcodename}/locales.seeds` and then include the
 following in your manifest:
@@ -525,7 +525,8 @@ following in your manifest:
     }
 
 You can change what template is used by setting `seedfile_template` to a
-template path (same as you would pass to the template() function).
+template path of your choosing (same as you would pass to the template()
+function).
 
 You can also specify the content of the seed via the `seedfile_content`
 parameter instead of using a template, for example:
