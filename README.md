@@ -155,8 +155,9 @@ Ubuntu support is lagging behind but not absent either.
          port  => '666';
        }
 
- * <a name="apt-preseeded_package"></a>the `apt::preseeded_package` defined type was renamed `apt::package` the
-   previous name is now deprecated and will be removed in the future.
+ * <a name="apt-preseeded_package"></a>the `apt::preseeded_package` defined
+   type was renamed `apt::package`. the previous name is now deprecated and
+   will be removed in the future.
 
 
 # Requirements<a name="requirements"></a>
