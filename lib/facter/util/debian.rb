@@ -1,7 +1,7 @@
 module Facter
   module Util
     module Debian
-      STABLE = 8
+      STABLE = 9
       CODENAMES = {
         "5" => "lenny",
         "6" => "squeeze",
@@ -9,9 +9,11 @@ module Facter
         "8" => "jessie",
         "9" => "stretch",
         "10" => "buster",
+        "11" => "bullseye",
       }
       LTS = [
         "squeeze",
+        "wheezy",
       ]
     end
   end
